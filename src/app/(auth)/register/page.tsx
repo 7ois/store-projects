@@ -1,5 +1,7 @@
 'use client'
 import Dropdown from '@/components/Dropdown';
+import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 // import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
@@ -81,7 +83,17 @@ const page = () => {
     return (
         <div className='w-full h-[800px] flex rounded-[10px] overflow-hidden shadow-lg'>
             <div className='relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20'>
-                <h1>LOGO</h1>
+                <div
+                    className='absolute top-5 left-5 cursor-pointer'
+                    onClick={() => router.back()}
+                >
+                    <ArrowLeft size={25} color='#1C3B6C' />
+                </div>
+                <Image src="/images/logo_main.jpg"
+                    alt="Logo"
+                    width={150}
+                    height={150}
+                />
                 <h1 className='text-5xl my-5'>Register</h1>
                 <form onSubmit={handleSubmit} className='grid gap-5 w-full text-2xl'>
                     <div className='grid gap-1'>
@@ -91,7 +103,7 @@ const page = () => {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder='Enter your email'
-                            className='h-[50px] pl-2 border rounded-lg text-base'
+                            className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
                         />
                     </div>
                     <div className='grid gap-1'>
@@ -100,7 +112,7 @@ const page = () => {
                             name='password'
                             value={formData.password}
                             onChange={handleChange}
-                            className='h-[50px] pl-2 border rounded-lg text-base'
+                            className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
                             placeholder='Enter your password' />
                     </div>
 
@@ -111,7 +123,7 @@ const page = () => {
                                 name='first_name'
                                 value={formData.first_name}
                                 onChange={handleChange}
-                                className="h-[50px] pl-2 border rounded-lg text-base"
+                                className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
                                 placeholder='Enter your Fistname' />
                         </div>
                         <div className='grid gap-1 w-full'>
@@ -120,7 +132,7 @@ const page = () => {
                                 name='last_name'
                                 value={formData.last_name}
                                 onChange={handleChange}
-                                className="h-[50px] pl-2 border rounded-lg text-base"
+                                className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
                                 placeholder='Enter your Lastname' />
                         </div>
 
@@ -129,7 +141,7 @@ const page = () => {
 
                     <div className='w-full flex items-center justify-center my-5'>
                         <button type='submit'
-                            className='bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px]'
+                            className='bg-blue text-[#fff] w-[200px] h-[60px] border border-[#c5c5c5] rounded-[10px]'
                         >Register</button>
                     </div>
                 </form>

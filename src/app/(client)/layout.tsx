@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import { PopupProvider } from "@/context/PopupContext";
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -12,18 +13,20 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en">
             <body>
-                <div className="flex">
-                    <Sidebar />
-                    <div className="w-full relative">
-                        <Header />
-                        <div className="p-10">
-                            {children}
-                        </div>
-                        <div className="absolute bottom-0 w-full">
-                            <Footer />
+                <PopupProvider>
+                    <div className="flex">
+                        <Sidebar />
+                        <div className="w-full relative">
+                            <Header />
+                            <div className="p-10">
+                                {children}
+                            </div>
+                            <div className="absolute bottom-0 w-full">
+                                <Footer />
+                            </div>
                         </div>
                     </div>
-                </div>
+                </PopupProvider>
             </body>
         </html >
     );

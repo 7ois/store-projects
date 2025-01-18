@@ -33,7 +33,7 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onSelect }) => {
                 <div
                     // type='button'
                     onClick={toggleDropdown}
-                    className="cursor-pointer flex w-full h-[50px] items-center justify-between rounded-lg border border-gray-300 bg-white text-base text-gray-700 focus:outline-none px-2"
+                    className="cursor-pointer flex w-full h-[50px] items-center justify-between rounded-lg border border-[#c5c5c5] bg-white text-base text-gray-700 focus:outline-none px-2"
                 >
                     <h1 className={`${selected !== "เลือกหน่อย" ? "text-[#000]" : "text-[#808080]"}`}>{selected}</h1>
                     <ChevronDown size={15} className={`${isOpen ? "-scale-100" : "scale-100"}`} />
@@ -42,17 +42,17 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onSelect }) => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-full h-auto rounded-md shadow-lg border bg-[#fff]">
-                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div className="absolute right-0 mt-2 w-full h-auto rounded-md shadow-lg border border-[#c5c5c5] bg-[#fff]">
+                    <div role="menu">
                         {items.map((item, index) => (
-                            <button
+                            <div
                                 key={index}
                                 onClick={() => handleSelect(item.role_id)}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100"
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#e1e1e1] cursor-pointer"
                                 role="menuitem"
                             >
                                 {item.role_name}
-                            </button>
+                            </div>
                         ))}
                     </div>
                 </div>
