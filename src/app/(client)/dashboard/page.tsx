@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 
 interface Project {
     id: number;
-    name: string;
+    project_name: string;
     description: string;
     year: string;
     file_download: string;
@@ -15,18 +15,23 @@ const page = () => {
     const [projects, setProjects] = useState<Project[]>([]);
 
     useEffect(() => {
-        const fetcProject = async () => {
+        const fetchProjects = async () => {
             try {
-                const res = await fetch('http://localhost:3001/projects')
-                const data = await res.json()
-                console.log(data)
-                setProjects(data)
+                const response = await fetch('http://localhost:3001/projects'); // แก้ไข endpoint ให้ตรงกับ API ของคุณ
+                const data = await response.json();
+                if (response.ok) {
+                    setProjects(data.data); // ต้องตรงกับ key ใน response
+                } else {
+                    console.error('Error fetching projects:', data.error);
+                }
             } catch (error) {
-                console.log('Error fetching projects:', error)
+                console.error('Error fetching projects:', error);
             }
-        }
-        fetcProject()
-    }, [])
+        };
+
+        fetchProjects();
+    }, []);
+
     return (
         <div className='grid gap-3'>
             {Array.isArray(projects) && projects.length > 0 ? (
@@ -34,7 +39,7 @@ const page = () => {
                     <div key={index}
                         className='grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden'
                     >
-                        <h1 className='text-xl'>{project.name}</h1>
+                        <h1 className='text-xl'>{project.project_name}</h1>
                         <p className='text-[#B4B4B4] text-base w-full truncate'>{project.description}</p>
                     </div>
                 ))

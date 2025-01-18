@@ -15,15 +15,14 @@ module.exports = {
         'xl': '1280px',   // ขนาดจอใหญ่พิเศษ
         '2xl': '1536px',  // ขนาดจอใหญ่มาก
       },
+      colors: {
+        'primary': '#FF5656',
+        'blue': '#1C3B6C'
+      },
+      fontFamily: {
+        thai: ["Athiti", 'serif']
+      },
     },
-    colors: {
-      'primary': '#FF5656',
-      'blue': '#1C3B6C'
-    },
-    fontFamily: {
-      thai: ["Athiti", 'serif']
-    }
-  },
-  plugins: [],
+    plugins: [],
+  }
 }
-

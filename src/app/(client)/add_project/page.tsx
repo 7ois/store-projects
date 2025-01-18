@@ -1,13 +1,14 @@
 'use client'
-
 import { Book, Camera } from 'lucide-react'
 import React, { useState } from 'react'
+import { usePopup } from "@/context/PopupContext";
 
 const data = [
     { id: 1, title: "What project?", description: "It's my time I hope you miss each other. I want to hug you." },
 ]
 
 const page = () => {
+    const { showPopup } = usePopup();
     const userName = "Passakorn Wannapak"
     const email = "passakorn.wa@rmuti.ac.th"
 
@@ -32,7 +33,8 @@ const page = () => {
                     <div className='absolute -left-7 border w-[200px] h-[50px] bg-blue flex items-center justify-center'>
                         <h1 className='text-xl text-[#fff]'>My project</h1>
                     </div>
-                    <button className='flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]'>
+                    <button className='flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]'
+                        onClick={() => showPopup(popuppage())}>
                         <Book size={20} />
                         Add Project
                     </button>
@@ -51,3 +53,59 @@ const page = () => {
 }
 
 export default page
+
+const popuppage = () => {
+    return (
+        <div className='w-[1000px] grid'>
+            <div className=' h-10 flex items-center justify-center pb-6 shadow-sm'>Header</div>
+            <div className='p-10 grid grid-cols-[200px_auto] gap-2 text-lg items-center'>
+
+                <label>Project-Name</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border border-[#c5c5c5] text-base'
+                    placeholder='project-name'
+                />
+
+                <label>Description</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border border-[#c5c5c5] text-base'
+                    placeholder='description'
+                />
+
+                <label>Year</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border border-[#c5c5c5] text-base'
+                    placeholder='year'
+                />
+
+                <label>Owner</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border border-[#c5c5c5] text-base'
+                    placeholder='owner'
+                />
+
+                <label>Advisor</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border border-[#c5c5c5] text-base'
+                    placeholder='advisor'
+                />
+
+                <label>file-download</label>
+                <input
+                    type="text"
+                    className='h-[50px] pl-2 border-[#c5c5c5] text-base'
+                />
+
+            </div>
+            {/* <div className='flex items-center justify-center gap-10 h-auto py-6 shadow-md'>
+                <button className='border w-[300px] h-[50px] rounded-[10px] border-primary text-primary'>Cancel</button>
+                <button className='border w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff]'>Submit</button>
+            </div> */}
+        </div>
+    )
+}

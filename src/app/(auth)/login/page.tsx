@@ -1,5 +1,7 @@
 'use client'
 import { useAuthStore } from '@/stores/authStore'
+import { ArrowLeft } from 'lucide-react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -50,7 +52,17 @@ const page = () => {
     return (
         <div className='w-full h-[800px] flex rounded-[10px] overflow-hidden shadow-lg'>
             <div className='relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20'>
-                <h1>LOGO</h1>
+                <div
+                    className='absolute top-5 left-5 cursor-pointer'
+                    onClick={() => router.back()}
+                >
+                    <ArrowLeft size={25} color='#1C3B6C' />
+                </div>
+                <Image src="/images/logo_main.jpg"
+                    alt="Logo"
+                    width={150}
+                    height={150}
+                />
                 <h1 className='text-5xl my-5'>Log In</h1>
                 <form onSubmit={loginSubmit} className='grid gap-5 w-full text-2xl'>
                     <div className='grid gap-2'>
@@ -58,7 +70,8 @@ const page = () => {
                         <input
                             type="email"
                             name="email"
-                            className='bg-[#E0EEFD] h-[50px] rounded-lg pl-2'
+                            className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
+                            placeholder='Enter email.'
                             value={formData.email}
                             onChange={handleChange}
                         />
@@ -68,7 +81,8 @@ const page = () => {
                         <input
                             type="password"
                             name="password"
-                            className='bg-[#E0EEFD] h-[50px] rounded-lg pl-2'
+                            className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
+                            placeholder='Enter password.'
                             value={formData.password}
                             onChange={handleChange}
                         />
@@ -82,7 +96,7 @@ const page = () => {
                         >Log In</button>
                     </div>
                 </form>
-                <div className='absolute bottom-20 cursor-pointer'>
+                <div className='cursor-pointer' onClick={() => router.push('/register')}>
                     <p>You are not a member yet?</p>
                 </div>
             </div>
