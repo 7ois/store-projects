@@ -1,88 +1,79 @@
 'use client'
 import Dropdown from '@/components/Dropdown';
-import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
-// import axios from 'axios';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useForm } from "react-hook-form";
+import { registerSchema, registerSchemaType } from '@/lib/types';
+import axios from 'axios';
+
 
 const page = () => {
-
-    const router = useRouter();
-    const [showNameInputs, setShowNameInputs] = useState(false);
-    const [formData, setFormData] = useState({
-        role_id: 4,
-        first_name: '',
-        last_name: '',
-        email: '',
-        password: ''
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+        reset,
+        setError,
+        getValues,
+        setValue,
+        watch,
+    } = useForm<registerSchemaType>({
+        resolver: zodResolver(registerSchema)
     });
-    const [roles, setRoles] = useState<{ role_id: number, role_name: string }[]>([])
-    // const [responseMessage, setResponseMessage] = useState('');
+    const router = useRouter();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+    const email = watch("email");
+    const [roles, setRoles] = useState<{ id: number, value: string }[]>([])
 
-        if (name == "email") {
-            if (value.endsWith('@rmuti.ac.th')) {
-                setShowNameInputs(true);
-            } else {
-                setShowNameInputs(false)
-            }
-        }
-    }
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
+    const onSubmit = async (data: registerSchemaType) => {
         try {
-            const response = await fetch('http://localhost:3001/register', {
-                method: 'POST',
+            const response = await axios.post('http://localhost:3001/api/register', data, {
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            if (!response.ok) {
-                throw new Error('Failed to register user')
+                }
+            });
+
+            if (response.status === 200) {
+                alert("Register successful");
+                reset();
+                router.push('/login');
             }
-            const data = await response.json()
-            alert(`User registered successfully.`)
-            console.log(data)
-            router.push('/login')
-            // setResponseMessage(`Success: ${response.data.message}`);
         } catch (error) {
-            // setResponseMessage(`Error: ${error.response?.data?.error || error.message}`)
-            console.error('Error:', error)
-            alert('Error registering user')
+            // ถ้ามีข้อผิดพลาดในการสมัคร
+            console.error("Error during registration:", error);
+            alert("Submitting form failed");
         }
-    }
-
-    useEffect(() => {
-        const fetcRoles = async () => {
-            const res = await fetch('http://localhost:3001/users_role')
-            const json = await res.json()
-
-            const filteredRoles = json.data.filter((role: { role_id: number }) => role.role_id == 2 || role.role_id == 3)
-            setRoles(filteredRoles)
-        }
-        fetcRoles()
-    }, [])
-
-    const handleRoleSelect = (id: number) => {
-        setFormData({ ...formData, role_id: id });
     };
 
     useEffect(() => {
-        console.log(formData)
-    }, [formData])
+        const fetchRoles = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/getRoles');
+                const formattedRoles = response.data.data
+                    .filter((data: { role_id: number }) => data.role_id === 2 || data.role_id === 3)
+                    .map((item: { role_id: number; role_name: string }) => ({
+                        id: item.role_id,
+                        value: item.role_name,
+                    }));
+                setRoles(formattedRoles);
+            } catch (error) {
+                console.error("Error fetching roles:", error);
+            }
+        };
+
+        fetchRoles();
+    }, []);
+
+    const handleRoleSelect = (value: number) => {
+        setValue("role_id", value);
+    };
 
     return (
-        <div className='w-full h-[800px] flex rounded-[10px] overflow-hidden shadow-lg'>
-            <div className='relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20'>
+        <div className='w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg'>
+            <div className='relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 px-20 py-5'>
                 <div
                     className='absolute top-5 left-5 cursor-pointer'
                     onClick={() => router.back()}
@@ -95,49 +86,77 @@ const page = () => {
                     height={150}
                 />
                 <h1 className='text-5xl my-5'>Register</h1>
-                <form onSubmit={handleSubmit} className='grid gap-5 w-full text-2xl'>
+                <form onSubmit={handleSubmit(onSubmit)} className='grid gap-5 w-full text-2xl'>
                     <div className='grid gap-1'>
-                        <label className='text-xl'>Email</label>
-                        <input type="email"
-                            name='email'
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder='Enter your email'
+                        <label htmlFor='email' className='text-xl'>Email</label>
+                        <input
+                            {...register("email")}
+                            type='email'
                             className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
                         />
+                        {errors.email && (
+                            <p className='text-primary text-base'>{`${errors.email.message}`}</p>
+                        )}
                     </div>
+
                     <div className='grid gap-1'>
-                        <label className='text-xl'>Password</label>
-                        <input type="password"
-                            name='password'
-                            value={formData.password}
-                            onChange={handleChange}
+                        <label htmlFor='password' className='text-xl'>Password</label>
+                        <input
+                            {...register("password")}
+                            type='password'
                             className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
-                            placeholder='Enter your password' />
+                        />
+                        {errors.password && (
+                            <p className='text-primary text-base'>{`${errors.password.message}`}</p>
+                        )}
                     </div>
 
-                    <div className={`${showNameInputs ? "" : "hidden"} grid grid-cols-2 gap-5 w-full`}>
-                        <div className='grid gap-1 w-full'>
-                            <label className='text-xl'>Firstname</label>
-                            <input type="text"
-                                name='first_name'
-                                value={formData.first_name}
-                                onChange={handleChange}
-                                className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
-                                placeholder='Enter your Fistname' />
-                        </div>
-                        <div className='grid gap-1 w-full'>
-                            <label className='text-xl'>Lastname</label>
-                            <input type="text"
-                                name='last_name'
-                                value={formData.last_name}
-                                onChange={handleChange}
-                                className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
-                                placeholder='Enter your Lastname' />
-                        </div>
-
-                        <Dropdown items={roles} onSelect={handleRoleSelect} />
+                    <div className='grid gap-1'>
+                        <label htmlFor="confirmPassword" className='text-xl'>Confirm Password</label>
+                        <input
+                            {...register("confirmPassword")}
+                            type='password'
+                            className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
+                        />
+                        {errors.confirmPassword && (
+                            <p className='text-primary text-base'>{`${errors.confirmPassword.message}`}</p>
+                        )}
                     </div>
+
+                    {email ? (email.endsWith("@rmuti.ac.th") ? (
+                        <div className={`grid grid-cols-2 gap-5 w-full`}>
+                            <div className='grid gap-1 w-full'>
+                                <label className='text-xl'>Firstname</label>
+                                <input
+                                    {...register("first_name")}
+                                    type="text"
+                                    className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
+                                />
+                                {errors.first_name && (
+                                    <p className='text-primary text-base'>{`${errors.first_name.message}`}</p>
+                                )}
+                            </div>
+
+                            <div className='grid gap-1 w-full'>
+                                <label className='text-xl'>Lastname</label>
+                                <input
+                                    {...register("last_name")}
+                                    type="text"
+                                    className='h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base'
+                                />
+                                {errors.last_name && (
+                                    <p className='text-primary text-base'>{`${errors.last_name.message}`}</p>
+                                )}
+                            </div>
+
+                            <div className='grid'>
+                                <Dropdown items={roles} onSelect={handleRoleSelect} labelName='Role' />
+                                {errors.role_id && (
+                                    <p className='text-primary text-base'>{`${errors.role_id.message}`}</p>
+                                )}
+                            </div>
+                        </div>
+                    ) : (null)) : (null)}
 
                     <div className='w-full flex items-center justify-center my-5'>
                         <button type='submit'

@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react'
 
 const menu = [
     { id: 1, title: "Dashboard", Link: "/dashboard" },
-    { id: 2, title: "Add project", Link: "/add_project" },
+    { id: 2, title: "Add type project", Link: "/add_type_project" },
+    { id: 3, title: "Add project", Link: "/add_project" },
 ]
 
 const Sidebar = () => {

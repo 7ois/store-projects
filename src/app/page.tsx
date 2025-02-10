@@ -2,7 +2,6 @@
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
-
 const page = () => {
   const router = useRouter()
   const pathname = usePathname()

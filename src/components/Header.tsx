@@ -3,22 +3,46 @@ import { ChevronDown, Pencil, Search } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Modal from './Modal'
-import { useAuthStore } from '@/stores/authStore'
+import { jwtDecode } from 'jwt-decode'
 
 const Navbar = () => {
     const router = useRouter()
-    const { user, loadUserFromStorage, logout } = useAuthStore()
 
     const [value, setValue] = useState("")
     const [isOpen, setIsOpen] = useState(false);
+    const [email, setEmail] = useState<string>(''); // user เป็น string หรือ null
 
     const toggleModal = () => {
         setIsOpen(!isOpen);
     };
 
     useEffect(() => {
-        loadUserFromStorage()
-    }, [loadUserFromStorage])
+        const token = localStorage.getItem('token');
+        if (!token) {
+            router.push('/dashboard');
+        } else {
+            // Decode token to get user information
+            const decoded: any = jwtDecode(token);
+            setEmail(decoded.email); // Set username from token
+        }
+    }, [router]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/login');
+    };
+
+    // useEffect(() => {
+    //     axios.get("http://localhost:3001/user/checkSession", {
+    //         withCredentials: true, // ให้ cookie ส่งไปกับคำขอ
+    //     })
+    //         .then((response) => {
+    //             setUser(response.data); // ใช้ response.data
+    //         })
+    //         .catch(() => {
+    //             setUser(null);
+    //         });
+    // }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: any) => {
@@ -58,7 +82,7 @@ const Navbar = () => {
                     onClick={toggleModal}
                 >
                     <p className='text-base'>
-                        {user ? user.email : "account"}
+                        {email ? email : "account"}
                     </p>
                     <ChevronDown size={15} className={`${isOpen ? "-scale-100" : "scale-100"}`} />
                 </div>
@@ -74,7 +98,7 @@ const Navbar = () => {
                         <Pencil size={15} />
                         Create an account
                     </button>
-                    <button onClick={logout}>Logout</button>
+                    <button onClick={handleLogout}>Logout</button>
                 </Modal>
             </div>
         </div>
