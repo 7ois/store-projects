@@ -1,5 +1,6 @@
 'use client'
-import { useAuthStore } from '@/stores/authStore'
+import axios from 'axios'
+// import { useAuthStore } from '@/stores/authStore'
 import { ArrowLeft } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -12,8 +13,6 @@ const page = () => {
         email: '',
         password: ''
     })
-    // const login = useAuthStore((state) => state.login);
-    const { login } = useAuthStore()
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -22,39 +21,24 @@ const page = () => {
         }))
     }
 
-    const loginSubmit = async (e: React.FormEvent) => {
+    const handleLogin = async (e: any) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:3001/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            if (!res.ok) {
-                throw new Error('Failed to login')
-            }
-            const data = await res.json()
-            login(data.user, data.token);
-            // console.log('Backend response:', data);
-            alert('Login successful!')
-            router.push('/dashboard')
+            const response = await axios.post('http://localhost:3001/api/login', { email: formData.email, password: formData.password });
+            console.log(JSON.stringify(response.data.user))
+            localStorage.setItem('token', response.data.token);
+            router.push('/dashboard');
         } catch (error) {
-            console.error('Login error:', error)
-            alert('Login failed')
-            setFormData({ email: "", password: "" })
+            alert('Login failed');
         }
-    }
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
+    };
 
     return (
         <div className='w-full h-[800px] flex rounded-[10px] overflow-hidden shadow-lg'>
             <div className='relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20'>
                 <div
                     className='absolute top-5 left-5 cursor-pointer'
-                    onClick={() => router.back()}
+                    onClick={() => router.push('/dashboard')}
                 >
                     <ArrowLeft size={25} color='#1C3B6C' />
                 </div>
@@ -64,7 +48,7 @@ const page = () => {
                     height={150}
                 />
                 <h1 className='text-5xl my-5'>Log In</h1>
-                <form onSubmit={loginSubmit} className='grid gap-5 w-full text-2xl'>
+                <form onSubmit={handleLogin} className='grid gap-5 w-full text-2xl'>
                     <div className='grid gap-2'>
                         <label className='text-xl'>Email</label>
                         <input
