@@ -1,11 +1,11 @@
 "use client";
-import { Book, Camera, CirclePlus, X } from "lucide-react";
+import { Book, CirclePlus, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usePopup } from "@/context/PopupContext";
 import Popup from "@/components/Popup";
 import Dropdown from "@/components/Dropdown";
 import axios from "axios";
-import SearchDropdown from "@/components/SearchDropdown";
+// import SearchDropdown from "@/components/SearchDropdown";
 
 const data = [
   {
@@ -63,7 +63,7 @@ const page = () => {
         ))}
       </div>
       <Popup>
-        <Popuppage closePopup={closePopup} />
+        <PopupPage closePopup={closePopup} />
       </Popup>
     </div>
   );
@@ -71,7 +71,7 @@ const page = () => {
 
 export default page;
 
-const Popuppage = ({ closePopup }: { closePopup: () => void }) => {
+const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const [formData, setFormData] = useState({
     project_name: "",
     description: "",
@@ -88,7 +88,7 @@ const Popuppage = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/getTypeProjects"
+          "http://localhost:3001/api/getAllTypeProjects"
         );
         console.log(response.data);
         const formattedTypes = response.data.map(
@@ -182,25 +182,31 @@ const Popuppage = ({ closePopup }: { closePopup: () => void }) => {
     formDataToSend.forEach((value, key) => {
       console.log(`${key}:`, value);
     });
-    // try {
-    //     const respone = await axios.post('http://localhost:3001/api/postProjects', formDataToSend, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //         }
-    //     });
-    //     closePopup();
-    // } catch (err) {
-    //     console.error("Error create project: ", err)
-    // }
+    try {
+      const respone = await axios.post(
+        "http://localhost:3001/api/postProjects",
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log(respone.data);
+      closePopup();
+    } catch (err) {
+      console.error("Error create project: ", err);
+    }
   };
 
   return (
     <div className="max-w-[1000px] grid overflow-hidden">
-      <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
+      <div className=" h-10 flex items-center justify-center pb-6 shadow-sm">
         Header
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="p-10 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[590px] ">
+        <div className="p-10 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[590px]">
           <label>Project name</label>
           <input
             type="text"
@@ -313,6 +319,7 @@ const Popuppage = ({ closePopup }: { closePopup: () => void }) => {
           <input
             onChange={handleFileChange}
             type="file"
+            accept=".pdf"
             className="h-[50px] pl-2 border-[#c5c5c5] text-base"
           />
         </div>

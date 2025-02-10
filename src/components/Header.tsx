@@ -4,13 +4,14 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "./Modal";
 import { jwtDecode } from "jwt-decode";
+import { User } from "@/entity/user";
 
 const Navbar = () => {
   const router = useRouter();
 
   const [value, setValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [email, setEmail] = useState<string>(""); // user เป็น string หรือ null
+  const [user, setUser] = useState<User | null>(null);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -23,7 +24,7 @@ const Navbar = () => {
     } else {
       // Decode token to get user information
       const decoded: any = jwtDecode(token);
-      setEmail(decoded.email); // Set username from token
+      setUser(decoded); // Set username from token
     }
   }, [router]);
 
@@ -72,7 +73,9 @@ const Navbar = () => {
           className="flex items-center gap-2 cursor-pointer"
           onClick={toggleModal}
         >
-          <p className="text-base">{email ? email : "account"}</p>
+          <p className="text-base">{user?.email ? user.email : "account"}</p>
+          <p className="text-base">{user?.first_name ? user.first_name : ""}</p>
+          <p className="text-base">{user?.last_name ? user.last_name : ""}</p>
           <ChevronDown
             size={15}
             className={`${isOpen ? "-scale-100" : "scale-100"}`}
