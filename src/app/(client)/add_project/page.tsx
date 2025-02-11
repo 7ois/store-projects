@@ -509,9 +509,9 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
                   Array.isArray(advisorSuggestions) &&
                   advisorSuggestions.length > 0 && (
                     <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
-                      {advisorSuggestions.map((value, index) => (
+                      {advisorSuggestions.map((value, idx) => (
                         <div
-                          key={index}
+                          key={idx}
                           className="p-2 cursor-pointer hover:bg-gray-100"
                           onClick={() =>
                             handleSelectUserForField(value, "advisor", index)
