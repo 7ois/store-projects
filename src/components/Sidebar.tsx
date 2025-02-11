@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { User } from "@/entity/user";
 
 const menu = [
   { id: 1, title: "Dashboard", Link: "/dashboard" },
@@ -10,8 +12,28 @@ const menu = [
 ];
 
 const Sidebar = () => {
+  const router = useRouter();
+
   const [activeButton, setActiveButton] = useState<number | null>(null);
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/dashboard");
+    } else {
+      // Decode token to get user information
+      const decoded: any = jwtDecode(token);
+      setUser(decoded); // Set username from token
+    }
+  }, [router]);
+
+  const filteredMenu = !user
+    ? menu.filter((item) => item.id === 1) // ถ้าไม่มี user แสดงเฉพาะ id 1
+    : user.role_id && user.role_id > 2
+    ? menu.filter((item) => [1, 3].includes(item.id)) // role_id > 2 แสดงเฉพาะ id 1 และ 3
+    : menu; // role_id <= 2 แสดงทั้งหมด
 
   useEffect(() => {
     // ตรวจสอบว่า pathname ตรงกับ Link ใดในเมนู
@@ -33,11 +55,11 @@ const Sidebar = () => {
         <Link href="/">Logo</Link>
       </div>
       <div className="flex items-center justify-center flex-col gap-3">
-        {menu.map((item) => (
+        {filteredMenu.map((item) => (
           <Link key={item.title} href={item.Link} className="w-full">
             <button
               className={`${
-                activeButton == item.id
+                activeButton === item.id
                   ? "bg-blue text-[#fff] shadow-md"
                   : "bg-[#fff] text-[#000] shadow-md"
               } w-full h-20 rounded-[10px] text-xl text-left pl-5`}

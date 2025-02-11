@@ -23,7 +23,7 @@ const Page = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       setProjects(response.data.data);
@@ -136,7 +136,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null); //สำหรับเช็คว่าอยู่ input ไหน
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null,
+    null
   ); //สำหรับเช็คว่าอยู่ input ไหน
 
   const getAllUsers = async (query: string, role_id?: string) => {
@@ -158,7 +158,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   };
 
   const handleChangeMainOwner = async (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     setFormData({
       ...formData,
@@ -189,7 +189,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number,
+    index?: number
   ) => {
     const newData = [...formData[field]];
 
@@ -230,13 +230,13 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          }),
+          })
         );
         setTypes(formattedTypes);
       } catch {}
@@ -266,7 +266,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor",
+    field: "owner" | "advisor"
   ) => {
     const newData = [...formData[field]];
     newData[index].value = e.target.value;
@@ -278,7 +278,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : "",
+      field === "advisor" ? "2" : ""
     );
 
     if (field === "advisor") {
@@ -355,7 +355,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       closePopup();
@@ -365,7 +365,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   return (
     <>
       <div className="max-w-[1000px] grid overflow-hidden">
-        <div className=" h-10 flex items-center justify-center pb-6 shadow-sm">
+        <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
           Header
         </div>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
