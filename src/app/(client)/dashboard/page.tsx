@@ -15,17 +15,16 @@ interface Project {
   type_id: number;
 }
 
-const page = () => {
+const Page = () => {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/getAllProjects",
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllProjects`,
         );
         const data = response.data;
-        console.log("API Response:", data);
 
         setProjects(data.data);
       } catch (err) {
@@ -40,7 +39,7 @@ const page = () => {
     <div className="grid gap-3">
       {projects.length === 0
         ? "No data available"
-        : projects.map((project, index) => {
+        : projects.map((project) => {
             return (
               <Link
                 href={`/dashboard/${project.project_id}`}
@@ -58,4 +57,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
