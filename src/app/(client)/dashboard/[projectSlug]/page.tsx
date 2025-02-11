@@ -10,13 +10,11 @@ const Page = () => {
   const params = useParams();
   const [project, setProject] = useState<Project | null>(null);
 
-  console.log("Params from useParams():", params);
-
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/getProject/${params.projectSlug}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectSlug}`,
         );
         setProject(response.data.project);
       } catch (err) {

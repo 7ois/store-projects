@@ -33,18 +33,6 @@ const Navbar = () => {
     router.push("/login");
   };
 
-  // useEffect(() => {
-  //     axios.get("http://localhost:3001/user/checkSession", {
-  //         withCredentials: true, // ให้ cookie ส่งไปกับคำขอ
-  //     })
-  //         .then((response) => {
-  //             setUser(response.data); // ใช้ response.data
-  //         })
-  //         .catch(() => {
-  //             setUser(null);
-  //         });
-  // }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (event.target.id !== "modal" && isOpen) {
