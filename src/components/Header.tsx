@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDown, Pencil, Search } from "lucide-react";
+import { ChevronDown, DoorOpen, Pencil, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "./Modal";
@@ -74,8 +74,6 @@ const Navbar = () => {
           onClick={toggleModal}
         >
           <p className="text-base">{user?.email ? user.email : "account"}</p>
-          <p className="text-base">{user?.first_name ? user.first_name : ""}</p>
-          <p className="text-base">{user?.last_name ? user.last_name : ""}</p>
           <ChevronDown
             size={15}
             className={`${isOpen ? "-scale-100" : "scale-100"}`}
@@ -83,44 +81,64 @@ const Navbar = () => {
         </div>
 
         {/* No user */}
-        <Modal
-          isOpen={isOpen}
-          position="right"
-          classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
-        >
-          <div
-            id="modal"
-            className="w-full h-[90px] flex items-center justify-center"
+        {!user && (
+          <Modal
+            isOpen={isOpen}
+            position="right"
+            classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
           >
+            <div
+              id="modal"
+              className="w-full h-[90px] flex items-center justify-center"
+            >
+              <button
+                id="modal"
+                type="button"
+                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-[#fff] text-base"
+                onClick={() => router.push("/login")}
+              >
+                Login
+              </button>
+            </div>
             <button
               id="modal"
               type="button"
-              className="w-[260px] h-[50px] bg-blue rounded-[10px] text-[#fff] text-base"
-              onClick={() => router.push("/login")}
+              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5"
+              onClick={() => router.push("/register")}
             >
-              Login
+              <Pencil size={15} />
+              Create an account
             </button>
-          </div>
-          <button
-            id="modal"
-            type="button"
-            className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5"
-            onClick={() => router.push("/register")}
-          >
-            <Pencil size={15} />
-            Create an account
-          </button>
-          {/* <button onClick={handleLogout}>Logout</button> */}
-        </Modal>
+          </Modal>
+        )}
 
         {/* Login */}
-        {/* <Modal
-          isOpen={isOpen}
-          position="right"
-          classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
-        >
-          <button onClick={handleLogout}>Logout</button>
-        </Modal> */}
+        {user && (
+          <Modal
+            isOpen={isOpen}
+            position="right"
+            classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
+          >
+            <div className="grid gap-1 pl-3 py-3">
+              <div className="flex gap-2">
+                <p className="text-base">
+                  {user?.first_name ? user.first_name : ""}
+                </p>
+                <p className="text-base">
+                  {user?.last_name ? user.last_name : ""}
+                </p>
+              </div>
+              <p className="text-[#B4B4B4]">{user?.email ? user.email : ""}</p>
+            </div>
+            <button
+              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5"
+              onClick={handleLogout}
+            >
+              <DoorOpen size={20} />
+              Logout
+            </button>
+          </Modal>
+        )}
       </div>
     </div>
   );

@@ -202,7 +202,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
 
   return (
     <div className="max-w-[1000px] grid overflow-hidden">
-      <div className=" h-10 flex items-center justify-center pb-6 shadow-sm">
+      <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
         Header
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">

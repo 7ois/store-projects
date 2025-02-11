@@ -2,9 +2,10 @@
 
 // import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Project } from "@/entity/project";
+import { MoveLeft } from "lucide-react";
 
 const Page = () => {
   const params = useParams();
@@ -12,6 +13,7 @@ const Page = () => {
 
   console.log("Params from useParams():", params);
 
+  const router = useRouter();
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -25,8 +27,15 @@ const Page = () => {
     };
     if (params) fetchProject();
   }, [params]);
+
   return (
     <div className="overflow-y-auto max-h-[700px]">
+      <MoveLeft
+        onClick={() => router.back()}
+        size={25}
+        color="#1C3B6C"
+        className="cursor-pointer"
+      />
       <h1>Page ID: {params.projectSlug}</h1>
       {project ? (
         <div>
