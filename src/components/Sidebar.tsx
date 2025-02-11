@@ -28,7 +28,7 @@ const Sidebar = () => {
   }, [pathname]); // เมื่อ pathname เปลี่ยนแปลง, useEffect จะทำงานใหม่
 
   return (
-    <div className="z-10 w-[400px] bg-[#fff] drop-shadow-lg p-5">
+    <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5">
       <div className="mb-10 h-16 flex justify-center items-center">
         <Link href="/">Logo</Link>
       </div>
