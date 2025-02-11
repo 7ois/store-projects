@@ -1,19 +1,17 @@
-'use client'
-import { usePathname, useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+"use client";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
-const page = () => {
-  const router = useRouter()
-  const pathname = usePathname()
+const Page = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   useEffect(() => {
-    if (pathname === '/') {
-      router.push('/dashboard')
+    if (pathname === "/") {
+      router.push("/dashboard");
     }
-  }, [router])
+  }, [router]);
 
-  return (
-    <div className='text-base'>Loading...</div>
-  )
-}
+  return <div className="text-base">Loading...</div>;
+};
 
-export default page
+export default Page;

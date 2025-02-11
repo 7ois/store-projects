@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -24,14 +24,17 @@ const page = () => {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/api/login", {
-        email: formData.email,
-        password: formData.password,
-      });
-      console.log(JSON.stringify(response.data.user));
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/login`,
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+      );
+
       localStorage.setItem("token", response.data.token);
       router.push("/dashboard");
-    } catch (error) {
+    } catch {
       alert("Login failed");
     }
   };
@@ -102,4 +105,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
