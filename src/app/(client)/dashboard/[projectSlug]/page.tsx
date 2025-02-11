@@ -16,7 +16,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectSlug}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectSlug}`,
         );
         setProject(response.data.project);
       } catch (err) {
@@ -42,12 +42,12 @@ const Page = () => {
           <p>{project.description}</p>
           <p>{project.date}</p>
           <embed
-            src={`http://localhost:3001${project.file_path}`}
+            src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
             width="600"
             height="400"
           />
           <a
-            href={`http://localhost:3001${project.file_path}`}
+            href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
             download={project.file_name}
             className="text-blue-500 mt-2 block"
           >
