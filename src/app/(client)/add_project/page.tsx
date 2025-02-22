@@ -24,7 +24,7 @@ const Page = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setProjects(response.data.data);
@@ -41,6 +41,18 @@ const Page = () => {
   const handleClosePopup = () => {
     closePopup();
     fetchProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
+  };
+
+  const handleDelete = async (projectId: number) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
+      );
+
+      fetchProjects();
+    } catch (err) {
+      console.error("Error deleting project", err);
+    }
   };
 
   return (
@@ -88,7 +100,10 @@ const Page = () => {
                 </p>
               </div>
               <div className="flex gap-2 items-center justify-between">
-                <button className="bg-primary text-white rounded-lg p-4">
+                <button
+                  className="bg-primary text-white rounded-lg p-4"
+                  onClick={() => handleDelete(item.project_id)}
+                >
                   <Trash2 />
                 </button>
                 <button className="bg-blue text-white rounded-lg p-4">
@@ -100,14 +115,7 @@ const Page = () => {
                   Keywords: {item.keywords}
                 </p>
               )}
-              {item.users && (
-                <p className="text-sm text-gray-500">
-                  Users:{" "}
-                  {item.users
-                    .map((user) => `${user.first_name} ${user.last_name ?? ""}`)
-                    .join(", ")}
-                </p>
-              )} */}
+             */}
             </div>
           ))}
       </div>
@@ -125,7 +133,8 @@ interface FormData {
   project_name_en: string;
   abstract_th: string;
   abstract_en: string;
-  year: string;
+  keyword: string[];
+  date: string;
   type_id: number;
   main_owner: { user_id: number; role_group: "main_owner"; value: string };
   owner: { user_id: number; role_group: "owner"; value: string }[]; // Array of owner objects
@@ -139,7 +148,8 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
     project_name_en: "",
     abstract_th: "",
     abstract_en: "",
-    year: "",
+    keyword: [],
+    date: "",
     type_id: 0,
     main_owner: { user_id: 0, role_group: "main_owner", value: "" },
     owner: [],
@@ -153,7 +163,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null); //สำหรับเช็คว่าอยู่ input ไหน
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null
+    null,
   ); //สำหรับเช็คว่าอยู่ input ไหน
 
   const getAllUsers = async (query: string, role_id?: string) => {
@@ -175,7 +185,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   };
 
   const handleChangeMainOwner = async (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setFormData({
       ...formData,
@@ -206,7 +216,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number
+    index?: number,
   ) => {
     const newData = [...formData[field]];
 
@@ -247,13 +257,13 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          })
+          }),
         );
         setTypes(formattedTypes);
       } catch {}
@@ -283,7 +293,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor"
+    field: "owner" | "advisor",
   ) => {
     const newData = [...formData[field]];
     newData[index].value = e.target.value;
@@ -295,7 +305,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : ""
+      field === "advisor" ? "2" : "",
     );
 
     if (field === "advisor") {
@@ -357,9 +367,11 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
     const formDataToSend = new FormData();
     formDataToSend.append("type_id", formData.type_id.toString());
     formDataToSend.append("project_name_th", formData.project_name_th);
+    formDataToSend.append("project_name_en", formData.project_name_en);
     formDataToSend.append("abstract_th", formData.abstract_th);
-    formDataToSend.append("keywords", "");
-    formDataToSend.append("date", formData.year);
+    formDataToSend.append("abstract_en", formData.abstract_en);
+    formDataToSend.append("keywords", JSON.stringify(formData.keyword));
+    formDataToSend.append("date", formData.date);
     formDataToSend.append("role_group", JSON.stringify(mapRoleGroup));
     if (formData.file) {
       formDataToSend.append("file", formData.file);
@@ -372,7 +384,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       closePopup();
@@ -431,6 +443,20 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.abstract_en}
             />
 
+            <label>Keyword</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              placeholder="Enter keywords, separated by commas"
+              value={formData.keyword.join(", ")}
+              onChange={(e) => {
+                const keywords = e.target.value
+                  .split(",")
+                  .map((keyword) => keyword.trim());
+                setFormData({ ...formData, keyword: keywords });
+              }}
+            />
+
             <label>Type Project</label>
             <Dropdown
               items={types}
@@ -438,15 +464,15 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
               className="col-span-3"
             />
 
-            <label>Year</label>
+            <label>Date</label>
             <input
-              type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              type="date"
+              className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
               onChange={(e) =>
-                setFormData({ ...formData, year: e.target.value })
+                setFormData({ ...formData, date: e.target.value })
               }
-              placeholder="year"
-              value={formData.year}
+              placeholder="Select a date"
+              value={formData.date}
             />
 
             <label>Main owner</label>
@@ -587,6 +613,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
           </div>
           <div className="flex items-center justify-center gap-10 h-auto py-6 shadow-md">
             <button
+              type="button"
               className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary"
               onClick={closePopup}
             >

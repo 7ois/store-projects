@@ -7,7 +7,7 @@ export interface Project {
   project_name_en: string;
   abstract_th: string;
   abstract_en: string;
-  keywords?: string;
+  keywords?: string[];
   date: string;
   file_name: string;
   file_path: string;

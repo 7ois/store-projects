@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Project } from "@/entity/project";
-import { ChevronLeft, MoveLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 const Page = () => {
   const params = useParams();
@@ -16,7 +16,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
         );
         setProject(response.data.project);
       } catch (err) {
@@ -56,7 +56,12 @@ const Page = () => {
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>Date:</h1>
-              <h1>{project.date}</h1>
+              <h1>
+                {" "}
+                {new Date(project.date).toLocaleDateString("en-CA", {
+                  timeZone: "Asia/Bangkok",
+                })}
+              </h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>Keywords:</h1>
@@ -75,7 +80,7 @@ const Page = () => {
                       ?.filter(
                         (user) =>
                           user.role_group === "main_owner" ||
-                          user.role_group === "owner"
+                          user.role_group === "owner",
                       )
                       .map((user) => `${user.first_name} ${user.last_name}`)
                       .join(", ")}
