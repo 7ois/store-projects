@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Project } from "@/entity/project";
-import { MoveLeft } from "lucide-react";
+import { ChevronLeft, MoveLeft } from "lucide-react";
 
 const Page = () => {
   const params = useParams();
@@ -28,7 +28,7 @@ const Page = () => {
 
   return (
     <div>
-      <MoveLeft
+      <ChevronLeft
         onClick={() => router.back()}
         size={25}
         color="#1C3B6C"

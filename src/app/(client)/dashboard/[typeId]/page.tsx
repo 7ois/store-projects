@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowBigLeft } from "lucide-react";
+import { ArrowBigLeft, ChevronLeft } from "lucide-react";
 
 interface Project {
   date: string;
@@ -42,7 +42,7 @@ const Page = () => {
   return (
     <div className="grid gap-3">
       {/* <div> */}
-      <ArrowBigLeft onClick={() => router.back()} className="cursor-pointer" />
+      <ChevronLeft onClick={() => router.back()} className="cursor-pointer" />
       {/* </div> */}
       {projects.length > 0 ? (
         projects.map((project) => (
