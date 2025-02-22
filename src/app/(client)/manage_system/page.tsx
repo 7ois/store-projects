@@ -21,7 +21,7 @@ const page = () => {
         const data = response.data.data;
         setUsers(data);
       } catch (err) {
-        console.error("Error fetching project:", err);
+        console.error("Error fetching users:", err);
       }
     };
     fetchUsers();

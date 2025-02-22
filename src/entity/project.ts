@@ -3,8 +3,10 @@ import { User } from "./user";
 export interface Project {
   project_id: number;
   type_id: number;
-  project_name: string;
-  description: string;
+  project_name_th: string;
+  project_name_en: string;
+  abstract_th: string;
+  abstract_en: string;
   keywords?: string;
   date: string;
   file_name: string;

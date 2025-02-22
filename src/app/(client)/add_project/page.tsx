@@ -1,5 +1,5 @@
 "use client";
-import { Book, CirclePlus, X } from "lucide-react";
+import { Book, CirclePlus, Pencil, Trash2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usePopup } from "@/context/PopupContext";
 import Popup from "@/components/Popup";
@@ -79,13 +79,23 @@ const Page = () => {
           projects.map((item) => (
             <div
               key={item.project_id}
-              className="grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
+              className="grid grid-cols-[1300px_auto] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
             >
-              <h1 className="text-xl">{item.project_name}</h1>
-              <p className="text-[#B4B4B4] text-base w-full truncate">
-                {item.description}
-              </p>
-              {item.keywords && (
+              <div>
+                <h1 className="text-xl">{item.project_name_th}</h1>
+                <p className="text-[#B4B4B4] text-base w-full truncate">
+                  {item.abstract_th}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center justify-between">
+                <button className="bg-primary text-white rounded-lg p-4">
+                  <Trash2 />
+                </button>
+                <button className="bg-blue text-white rounded-lg p-4">
+                  <Pencil />
+                </button>
+              </div>
+              {/* {item.keywords && (
                 <p className="text-sm text-gray-500">
                   Keywords: {item.keywords}
                 </p>
@@ -97,7 +107,7 @@ const Page = () => {
                     .map((user) => `${user.first_name} ${user.last_name ?? ""}`)
                     .join(", ")}
                 </p>
-              )}
+              )} */}
             </div>
           ))}
       </div>
@@ -111,8 +121,10 @@ const Page = () => {
 export default Page;
 
 interface FormData {
-  project_name: string;
-  description: string;
+  project_name_th: string;
+  project_name_en: string;
+  abstract_th: string;
+  abstract_en: string;
   year: string;
   type_id: number;
   main_owner: { user_id: number; role_group: "main_owner"; value: string };
@@ -123,8 +135,10 @@ interface FormData {
 
 const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
   const [formData, setFormData] = useState<FormData>({
-    project_name: "",
-    description: "",
+    project_name_th: "",
+    project_name_en: "",
+    abstract_th: "",
+    abstract_en: "",
     year: "",
     type_id: 0,
     main_owner: { user_id: 0, role_group: "main_owner", value: "" },
@@ -342,8 +356,8 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
 
     const formDataToSend = new FormData();
     formDataToSend.append("type_id", formData.type_id.toString());
-    formDataToSend.append("project_name", formData.project_name);
-    formDataToSend.append("description", formData.description);
+    formDataToSend.append("project_name_th", formData.project_name_th);
+    formDataToSend.append("abstract_th", formData.abstract_th);
     formDataToSend.append("keywords", "");
     formDataToSend.append("date", formData.year);
     formDataToSend.append("role_group", JSON.stringify(mapRoleGroup));
@@ -369,30 +383,52 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
     <>
       <div className="max-w-[1000px] grid overflow-hidden">
         <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
-          Header
+          Add project
         </div>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="px-10 my-5 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[460px]">
-            <label>Project name</label>
+            <label>Project name TH</label>
             <input
               type="text"
               className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
               onChange={(e) =>
-                setFormData({ ...formData, project_name: e.target.value })
+                setFormData({ ...formData, project_name_th: e.target.value })
               }
               placeholder="project-name"
-              value={formData.project_name}
+              value={formData.project_name_th}
             />
 
-            <label>Description</label>
+            <label>Project name EN</label>
             <input
               type="text"
               className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
               onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
+                setFormData({ ...formData, project_name_en: e.target.value })
               }
-              placeholder="description"
-              value={formData.description}
+              placeholder="project-name-EN"
+              value={formData.project_name_en}
+            />
+
+            <label>Abstract TH</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              onChange={(e) =>
+                setFormData({ ...formData, abstract_th: e.target.value })
+              }
+              placeholder="abstract_th"
+              value={formData.abstract_th}
+            />
+
+            <label>Abstract EN</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              onChange={(e) =>
+                setFormData({ ...formData, abstract_en: e.target.value })
+              }
+              placeholder="abstract_en"
+              value={formData.abstract_en}
             />
 
             <label>Type Project</label>

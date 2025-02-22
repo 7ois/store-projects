@@ -48,7 +48,7 @@ const page = () => {
       <ul className="grid grid-cols-3 gap-5 mt-20">
         {typeProject.length > 0 ? (
           typeProject.map((type) => (
-            <Link key={type.type_id} href={`/dashboard/${type.type_id}`}>
+            <Link key={type.type_id} href={`/project_center/${type.type_id}`}>
               <li className="flex items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition delay-100 hover:-translate-y-1 hover:bg-orange">
                 {type.type_name}
               </li>

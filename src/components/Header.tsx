@@ -33,7 +33,7 @@ const Navbar = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/dashboard");
+      router.push("/project_center");
     } else {
       // Decode token to get user information
       const decoded: any = jwtDecode(token);

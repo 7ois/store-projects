@@ -29,11 +29,11 @@ const Page = () => {
         {
           email: formData.email,
           password: formData.password,
-        },
+        }
       );
 
       localStorage.setItem("token", response.data.token);
-      router.push("/dashboard");
+      router.push("/project_center");
     } catch {
       alert("Login failed");
     }
@@ -44,7 +44,7 @@ const Page = () => {
       <div className="relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20">
         <div
           className="absolute top-5 left-5 cursor-pointer"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.push("/project_center")}
         >
           <ArrowLeft size={25} color="#1C3B6C" />
         </div>

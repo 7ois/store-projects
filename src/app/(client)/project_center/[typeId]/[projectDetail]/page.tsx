@@ -40,43 +40,19 @@ const Page = () => {
           <div className="grid gap-3">
             <div className="grid grid-cols-[200px_auto]">
               <h1>Title:</h1>
-              <h1>{project.project_name}</h1>
+              <h1>{project.project_name_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Other Title:</h1>
-              <h1>-</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Abstract:</h1>
-              <h1>{project.description}</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Title:</h1>
-              <h1>{project.project_name}</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Other Title:</h1>
-              <h1>-</h1>
+              <h1>Orter Title:</h1>
+              <h1>{project.project_name_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>Abstract:</h1>
-              <h1>{project.description}</h1>
+              <h1>{project.abstract_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Title:</h1>
-              <h1>{project.project_name}</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Other Title:</h1>
-              <h1>-</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Abstract:</h1>
-              <h1>{project.description}</h1>
-            </div>
-            <div className="grid grid-cols-[200px_auto]">
-              <h1>Other Abstract:</h1>
-              <h1>-</h1>
+              <h1>Orter Abstract:</h1>
+              <h1>{project.abstract_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>Date:</h1>

@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { User } from "@/entity/user";
 
 const menu = [
-  { id: 1, title: "Dashboard", Link: "/dashboard" },
+  { id: 1, title: "Project center", Link: "/project_center" },
   { id: 2, title: "Add type project", Link: "/add_type_project" },
   { id: 3, title: "Add project", Link: "/add_project" },
   { id: 4, title: "Manage system", Link: "/manage_system" },
@@ -22,7 +22,7 @@ const Sidebar = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/dashboard");
+      router.push("/project_center");
     } else {
       // Decode token to get user information
       const decoded: any = jwtDecode(token);
@@ -39,8 +39,11 @@ const Sidebar = () => {
   useEffect(() => {
     // ตรวจสอบว่า pathname ตรงกับ Link ใดในเมนู
     const activeMenuItem = menu.find((item) => {
-      // สำหรับหน้า Dashboard หรือ Dashboard/[id]
-      if (item.Link === "/dashboard" && pathname.startsWith("/dashboard")) {
+      // สำหรับหน้า project_center หรือ project_center/[id]
+      if (
+        item.Link === "/project_center" &&
+        pathname.startsWith("/project_center")
+      ) {
         return true;
       }
       return pathname === item.Link;

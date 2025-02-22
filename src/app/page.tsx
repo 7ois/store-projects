@@ -7,7 +7,7 @@ const Page = () => {
   const pathname = usePathname();
   useEffect(() => {
     if (pathname === "/") {
-      router.push("/dashboard");
+      router.push("/project_center");
     }
   }, [router]);
 

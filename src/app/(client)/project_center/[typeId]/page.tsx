@@ -1,10 +1,9 @@
 "use client";
-// pages/dashboard/[typeId].tsx
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowBigLeft, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 interface Project {
   date: string;
@@ -47,7 +46,7 @@ const Page = () => {
       {projects.length > 0 ? (
         projects.map((project) => (
           <Link
-            href={`/dashboard/${project.type_id}/${project.project_id}`}
+            href={`/project_center/${project.type_id}/${project.project_id}`}
             key={project.project_id}
             className="grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
           >
