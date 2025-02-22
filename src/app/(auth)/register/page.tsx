@@ -36,7 +36,7 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
@@ -55,12 +55,12 @@ const Page = () => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`
         );
         const formattedRoles = response.data.data
           .filter(
             (data: { role_id: number }) =>
-              data.role_id === 2 || data.role_id === 3,
+              data.role_id === 2 || data.role_id === 3
           )
           .map((item: { role_id: number; role_name: string }) => ({
             id: item.role_id,
@@ -101,7 +101,7 @@ const Page = () => {
         >
           <div className="grid gap-1">
             <label htmlFor="email" className="text-xl">
-              Email
+              อีเมล
             </label>
             <input
               {...register("email")}
@@ -115,7 +115,7 @@ const Page = () => {
 
           <div className="grid gap-1">
             <label htmlFor="password" className="text-xl">
-              Password
+              รหัสผ่าน
             </label>
             <input
               {...register("password")}
@@ -129,7 +129,7 @@ const Page = () => {
 
           <div className="grid gap-1">
             <label htmlFor="confirmPassword" className="text-xl">
-              Confirm Password
+              ยืนยันรหัสผ่าน
             </label>
             <input
               {...register("confirmPassword")}
@@ -145,7 +145,7 @@ const Page = () => {
             email.endsWith("@rmuti.ac.th") ? (
               <div className={`grid grid-cols-2 gap-5 w-full`}>
                 <div className="grid gap-1 w-full">
-                  <label className="text-xl">Firstname</label>
+                  <label className="text-xl">ชื่อ</label>
                   <input
                     {...register("first_name")}
                     type="text"
@@ -157,7 +157,7 @@ const Page = () => {
                 </div>
 
                 <div className="grid gap-1 w-full">
-                  <label className="text-xl">Lastname</label>
+                  <label className="text-xl">นามสกุล</label>
                   <input
                     {...register("last_name")}
                     type="text"
@@ -172,7 +172,7 @@ const Page = () => {
                   <Dropdown
                     items={roles}
                     onSelect={handleRoleSelect}
-                    labelName="Role"
+                    labelName="ประเภทผู้ใช้"
                   />
                   {errors.role_id && (
                     <p className="text-primary text-base">{`${errors.role_id.message}`}</p>

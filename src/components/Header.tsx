@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Modal from "./Modal";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/entity/user";
+import Dropdown from "./Dropdown";
 
 const Navbar = () => {
   const router = useRouter();
@@ -12,6 +13,18 @@ const Navbar = () => {
   const [value, setValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [year, setYear] = useState(0);
+
+  const yearData = [
+    { id: 1, value: "2545" },
+    { id: 2, value: "2546" },
+    { id: 3, value: "2547" },
+    { id: 4, value: "2548" },
+  ];
+
+  const handleYearSelect = (value: number) => {
+    setYear(value);
+  };
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -39,7 +52,6 @@ const Navbar = () => {
         toggleModal();
       }
     };
-
     document.addEventListener("click", handleClickOutside);
 
     return () => {
@@ -48,8 +60,8 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <div className="relative h-[100px] w-full px-20 bg-[#fff] flex justify-between items-center shadow-md z-20">
-      <div className="w-3/4 flex gap-5">
+    <div className="h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky  top-0 z-10 bg-white">
+      <div className="w-3/4 flex items-center gap-5">
         <div className="w-1/4 h-10 flex items-center gap-2">
           <Search size={20} />
           <input
@@ -60,12 +72,20 @@ const Navbar = () => {
             placeholder="Quick Search (ctrl + K)"
           />
         </div>
-        <button
+        <div className="flex gap-2 justify-center items-center">
+          <h1>ปีการศึกษา</h1>
+          <Dropdown
+            items={yearData}
+            onSelect={handleYearSelect}
+            className="border-none"
+          />
+        </div>
+        {/* <button
           type="button"
           className="border border-blue text-blue w-20 h-10 rounded-[10px]"
         >
           Label
-        </button>
+        </button> */}
       </div>
 
       <div className="relative">
@@ -81,11 +101,11 @@ const Navbar = () => {
         </div>
 
         {/* No user */}
-        {!user && (
+        {!user ? (
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
+            classNameContainer="flex flex-col bg-[#fff] border-[1px] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
           >
             <div
               id="modal"
@@ -110,14 +130,12 @@ const Navbar = () => {
               Create an account
             </button>
           </Modal>
-        )}
-
-        {/* Login */}
-        {user && (
+        ) : (
+          /* Login */
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-[#fff] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
+            classNameContainer="flex flex-col bg-[#fff] border-[1px] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
           >
             <div className="grid gap-1 pl-3 py-3">
               <div className="flex gap-2">

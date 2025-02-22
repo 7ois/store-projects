@@ -50,7 +50,7 @@ const Sidebar = () => {
   }, [pathname]); // เมื่อ pathname เปลี่ยนแปลง, useEffect จะทำงานใหม่
 
   return (
-    <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5">
+    <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5 sticky top-0">
       <div className="mb-10 h-16 flex justify-center items-center">
         <Link href="/">Logo</Link>
       </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
               className={`${
                 activeButton === item.id
                   ? "bg-blue text-[#fff] shadow-md"
-                  : "bg-[#fff] text-[#000] shadow-md"
+                  : "bg-[#fff] text-[#000] shadow-md transition delay-75 hover:bg-orange hover:text-white"
               } w-full h-20 rounded-[10px] text-xl text-left pl-5`}
               onClick={() => setActiveButton(item.id)}
             >

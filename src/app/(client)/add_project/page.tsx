@@ -14,6 +14,7 @@ const Page = () => {
   const { openPopup, closePopup } = usePopup();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -32,9 +33,11 @@ const Page = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchProjects();
   }, []);
+
   const handleClosePopup = () => {
     closePopup();
     fetchProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
@@ -369,7 +372,7 @@ const PopupPage = ({ closePopup }: { closePopup: () => void }) => {
           Header
         </div>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <div className="p-10 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[590px]">
+          <div className="px-10 my-5 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[460px]">
             <label>Project name</label>
             <input
               type="text"

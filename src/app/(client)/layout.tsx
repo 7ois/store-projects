@@ -16,14 +16,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <PopupProvider>
-          <div className="flex">
+          <div className="flex min-h-screen">
             <Sidebar />
-            <div className="w-full relative">
+            {/* Main Content */}
+            <div className="flex flex-col w-full relative">
               <Header />
-              <div className="p-10">{children}</div>
-              <div className="absolute bottom-0 w-full">
-                <Footer />
-              </div>
+              <div className="flex-1 overflow-y-auto p-10">{children}</div>
+              <Footer />
             </div>
           </div>
         </PopupProvider>
