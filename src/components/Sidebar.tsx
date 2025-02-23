@@ -23,7 +23,9 @@ const Sidebar = () => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
       if (!token) {
-        router.push("/project_center");
+        if (!pathname.startsWith("/project_center")) {
+          router.push("/project_center");
+        }
         return;
       }
 
