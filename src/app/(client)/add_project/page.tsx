@@ -1,5 +1,5 @@
 "use client";
-import { Book, Pencil, Trash2, X } from "lucide-react";
+import { Book, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usePopup } from "@/context/PopupContext";
 import Popup from "@/components/Popup";
@@ -25,7 +25,7 @@ const Page = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setProjects(response.data.data);
@@ -47,7 +47,7 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
       );
 
       fetchProjects();
@@ -85,6 +85,14 @@ const Page = () => {
                 <p className="text-[#B4B4B4] text-base w-full truncate">
                   {item.abstract_th}
                 </p>
+                {!item.type_id && (
+                  <div className="flex">
+                    <p className="text-red-500 text-sm">
+                      ประเภทโครงงานไม่มีแล้วนะจ๊ะ
+                    </p>
+                    <TriangleAlert className="text-primary" />
+                  </div>
+                )}
               </div>
               <div className="flex gap-2 items-center justify-center">
                 <button
