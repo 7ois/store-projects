@@ -1,29 +1,27 @@
 "use client";
-import { Book, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { Book, Pencil, Trash2, TriangleAlert } from "lucide-react";
+import React, { useEffect } from "react";
 import { usePopup } from "@/context/PopupContext";
 import Popup from "@/components/Popup";
-import Dropdown from "@/components/Dropdown";
 import axios from "axios";
-import { User } from "@/entity/user";
-import { Project } from "@/entity/project";
-import { jwtDecode } from "jwt-decode";
 import PopupAddProjects from "@/components/PopupAddProjects";
 // import SearchDropdown from "@/components/SearchDropdown";
 import Jojo from "../../../../public/images/Jojo.jpg";
 import Image from "next/image";
 import PopupEditProject from "@/components/PopupEditProject";
+import { useMyProjectStore } from "@/stores/myProjectStore";
 
 const Page = () => {
   // const { openPopup, closePopup } = usePopup();
-  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { projects, fetchMyProjects } = useMyProjectStore();
   // const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
   const [isOpenAddProject, setIsOpenAddProject] = useState(false);
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
+    null,
   );
 
   const openPopup = (projectId: number) => {
@@ -38,43 +36,28 @@ const Page = () => {
     }
   }, [selectedProjectId]);
 
-  const fetchProjects = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get<{ success: boolean; data: Project[] }>(
-        `${process.env.NEXT_PUBLIC_API_URL}/getMyProjects`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  const { openPopup, closePopup } = usePopup();
 
-      setProjects(response.data.data);
-    } catch {
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { projects, fetchMyProjects } = useMyProjectStore();
 
   useEffect(() => {
-    fetchProjects();
+    fetchMyProjects({});
   }, []);
 
   const handleClosePopup = () => {
     setIsOpenAddProject(false);
     setIsOpenDeleteProject(false);
     setIsOpenEditProject(false);
-    fetchProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
+    fetchMyProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
   };
 
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
       );
 
-      fetchProjects();
+      fetchMyProjects({});
     } catch (err) {
       console.error("Error deleting project", err);
     }
@@ -96,7 +79,7 @@ const Page = () => {
           </button>
         </div>
 
-        {loading && <p>Loading...</p>}
+        {/* {loading && <p>Loading...</p>} */}
 
         {!loading &&
           projects.map((item) => (

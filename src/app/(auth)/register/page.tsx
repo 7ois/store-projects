@@ -13,10 +13,8 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
-    setError,
-    getValues,
     setValue,
     watch,
   } = useForm<registerSchemaType>({
@@ -28,6 +26,7 @@ const Page = () => {
   const [roles, setRoles] = useState<{ id: number; value: string }[]>([]);
 
   const onSubmit = async (data: registerSchemaType) => {
+    console.log("Form Data:", data);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/register`,
@@ -36,7 +35,7 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -55,18 +54,19 @@ const Page = () => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`
+          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`,
         );
         const formattedRoles = response.data.data
           .filter(
             (data: { role_id: number }) =>
-              data.role_id === 2 || data.role_id === 3
+              data.role_id === 2 || data.role_id === 3,
           )
           .map((item: { role_id: number; role_name: string }) => ({
             id: item.role_id,
             value: item.role_name,
           }));
         setRoles(formattedRoles);
+        setValue("role_id", 4);
       } catch (error) {
         console.error("Error fetching roles:", error);
       }
@@ -76,7 +76,7 @@ const Page = () => {
   }, []);
 
   const handleRoleSelect = (value: number) => {
-    setValue("role_id", value);
+    setValue("role_id", value || 4);
   };
 
   return (

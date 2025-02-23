@@ -1,28 +1,61 @@
 "use client";
 import { ChevronDown, DoorOpen, Pencil, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import Modal from "./Modal";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/entity/user";
 import Dropdown from "./Dropdown";
+import { useAllProjectStore } from "@/stores/allProjectStore";
+import { useMyProjectStore } from "@/stores/myProjectStore";
 
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname(); // ดึง pathname ปัจจุบัน
+  const params = useParams(); // ดึงข้อมูลจาก params
+  const { typeId } = params;
 
   const [value, setValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [year, setYear] = useState(0);
+  const [year, setYear] = useState("");
 
+  useEffect(() => {
+    setValue("");
+    setYear("");
+  }, [pathname]);
+
+  const currentYear = new Date().getFullYear();
   const yearData = [
-    { id: 1, value: "2545" },
-    { id: 2, value: "2546" },
-    { id: 3, value: "2547" },
-    { id: 4, value: "2548" },
+    { id: 0, value: "ทั้งหมด" },
+    ...Array.from({ length: 5 }, (_, index) => {
+      const yearInBuddhistEra = currentYear - index + 543;
+      return { id: index + 1, value: yearInBuddhistEra.toString() };
+    }),
   ];
 
-  const handleYearSelect = (value: number) => {
+  const { fetchProjects } = useAllProjectStore();
+  const { fetchMyProjects } = useMyProjectStore();
+
+  useEffect(() => {
+    if (
+      pathname === "/add_project" ||
+      pathname.startsWith("/project_center/") ||
+      value.length >= 2
+    ) {
+      if (pathname === "/add_project") {
+        fetchMyProjects({ search: value, year });
+      } else {
+        fetchProjects({
+          typeId: typeId?.toLocaleString(),
+          search: value,
+          year,
+        });
+      }
+    }
+  }, [value, year, pathname, typeId, fetchProjects, fetchMyProjects]);
+
+  const handleYearSelect = (_: number, value: string) => {
     setYear(value);
   };
 
@@ -43,7 +76,6 @@ const Navbar = () => {
     const intervalId = setInterval(checkToken, 5000);
 
     checkToken();
-
     return () => clearInterval(intervalId);
   }, [router]);
 
@@ -65,33 +97,35 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
+  const shouldShowSearchAndYear =
+    pathname === "/add_project" || /^\/project_center\/\d+$/.test(pathname);
+
   return (
-    <div className="h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky  top-0 z-10 bg-white">
+    <div className="h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
       <div className="w-3/4 flex items-center gap-5">
-        <div className="w-1/4 h-10 flex items-center gap-2">
-          <Search size={20} />
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            className="p-3 w-full h-full focus:outline-none"
-            placeholder="Quick Search (ctrl + K)"
-          />
-        </div>
-        <div className="flex gap-2 justify-center items-center">
-          <h1>ปีการศึกษา</h1>
-          <Dropdown
-            items={yearData}
-            onSelect={handleYearSelect}
-            className="border-none"
-          />
-        </div>
-        {/* <button
-          type="button"
-          className="border border-blue text-blue w-20 h-10 rounded-[10px]"
-        >
-          Label
-        </button> */}
+        {/* แสดง Search และปีการศึกษาตามเงื่อนไข */}
+        {shouldShowSearchAndYear && (
+          <>
+            <div className="w-1/4 h-10 flex items-center gap-2">
+              <Search size={20} />
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                className="p-3 w-full h-full focus:outline-none"
+                placeholder="Quick Search (ctrl + K)"
+              />
+            </div>
+            <div className="flex gap-2 justify-center items-center">
+              <h1>ปีการศึกษา</h1>
+              <Dropdown
+                items={yearData}
+                onSelect={handleYearSelect} // อัปเดตค่า year
+                className="border-none"
+              />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="relative">

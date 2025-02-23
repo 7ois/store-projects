@@ -1,32 +1,23 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-import { Project } from "@/entity/project";
+import { useAllProjectStore } from "@/stores/allProjectStore";
 
 const Page = () => {
   const router = useRouter();
   const params = useParams(); // ดึงข้อมูลจาก params
   const { typeId } = params; // ดึงค่าจาก params
 
-  const [projects, setProjects] = useState<Project[]>([]);
+  const { projects, setTypeId, fetchProjects } = useAllProjectStore();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllProjects?type_id=${typeId}`
-        );
-        const allProjects = response.data.data;
-        setProjects(allProjects);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+    if (typeId) {
+      setTypeId(typeId.toString());
+      fetchProjects({ typeId: typeId.toString() });
+    }
+  }, [typeId, setTypeId, fetchProjects]);
 
   return (
     <div className="grid gap-3">

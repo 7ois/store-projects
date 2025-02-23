@@ -9,7 +9,7 @@ interface DropdownItem {
 
 interface DropdownProps {
   items: DropdownItem[];
-  onSelect: (value: number) => void;
+  onSelect: (id: number, value: string) => void;
   labelName?: string;
   className?: string;
 }
@@ -27,8 +27,8 @@ const Dropdown: React.FC<DropdownProps> = ({
     setIsOpen(!isOpen);
   };
 
-  const handleSelect = (selectedIds: number) => {
-    onSelect(selectedIds);
+  const handleSelect = (selectedIds: number, selectedValue: string = "") => {
+    onSelect(selectedIds, selectedValue);
     setIsOpen(false); // ปิด Dropdown หลังเลือก
     const selectedName = items.find((item) => item.id == selectedIds);
     setSelected(selectedName?.value);
@@ -64,7 +64,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             {items.map((item, index) => (
               <div
                 key={index}
-                onClick={() => handleSelect(item.id)}
+                onClick={() => handleSelect(item.id, item.value)}
                 className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#e1e1e1] cursor-pointer"
                 role="menuitem"
               >
