@@ -1,7 +1,6 @@
 "use client";
 import { Book, Pencil, Trash2, TriangleAlert } from "lucide-react";
-import React, { useEffect } from "react";
-import { usePopup } from "@/context/PopupContext";
+import React, { useEffect, useState } from "react";
 import Popup from "@/components/Popup";
 import axios from "axios";
 import PopupAddProjects from "@/components/PopupAddProjects";
@@ -12,9 +11,6 @@ import PopupEditProject from "@/components/PopupEditProject";
 import { useMyProjectStore } from "@/stores/myProjectStore";
 
 const Page = () => {
-  // const { openPopup, closePopup } = usePopup();
-  const [loading, setLoading] = useState(true);
-
   const { projects, fetchMyProjects } = useMyProjectStore();
   // const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
   const [isOpenAddProject, setIsOpenAddProject] = useState(false);
@@ -36,10 +32,6 @@ const Page = () => {
     }
   }, [selectedProjectId]);
 
-  const { openPopup, closePopup } = usePopup();
-
-  const { projects, fetchMyProjects } = useMyProjectStore();
-
   useEffect(() => {
     fetchMyProjects({});
   }, []);
@@ -48,7 +40,7 @@ const Page = () => {
     setIsOpenAddProject(false);
     setIsOpenDeleteProject(false);
     setIsOpenEditProject(false);
-    fetchMyProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
+    fetchMyProjects({}); // เรียก fetchProjects หลังจากที่ปิด Popup
   };
 
   const handleDelete = async (projectId: number) => {
@@ -81,72 +73,71 @@ const Page = () => {
 
         {/* {loading && <p>Loading...</p>} */}
 
-        {!loading &&
-          projects.map((item) => (
-            <div
-              key={item.project_id}
-              className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
-            >
-              <div>
-                <h1 className="text-xl">{item.project_name_th}</h1>
-                <p className="text-[#B4B4B4] text-base w-full truncate">
-                  {item.abstract_th}
-                </p>
-                {!item.type_id && (
-                  <div className="flex items-center gap-2">
-                    <TriangleAlert className="text-primary" />
-                    <p className="text-primary text-sm">
-                      ประเภทโครงงานไม่มีแล้วนะจ๊ะ
-                    </p>
-                  </div>
-                )}
-              </div>
-              <div className="flex gap-2 items-center justify-center">
-                <button
-                  className="bg-primary text-white rounded-lg p-4"
-                  onClick={() => setIsOpenDeleteProject(true)}
-                >
-                  <Trash2 />
-                </button>
-                <button
-                  className="bg-blue text-white rounded-lg p-4"
-                  onClick={() => openPopup(item.project_id)}
-                >
-                  <Pencil />
-                </button>
-              </div>
-              {/* {item.keywords && (
+        {projects.map((item) => (
+          <div
+            key={item.project_id}
+            className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
+          >
+            <div>
+              <h1 className="text-xl">{item.project_name_th}</h1>
+              <p className="text-[#B4B4B4] text-base w-full truncate">
+                {item.abstract_th}
+              </p>
+              {!item.type_id && (
+                <div className="flex items-center gap-2">
+                  <TriangleAlert className="text-primary" />
+                  <p className="text-primary text-sm">
+                    ประเภทโครงงานไม่มีแล้วนะจ๊ะ
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-2 items-center justify-center">
+              <button
+                className="bg-primary text-white rounded-lg p-4"
+                onClick={() => setIsOpenDeleteProject(true)}
+              >
+                <Trash2 />
+              </button>
+              <button
+                className="bg-blue text-white rounded-lg p-4"
+                onClick={() => openPopup(item.project_id)}
+              >
+                <Pencil />
+              </button>
+            </div>
+            {/* {item.keywords && (
                 <p className="text-sm text-gray-500">
                   Keywords: {item.keywords}
                 </p>
               )}
              */}
-              {/* {deleteProjectId && ( */}
-              <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
-                <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
-                  <h1 className="text-xl font-bold mb-3">
-                    ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
-                  </h1>
-                  <Image src={Jojo} alt="Jojo" />
-                  <div className="flex gap-4 justify-center">
-                    <button
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                      onClick={() => handleDelete(item.project_id)}
-                    >
-                      เดินเข้าไปหา!
-                    </button>
-                    <button
-                      className="bg-gray-300 px-4 py-2 rounded-lg"
-                      onClick={() => setIsOpenDeleteProject(false)}
-                    >
-                      รีบเดินหนี!
-                    </button>
-                  </div>
+            {/* {deleteProjectId && ( */}
+            <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
+              <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
+                <h1 className="text-xl font-bold mb-3">
+                  ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
+                </h1>
+                <Image src={Jojo} alt="Jojo" />
+                <div className="flex gap-4 justify-center">
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                    onClick={() => handleDelete(item.project_id)}
+                  >
+                    เดินเข้าไปหา!
+                  </button>
+                  <button
+                    className="bg-gray-300 px-4 py-2 rounded-lg"
+                    onClick={() => setIsOpenDeleteProject(false)}
+                  >
+                    รีบเดินหนี!
+                  </button>
                 </div>
-              </Popup>
-              {/* )} */}
-            </div>
-          ))}
+              </div>
+            </Popup>
+            {/* )} */}
+          </div>
+        ))}
       </div>
       <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
         <PopupAddProjects closePopup={handleClosePopup} />
