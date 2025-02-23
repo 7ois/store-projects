@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import Popup from "./Popup";
 
 interface TypeAdd {
+  isOpenAddType: boolean;
   //   openPopup: (item: boolean) => void;
-  setOpenPopup: (item: boolean) => void;
+  setOpenPopup: () => void;
 }
 
-const AddTypeProject = ({ setOpenPopup }: TypeAdd) => {
+const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
   const [typeProject, setTypeProject] = useState("");
 
   const handleSubmit = (e: any) => {
@@ -18,7 +19,7 @@ const AddTypeProject = ({ setOpenPopup }: TypeAdd) => {
 
   return (
     <>
-      <Popup>
+      <Popup isOpen={isOpenAddType} onClose={setOpenPopup}>
         <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white">
           <h1>เพิ่มประเภทโครงงาน</h1>
         </div>
@@ -37,7 +38,7 @@ const AddTypeProject = ({ setOpenPopup }: TypeAdd) => {
             <button
               type="button"
               className="border border-primary text-primary h-[40px] w-full rounded-lg"
-              onClick={() => setOpenPopup(false)}
+              onClick={setOpenPopup}
             >
               Cancel
             </button>

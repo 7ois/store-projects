@@ -11,8 +11,13 @@ interface TypeProject {
 }
 
 const page = () => {
-  const { openPopup, closePopup } = usePopup();
+  // const { openPopup, closePopup } = usePopup();
   const [typeProjects, setTypeProjects] = useState<TypeProject[]>([]);
+  const [isOpenAddType, setIsOpenAddType] = useState(false);
+
+  const handlePopup = () => {
+    setIsOpenAddType(!isOpenAddType);
+  };
 
   useEffect(() => {
     const fetchType = async () => {
@@ -38,12 +43,15 @@ const page = () => {
             </div>
             <button
               className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]"
-              onClick={openPopup}
+              onClick={() => setIsOpenAddType(true)}
             >
               <Plus size={20} />
               Add type project
             </button>
-            <AddTypeProject setOpenPopup={closePopup} />
+            <AddTypeProject
+              isOpenAddType={isOpenAddType}
+              setOpenPopup={handlePopup}
+            />
           </div>
           <div>
             {typeProjects.length > 0 && (
@@ -59,7 +67,7 @@ const page = () => {
               </ul>
             )}
             {typeProjects.length === 0 && (
-              <div style={{ textAlign: "center", color: "white" }}>
+              <div className="text-blue text-center">
                 <h2>There are no typeProject yet.</h2>
                 <p>Start adding some!</p>
               </div>

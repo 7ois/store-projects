@@ -10,11 +10,33 @@ import { Project } from "@/entity/project";
 import { jwtDecode } from "jwt-decode";
 import PopupAddProjects from "@/components/PopupAddProjects";
 // import SearchDropdown from "@/components/SearchDropdown";
+import Jojo from "../../../../public/images/Jojo.jpg";
+import Image from "next/image";
+import PopupEditProject from "@/components/PopupEditProject";
 
 const Page = () => {
-  const { openPopup, closePopup } = usePopup();
+  // const { openPopup, closePopup } = usePopup();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  // const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
+  const [isOpenAddProject, setIsOpenAddProject] = useState(false);
+  const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
+  const [isOpenEditProject, setIsOpenEditProject] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
+
+  const openPopup = (projectId: number) => {
+    setSelectedProjectId(projectId);
+    setIsOpenEditProject(true);
+  };
+
+  useEffect(() => {
+    setIsOpenEditProject(true);
+    if (!selectedProjectId) {
+      setIsOpenEditProject(false);
+    }
+  }, [selectedProjectId]);
 
   const fetchProjects = async () => {
     try {
@@ -25,7 +47,7 @@ const Page = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       setProjects(response.data.data);
@@ -40,14 +62,16 @@ const Page = () => {
   }, []);
 
   const handleClosePopup = () => {
-    closePopup();
+    setIsOpenAddProject(false);
+    setIsOpenDeleteProject(false);
+    setIsOpenEditProject(false);
     fetchProjects(); // เรียก fetchProjects หลังจากที่ปิด Popup
   };
 
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
       );
 
       fetchProjects();
@@ -65,7 +89,7 @@ const Page = () => {
           </div>
           <button
             className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]"
-            onClick={openPopup}
+            onClick={() => setIsOpenAddProject(true)}
           >
             <Book size={20} />
             Add Project
@@ -86,22 +110,25 @@ const Page = () => {
                   {item.abstract_th}
                 </p>
                 {!item.type_id && (
-                  <div className="flex">
-                    <p className="text-red-500 text-sm">
+                  <div className="flex items-center gap-2">
+                    <TriangleAlert className="text-primary" />
+                    <p className="text-primary text-sm">
                       ประเภทโครงงานไม่มีแล้วนะจ๊ะ
                     </p>
-                    <TriangleAlert className="text-primary" />
                   </div>
                 )}
               </div>
               <div className="flex gap-2 items-center justify-center">
                 <button
                   className="bg-primary text-white rounded-lg p-4"
-                  onClick={() => handleDelete(item.project_id)}
+                  onClick={() => setIsOpenDeleteProject(true)}
                 >
                   <Trash2 />
                 </button>
-                <button className="bg-blue text-white rounded-lg p-4">
+                <button
+                  className="bg-blue text-white rounded-lg p-4"
+                  onClick={() => openPopup(item.project_id)}
+                >
                   <Pencil />
                 </button>
               </div>
@@ -111,16 +138,44 @@ const Page = () => {
                 </p>
               )}
              */}
+              {/* {deleteProjectId && ( */}
+              <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
+                <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
+                  <h1 className="text-xl font-bold mb-3">
+                    ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
+                  </h1>
+                  <Image src={Jojo} alt="Jojo" />
+                  <div className="flex gap-4 justify-center">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                      onClick={() => handleDelete(item.project_id)}
+                    >
+                      เดินเข้าไปหา!
+                    </button>
+                    <button
+                      className="bg-gray-300 px-4 py-2 rounded-lg"
+                      onClick={() => setIsOpenDeleteProject(false)}
+                    >
+                      รีบเดินหนี!
+                    </button>
+                  </div>
+                </div>
+              </Popup>
+              {/* )} */}
             </div>
           ))}
       </div>
-      <Popup>
+      <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
         <PopupAddProjects closePopup={handleClosePopup} />
+      </Popup>
+      <Popup isOpen={isOpenEditProject} onClose={handleClosePopup}>
+        <PopupEditProject
+          selectedProjectId={selectedProjectId}
+          closePopup={handleClosePopup}
+        />
       </Popup>
     </div>
   );
 };
 
 export default Page;
-
-// const confirmDelete = () => {};

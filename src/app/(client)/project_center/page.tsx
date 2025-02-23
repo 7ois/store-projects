@@ -41,7 +41,7 @@ const page = () => {
   }, []);
 
   return (
-    <div className="relative rounded-lg shadow-lg w-full h-auto p-5">
+    <div className="relative rounded-lg shadow-md w-full h-auto p-5">
       <div className="absolute -left-2 border w-[200px] h-[50px] bg-blue flex items-center justify-center">
         <h1 className="text-xl text-[#fff]">Select Type Project</h1>
       </div>

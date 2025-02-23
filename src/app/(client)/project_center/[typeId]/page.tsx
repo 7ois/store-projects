@@ -4,17 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
-
-interface Project {
-  date: string;
-  description: string;
-  file_name: string;
-  file_path: string;
-  keywords: string | null;
-  project_id: number;
-  project_name: string;
-  type_id: number;
-}
+import { Project } from "@/entity/project";
 
 const Page = () => {
   const router = useRouter();
@@ -50,9 +40,9 @@ const Page = () => {
             key={project.project_id}
             className="grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
           >
-            <h1 className="text-xl">{project.project_name}</h1>
+            <h1 className="text-xl">{project.project_name_th}</h1>
             <p className="text-[#B4B4B4] text-base w-full truncate">
-              {project.description}
+              {project.abstract_th}
             </p>
           </Link>
         ))
