@@ -31,14 +31,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/project_center");
-    } else {
-      // Decode token to get user information
-      const decoded: any = jwtDecode(token);
-      setUser(decoded); // Set username from token
-    }
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setUser(null);
+      } else {
+        const decoded: any = jwtDecode(token);
+        setUser(decoded);
+      }
+    };
+    const intervalId = setInterval(checkToken, 5000);
+
+    checkToken();
+
+    return () => clearInterval(intervalId);
   }, [router]);
 
   const handleLogout = () => {

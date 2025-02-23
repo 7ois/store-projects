@@ -20,14 +20,35 @@ const Sidebar = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/project_center");
-    } else {
-      // Decode token to get user information
-      const decoded: any = jwtDecode(token);
-      setUser(decoded); // Set username from token
-    }
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/project_center");
+        return;
+      }
+
+      try {
+        const decoded: any = jwtDecode(token);
+
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("token");
+          router.push("/project_center");
+          setUser(null);
+        } else {
+          setUser(decoded);
+        }
+      } catch (error) {
+        console.error("Invalid token", error);
+        localStorage.removeItem("token");
+        router.push("/project_center");
+      }
+    };
+
+    const intervalId = setInterval(checkToken, 5000);
+
+    checkToken();
+
+    return () => clearInterval(intervalId);
   }, [router]);
 
   const filteredMenu = !user
