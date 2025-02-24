@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface DropdownItem {
   id: number;
@@ -10,6 +10,7 @@ interface DropdownItem {
 interface DropdownProps {
   items: DropdownItem[];
   onSelect: (id: number, value: string) => void;
+  selectedId?: number;
   labelName?: string;
   className?: string;
 }
@@ -17,15 +18,19 @@ interface DropdownProps {
 const Dropdown: React.FC<DropdownProps> = ({
   items,
   onSelect,
+  selectedId,
   labelName,
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | undefined>("select");
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
+  useEffect(() => {
+    const selectedType = items.find((item) => item.id === selectedId);
+    setSelected(selectedType?.value || "select");
+  }, [selectedId]);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleSelect = (selectedIds: number, selectedValue: string = "") => {
     onSelect(selectedIds, selectedValue);

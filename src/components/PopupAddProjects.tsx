@@ -35,13 +35,11 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
     file: "" as string | File,
   });
   const [types, setTypes] = useState<{ id: number; value: string }[]>([]);
-  const [mainOwnerSuggestions, setMainOwnerSuggestions] = useState<User[]>([]);
-  const [isMainOwnerActive, setIsMainOwnerActive] = useState(false);
   const [ownerSuggestions, setOwnerSuggestions] = useState<User[]>([]);
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null); //สำหรับเช็คว่าอยู่ input ไหน
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null
+    null,
   ); //สำหรับเช็คว่าอยู่ input ไหน
 
   const getAllUsers = async (query: string, role_id?: string) => {
@@ -62,39 +60,10 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
     }
   };
 
-  const handleChangeMainOwner = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData({
-      ...formData,
-      main_owner: {
-        ...formData.main_owner,
-        value: e.target.value,
-      },
-    });
-
-    const suggestions = await getAllUsers(e.target.value, "");
-
-    setMainOwnerSuggestions(suggestions!);
-  };
-
-  const handleSelectUser = (user: User) => {
-    setFormData({
-      ...formData,
-      main_owner: {
-        ...formData.main_owner,
-        user_id: user.user_id!,
-        value: `${user.first_name} ${user.last_name}`,
-      },
-    });
-
-    setMainOwnerSuggestions([]);
-  };
-
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number
+    index?: number,
   ) => {
     const newData = [...formData[field]];
 
@@ -135,13 +104,13 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          })
+          }),
         );
         setTypes(formattedTypes);
       } catch {}
@@ -171,7 +140,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor"
+    field: "owner" | "advisor",
   ) => {
     const newData = [...formData[field]];
     newData[index].value = e.target.value;
@@ -183,7 +152,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : ""
+      field === "advisor" ? "2" : "",
     );
 
     if (field === "advisor") {
@@ -262,7 +231,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       closePopup();
@@ -358,27 +327,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
               value={formData.main_owner.value}
               placeholder="main owner"
-              onChange={(e) => handleChangeMainOwner(e)}
-              onFocus={() => setIsMainOwnerActive(true)}
-              onBlur={() => setTimeout(() => setIsMainOwnerActive(false), 200)}
             />
-
-            {isMainOwnerActive &&
-              formData.main_owner.value &&
-              Array.isArray(mainOwnerSuggestions) &&
-              mainOwnerSuggestions.length > 0 && (
-                <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
-                  {mainOwnerSuggestions.map((value, index) => (
-                    <div
-                      key={index}
-                      className="p-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSelectUser(value)}
-                    >
-                      {value.first_name} {value.last_name}
-                    </div>
-                  ))}
-                </div>
-              )}
           </div>
           <label>Owner</label>
           {formData.owner.map((owner, index) => (

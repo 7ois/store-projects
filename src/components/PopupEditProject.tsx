@@ -1,22 +1,24 @@
 "use client";
-import { Project } from "@/entity/project";
+import { User } from "@/entity/user";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { CirclePlus, RotateCcw, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
+// import Dropdown from "./Dropdown";
 
-// interface FormData {
-//   project_name_th: string;
-//   project_name_en: string;
-//   abstract_th: string;
-//   abstract_en: string;
-//   keyword: string[];
-//   date: string;
-//   type_id: number;
-//   main_owner: { user_id: number; role_group: "main_owner"; value: string };
-//   owner: { user_id: number; role_group: "owner"; value: string }[]; // Array of owner objects
-//   advisor: { user_id: number; role_group: "advisor"; value: string }[]; // Array of advisor objects
-//   file: string | File;
-// }
+interface FormData {
+  project_name_th: string;
+  project_name_en: string;
+  abstract_th: string;
+  abstract_en: string;
+  keyword: string[];
+  date: string;
+  type_id: number;
+  main_owner: { user_id: number; role_group: "main_owner"; value: string };
+  owner: { user_id: number; role_group: "owner"; value: string }[]; // Array of owner objects
+  advisor: { user_id: number; role_group: "advisor"; value: string }[]; // Array of advisor objects
+  file: string | File;
+}
 
 interface PopupEditProjectProps {
   selectedProjectId: number | null;
@@ -27,75 +29,348 @@ const PopupEditProject = ({
   selectedProjectId,
   closePopup,
 }: PopupEditProjectProps) => {
-  console.log("selectedProjectId: ", selectedProjectId);
+  const [types, setTypes] = useState<{ id: number; value: string }[]>([]);
+  const [ownerSuggestions, setOwnerSuggestions] = useState<User[]>([]);
+  const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null);
+  const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
+  const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
+    null,
+  );
+  const [formData, setFormData] = useState<FormData>({
+    project_name_th: "",
+    project_name_en: "",
+    abstract_th: "",
+    abstract_en: "",
+    keyword: [],
+    date: "",
+    type_id: 0,
+    main_owner: { user_id: 0, role_group: "main_owner", value: "" },
+    owner: [],
+    advisor: [],
+    file: "" as string | File,
+  });
 
-  const [project, setProject] = useState<Project>();
+  const [originalFile, setOriginalFile] = useState<string | null>("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isFileModified, setIsFileModified] = useState(false);
+
+  const getAllUsers = async (query: string, role_id?: string) => {
+    try {
+      if (query.length < 2) return;
+
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/getAllUsers?search=${query}`;
+      if (role_id) {
+        url += `&role_id=${role_id}`;
+      }
+
+      const response = await axios.get(url);
+      const data = await response.data.data;
+
+      return Array.isArray(data) ? data : [];
+    } catch {
+      return [];
+    }
+  };
 
   useEffect(() => {
+    if (!selectedProjectId) return;
+
+    const fetchType = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+        );
+        const formattedTypes = response.data.map(
+          (item: { type_id: number; type_name: string }) => ({
+            id: item.type_id,
+            value: item.type_name,
+          }),
+        );
+        setTypes(formattedTypes);
+      } catch {}
+    };
+
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`,
         );
-        setProject(response.data.project);
+        const mainOwner = response.data.project.users.find(
+          (user: User) => user.role_group === "main_owner",
+        ) || { user_id: 0, role_group: "main_owner", value: "" };
+
+        const owners = response.data.project.users
+          .filter((user: User) => user.role_group === "owner")
+          .map((owner: User) => ({
+            user_id: owner.user_id,
+            role_group: owner.role_group,
+            value: `${owner.first_name} ${owner.last_name}`,
+          }));
+
+        const advisor = response.data.project.users
+          .filter((user: User) => user.role_group === "advisor")
+          .map((ad: User) => ({
+            user_id: ad.user_id,
+            role_group: ad.role_group,
+            value: `${ad.first_name} ${ad.last_name}`,
+          }));
+
+        const projectFile = response.data.project.file_path
+          ? `${process.env.NEXT_PUBLIC_UPLOAD_URL}${response.data.project.file_path}`
+          : "";
+
+        setOriginalFile(projectFile);
+
+        const selectedType = response.data.project.type_id;
+
+        setFormData((prev) => ({
+          ...prev,
+          project_name_th: response.data.project.project_name_th || "",
+          project_name_en: response.data.project.project_name_en || "",
+          abstract_th: response.data.project.abstract_th || "",
+          abstract_en: response.data.project.abstract_en || "",
+          keyword: response.data.project.keywords || [],
+          date: response.data.project.date
+            ? response.data.project.date.split("T")[0]
+            : "",
+          type_id: selectedType || 0,
+          main_owner: response.data.project.main_owner || {
+            user_id: mainOwner.user_id,
+            role_group: mainOwner.role_group,
+            value: `${mainOwner.first_name} ${mainOwner.last_name}`,
+          },
+          owner: owners || [],
+          advisor: advisor || [],
+          file: projectFile || "",
+        }));
       } catch (err) {
         console.error("Error fetching project:", err);
       }
     };
-    fetchProject();
-  }, [selectedProjectId]);
 
-  console.log(project);
+    fetchType();
+    fetchProject();
+  }, []);
+
+  const handleChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+    field: "owner" | "advisor",
+  ) => {
+    const newData = [...formData[field]];
+    newData[index].value = e.target.value;
+
+    setFormData({
+      ...formData,
+      [field]: newData,
+    });
+
+    const suggestions = await getAllUsers(
+      e.target.value,
+      field === "advisor" ? "2" : "",
+    );
+
+    if (field === "advisor") {
+      setAdvisorSuggestions(suggestions!);
+    } else {
+      setOwnerSuggestions(suggestions!);
+    }
+  };
+
+  const handleSelectUserForField = (
+    user: User,
+    field: "owner" | "advisor",
+    index?: number,
+  ) => {
+    const newData = [...formData[field]];
+
+    if (index !== undefined) {
+      newData[index] = {
+        user_id: user.user_id!,
+        value: `${user.first_name} ${user.last_name}`,
+        role_group: field,
+      };
+    } else {
+      setFormData({
+        ...formData,
+        [field]: [
+          ...formData[field],
+          {
+            user_id: user.user_id!,
+            value: `${user.first_name} ${user.last_name}`,
+            role_group: field,
+          },
+        ],
+      });
+    }
+
+    setFormData({
+      ...formData,
+      [field]: newData,
+    });
+
+    if (field === "owner") {
+      setOwnerSuggestions([]);
+    } else if (field === "advisor") {
+      setAdvisorSuggestions([]);
+    }
+  };
+
+  const handleAdd = (field: "owner" | "advisor") => {
+    setFormData({
+      ...formData,
+      [field]: [
+        ...formData[field],
+        {
+          user_id: 0,
+          role_group: field === "owner" ? "owner" : "advisor",
+          value: "",
+        },
+      ],
+    });
+  };
+
+  const handleRemove = (field: "owner" | "advisor", index: number) => {
+    setFormData({
+      ...formData,
+      [field]: formData[field].filter((_, i) => i !== index), // ลบ item ที่ index ที่กำหนด
+    });
+  };
+
+  const handleTypeSelect = (value: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      type_id: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+
+    if (file) {
+      setFormData((prev) => ({
+        ...prev,
+        file: file,
+      }));
+
+      setIsFileModified(true);
+    }
+  };
+
+  const handleRevertFile = () => {
+    if (originalFile) {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        file: originalFile,
+      }));
+
+      setIsFileModified(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const mapRoleGroup = [
+      {
+        user_id: formData.main_owner.user_id,
+        role_group: formData.main_owner.role_group,
+      },
+      ...(formData.owner && formData.owner.length > 0
+        ? formData.owner.map((owner) => ({
+            user_id: owner.user_id,
+            role_group: owner.role_group,
+          }))
+        : []),
+      ...(formData.advisor && formData.advisor.length > 0
+        ? formData.advisor.map((advisor) => ({
+            user_id: advisor.user_id,
+            role_group: advisor.role_group,
+          }))
+        : []),
+    ];
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("type_id", formData.type_id.toString());
+    formDataToSend.append("project_name_th", formData.project_name_th);
+    formDataToSend.append("project_name_en", formData.project_name_en);
+    formDataToSend.append("abstract_th", formData.abstract_th);
+    formDataToSend.append("abstract_en", formData.abstract_en);
+    formDataToSend.append("keywords", JSON.stringify(formData.keyword));
+    formDataToSend.append("date", formData.date);
+    formDataToSend.append("role_group", JSON.stringify(mapRoleGroup));
+
+    if (formData.file && formData.file !== "" && formData.file !== undefined) {
+      formDataToSend.append("file", formData.file);
+    }
+
+    try {
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/updateProject/${selectedProjectId}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      closePopup();
+    } catch {}
+  };
 
   return (
     <div className="max-w-[1000px] grid overflow-hidden">
       <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
         Edit project
       </div>
-      <form encType="multipart/form-data">
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="px-10 my-5 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[460px]">
           <label>Project name TH</label>
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            // onChange={(e) =>
-            //   setFormData({ ...formData, project_name_th: e.target.value })
-            // }
+            onChange={(e) =>
+              setFormData({ ...formData, project_name_th: e.target.value })
+            }
             placeholder="project-name"
-            value={project?.project_name_th}
+            value={formData?.project_name_th}
           />
 
           <label>Project name EN</label>
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            // onChange={(e) =>
-            //   setFormData({ ...formData, project_name_en: e.target.value })
-            // }
+            onChange={(e) =>
+              setFormData({ ...formData, project_name_en: e.target.value })
+            }
             placeholder="project-name-EN"
-            value={project?.project_name_en}
+            value={formData?.project_name_en}
           />
 
           <label>Abstract TH</label>
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            // onChange={(e) =>
-            //   setFormData({ ...formData, abstract_th: e.target.value })
-            // }
+            onChange={(e) =>
+              setFormData({ ...formData, abstract_th: e.target.value })
+            }
             placeholder="abstract_th"
-            value={project?.abstract_th}
+            value={formData?.abstract_th}
           />
 
           <label>Abstract EN</label>
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            // onChange={(e) =>
-            //   setFormData({ ...formData, abstract_en: e.target.value })
-            // }
+            onChange={(e) =>
+              setFormData({ ...formData, abstract_en: e.target.value })
+            }
             placeholder="abstract_en"
-            value={project?.abstract_en}
+            value={formData?.abstract_en}
           />
 
           <label>Keyword</label>
@@ -103,31 +378,34 @@ const PopupEditProject = ({
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
             placeholder="Enter keywords, separated by commas"
-            // value={project.keyword.join(", ")}
-            // onChange={(e) => {
-            //   const keywords = e.target.value
-            //     .split(",")
-            //     .map((keyword) => keyword.trim());
-            //   setFormData({ ...formData, keyword: keywords });
-            // }}
+            value={(formData?.keyword || []).join(", ")}
+            onChange={(e) => {
+              const keywords = e.target.value
+                .split(",")
+                .map((keyword) => keyword.trim())
+                .filter((keyword) => keyword !== "");
+
+              setFormData({ ...formData, keyword: keywords });
+            }}
           />
 
           <label>Type Project</label>
-          {/* <Dropdown
+          <Dropdown
             items={types}
             onSelect={handleTypeSelect}
+            selectedId={formData.type_id}
             className="col-span-3"
-          /> */}
+          />
 
           <label>Date</label>
-          {/* <input
+          <input
             type="date"
             className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
             placeholder="Select a date"
-            value={formData.date}
-          /> */}
-          {/* 
+            value={formData.date || ""}
+          />
+
           <label>Main owner</label>
           <div className="col-span-3 col-start-2 relative">
             <input
@@ -136,28 +414,9 @@ const PopupEditProject = ({
               className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
               value={formData.main_owner.value}
               placeholder="main owner"
-              onChange={(e) => handleChangeMainOwner(e)}
-              onFocus={() => setIsMainOwnerActive(true)}
-              onBlur={() => setTimeout(() => setIsMainOwnerActive(false), 200)}
             />
-
-            {isMainOwnerActive &&
-              formData.main_owner.value &&
-              Array.isArray(mainOwnerSuggestions) &&
-              mainOwnerSuggestions.length > 0 && (
-                <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
-                  {mainOwnerSuggestions.map((value, index) => (
-                    <div
-                      key={index}
-                      className="p-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleSelectUser(value)}
-                    >
-                      {value.first_name} {value.last_name}
-                    </div>
-                  ))}
-                </div>
-              )}
           </div>
+
           <label>Owner</label>
           {formData.owner.map((owner, index) => (
             <div key={index} className="col-span-3 col-start-2 relative">
@@ -195,6 +454,7 @@ const PopupEditProject = ({
               />
             </div>
           ))}
+
           <button
             type="button"
             onClick={() => handleAdd("owner")}
@@ -253,12 +513,38 @@ const PopupEditProject = ({
           </button>
 
           <label>File</label>
+          {formData.file && typeof formData.file === "string" && (
+            <div className="mt-2">
+              <p>Current file:</p>
+              <a
+                href={formData.file}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                {formData.file.split("/").pop()}
+              </a>
+            </div>
+          )}
+
           <input
+            ref={fileInputRef}
             onChange={handleFileChange}
             type="file"
             accept=".pdf"
             className="h-[50px] pl-2 border-[#c5c5c5] text-base"
-          /> */}
+          />
+
+          {originalFile && isFileModified && (
+            <button
+              type="button"
+              onClick={handleRevertFile}
+              className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3"
+            >
+              <RotateCcw size={20} />
+              Revert to original file
+            </button>
+          )}
         </div>
         <div className="flex items-center justify-center gap-10 h-auto py-6 shadow-md">
           <button
