@@ -382,8 +382,7 @@ const PopupEditProject = ({
             onChange={(e) => {
               const keywords = e.target.value
                 .split(",")
-                .map((keyword) => keyword.trim())
-                .filter((keyword) => keyword !== "");
+                .map((keyword) => keyword.trim());
 
               setFormData({ ...formData, keyword: keywords });
             }}
