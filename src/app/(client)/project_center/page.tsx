@@ -66,7 +66,7 @@ const page = () => {
                 <span className="text-lg font-semibold">{type.type_name}</span>
 
                 <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  {formatProjectCount(10000000)} Projects
+                  {formatProjectCount(type.project_count)} Projects
                 </span>
               </li>
             </Link>
