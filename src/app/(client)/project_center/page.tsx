@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 interface TypeProject {
   type_id: number;
   type_name: string;
+  project_count: number;
 }
 
 const page = () => {
@@ -19,7 +20,7 @@ const page = () => {
     const fetchTypeProjects = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
         );
         const data = response.data;
 
@@ -49,8 +50,12 @@ const page = () => {
         {typeProject.length > 0 ? (
           typeProject.map((type) => (
             <Link key={type.type_id} href={`/project_center/${type.type_id}`}>
-              <li className="flex items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition delay-100 hover:-translate-y-1 hover:bg-orange">
-                {type.type_name}
+              <li className="relative flex flex-col items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition-transform delay-100  hover:-translate-y-1 hover:bg-orange">
+                <span className="text-lg font-semibold">{type.type_name}</span>
+
+                <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  {type.project_count} Projects
+                </span>
               </li>
             </Link>
           ))
