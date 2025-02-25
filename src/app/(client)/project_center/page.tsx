@@ -41,6 +41,18 @@ const page = () => {
     fetchTypeProjects();
   }, []);
 
+  const formatProjectCount = (count: number) => {
+    if (count >= 1000000000) {
+      return `${(count / 1000000000).toFixed(1)}B`; // Billion
+    } else if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`; // Million
+    } else if (count >= 1000) {
+      return `${(count / 1000).toFixed(0)}k`; // Thousand
+    } else {
+      return new Intl.NumberFormat().format(count); // For less than 1000
+    }
+  };
+
   return (
     <div className="relative rounded-lg shadow-md w-full h-auto p-5">
       <div className="absolute -left-2 border w-[200px] h-[50px] bg-blue flex items-center justify-center">
@@ -54,7 +66,7 @@ const page = () => {
                 <span className="text-lg font-semibold">{type.type_name}</span>
 
                 <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  {type.project_count} Projects
+                  {formatProjectCount(10000000)} Projects
                 </span>
               </li>
             </Link>
