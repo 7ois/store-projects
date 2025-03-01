@@ -7,15 +7,19 @@ import { jwtDecode } from "jwt-decode";
 
 interface TypeAdd {
   isOpenAddType: boolean;
-  //   openPopup: (item: boolean) => void;
   setOpenPopup: () => void;
+  editData?: { type_name: string; type_id: number };
 }
 
-const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
-  // const [typeProject, setTypeProject] = useState("");
+const PopupTypeProject = ({
+  setOpenPopup,
+  isOpenAddType,
+  editData,
+}: TypeAdd) => {
   const [formData, setFormData] = useState({ user_id: "", type_name: "" });
   const [user, setUser] = useState<User | null>(null);
 
+  // If editData is provided, populate formData with the existing data
   useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
@@ -26,60 +30,55 @@ const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
         setUser(decoded);
       }
     };
-    // const intervalId = setInterval(checkToken, 5000);
-
     checkToken();
-    // return () => clearInterval(intervalId);
   }, []);
+
+  useEffect(() => {
+    if (editData) {
+      setFormData((prev) => ({
+        ...prev,
+        type_name: editData.type_name,
+      }));
+    }
+  }, [editData, user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axios.post(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/postTypeProjects`,
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Response: ", response.data);
-
-  //     // ล้างค่าหลังส่งสำเร็จ
-  //     setFormData({ user_id: "", type_name: "" });
-  //   } catch (err) {
-  //     console.log("Error: ", err);
-  //   }
-  // };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // ตรวจสอบว่า user มีค่าและมี user_id หรือไม่
     if (user && user.user_id) {
       try {
-        // อัปเดต formData ให้มี user_id
         const updatedFormData = { ...formData, user_id: user.user_id };
 
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/postTypeProjects`,
-          updatedFormData,
-          {
-            headers: {
-              "Content-Type": "application/json",
+        let response;
+        if (editData) {
+          response = await axios.put(
+            `${process.env.NEXT_PUBLIC_API_URL}/updateTypeProjects/${editData.type_id}`,
+            updatedFormData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
             },
-          },
-        );
+          );
+        } else {
+          response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/postTypeProjects`,
+            updatedFormData,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            },
+          );
+        }
 
         console.log("Response: ", response.data);
         setOpenPopup();
-        // ล้างค่าหลังส่งสำเร็จ
         setFormData({ user_id: "", type_name: "" });
       } catch (err) {
         console.log("Error: ", err);
@@ -93,9 +92,9 @@ const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
     <>
       <Popup isOpen={isOpenAddType} onClose={setOpenPopup}>
         <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white">
-          <h1>เพิ่มประเภทโครงงาน</h1>
+          <h1>{editData ? "แก้ไขประเภทโครงงาน" : "เพิ่มประเภทโครงงาน"}</h1>
         </div>
-        <form onSubmit={handleSubmit} className="">
+        <form onSubmit={handleSubmit}>
           <div className="flex gap-2 m-5 items-center justify-center">
             <label>ชื่อประเภทโครงงาน</label>
             <input
@@ -116,14 +115,13 @@ const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
               Cancel
             </button>
             <button className="bg-blue text-white h-[40px] w-full rounded-lg transition delay-75 hover:bg-orange hover:text-white">
-              Submit
+              {editData ? "Save Changes" : "Submit"}
             </button>
           </div>
         </form>
       </Popup>
-      {/* <button className={styles.button} onClick={() => setOpenModal(true)}>เพิ่มประเภทโครงงาน</button> */}
     </>
   );
 };
 
-export default AddTypeProject;
+export default PopupTypeProject;

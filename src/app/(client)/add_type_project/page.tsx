@@ -1,37 +1,71 @@
 "use client";
-import AddTypeProject from "@/components/AddTypeProject";
-import { usePopup } from "@/context/PopupContext";
+import Popup from "@/components/Popup";
+import PopupTypeProject from "@/components/PopupTypeProject";
 import axios from "axios";
-import { CircleX, Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import Jojo from "../../../../public/images/Jojo.jpg";
+import Image from "next/image";
 
 interface TypeProject {
   type_id: number;
   type_name: string;
 }
 
-const page = () => {
+const Page = () => {
   // const { openPopup, closePopup } = usePopup();
   const [typeProjects, setTypeProjects] = useState<TypeProject[]>([]);
   const [isOpenAddType, setIsOpenAddType] = useState(false);
+  const [isOpenEditType, setIsOpenEditType] = useState(false);
+  const [selectedTypeProject, setSelectedTypeProject] =
+    useState<TypeProject | null>(null);
+  const [isOpenDeleteType, setIsOpenDeleteType] = useState(false);
 
-  const handlePopup = () => {
+  const handleClosePopup = () => {
+    setIsOpenDeleteType(false);
+  };
+  const handleEditClick = (type: TypeProject) => {
+    setSelectedTypeProject(type);
+    setIsOpenEditType(true);
+  };
+
+  const handleAddPopup = () => {
     setIsOpenAddType(!isOpenAddType);
+  };
+  const handleEditPopup = () => {
+    setIsOpenEditType(!isOpenEditType);
+  };
+
+  const fetchType = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+      );
+      setTypeProjects(response.data);
+    } catch (err) {
+      console.error("Error fetching typeproject:", err);
+    }
+  };
+
+  const handleDelete = async (typeId: number) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteTypeProject/${typeId}`,
+      );
+
+      setIsOpenDeleteType(false);
+    } catch (err) {
+      console.error("Error deleting project", err);
+    }
   };
 
   useEffect(() => {
-    const fetchType = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
-        );
-        setTypeProjects(response.data);
-      } catch (err) {
-        console.error("Error fetching typeproject:", err);
-      }
-    };
     fetchType();
-  }, [typeProjects]);
+  }, []);
+
+  useEffect(() => {
+    fetchType();
+  }, [isOpenAddType, isOpenEditType, isOpenDeleteType]);
 
   return (
     <>
@@ -48,31 +82,61 @@ const page = () => {
               <Plus size={20} />
               Add type project
             </button>
-            <AddTypeProject
+            <PopupTypeProject
               isOpenAddType={isOpenAddType}
-              setOpenPopup={handlePopup}
+              setOpenPopup={handleAddPopup}
             />
           </div>
           <div>
             {typeProjects.length > 0 && (
               <ul className="grid grid-cols-3 gap-5">
                 {typeProjects.map((type) => (
-                  <li
-                    className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-md h-20 px-4"
-                    key={type.type_id}
-                  >
-                    <div className="w-full">
-                      <p>{type.type_name}</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 items-center justify-between w-full">
-                      <button className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition delay-75 hover:bg-primary hover:text-white">
-                        <Trash2 />
-                      </button>
-                      <button className="flex items-center justify-center bg-blue text-white rounded-lg p-4 transition delay-75 hover:bg-orange">
-                        <Pencil />
-                      </button>
-                    </div>
-                  </li>
+                  <>
+                    <li
+                      className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-md h-20 px-4"
+                      key={type.type_id}
+                    >
+                      <div className="w-full">
+                        <p>{type.type_name}</p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 items-center justify-between w-full">
+                        <button
+                          className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition delay-75 hover:bg-primary hover:text-white"
+                          onClick={() => setIsOpenDeleteType(true)}
+                        >
+                          <Trash2 />
+                        </button>
+                        <button
+                          className="flex items-center justify-center bg-blue text-white rounded-lg p-4 transition delay-75 hover:bg-orange"
+                          onClick={() => handleEditClick(type)}
+                        >
+                          <Pencil />
+                        </button>
+                      </div>
+                    </li>
+                    <Popup isOpen={isOpenDeleteType} onClose={handleClosePopup}>
+                      <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
+                        <h1 className="text-xl font-bold mb-3">
+                          ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
+                        </h1>
+                        <Image src={Jojo} alt="Jojo" />
+                        <div className="flex gap-4 justify-center">
+                          <button
+                            className="bg-red-500 text-white px-4 py-2 rounded-lg"
+                            onClick={() => handleDelete(type.type_id)}
+                          >
+                            เดินเข้าไปหา!
+                          </button>
+                          <button
+                            className="bg-gray-300 px-4 py-2 rounded-lg"
+                            onClick={() => setIsOpenDeleteType(false)}
+                          >
+                            รีบเดินหนี!
+                          </button>
+                        </div>
+                      </div>
+                    </Popup>
+                  </>
                 ))}
               </ul>
             )}
@@ -83,10 +147,15 @@ const page = () => {
               </div>
             )}
           </div>
+          <PopupTypeProject
+            isOpenAddType={isOpenEditType}
+            setOpenPopup={handleEditPopup}
+            editData={selectedTypeProject!}
+          />
         </div>
       </div>
     </>
   );
 };
 
-export default page;
+export default Page;
