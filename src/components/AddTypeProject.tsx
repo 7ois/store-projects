@@ -74,7 +74,7 @@ const AddTypeProject = ({ setOpenPopup, isOpenAddType }: TypeAdd) => {
             headers: {
               "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         console.log("Response: ", response.data);

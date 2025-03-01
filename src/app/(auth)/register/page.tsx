@@ -16,6 +16,7 @@ const Page = () => {
     formState: { errors },
     reset,
     setValue,
+    clearErrors,
     watch,
   } = useForm<registerSchemaType>({
     resolver: zodResolver(registerSchema),
@@ -26,7 +27,6 @@ const Page = () => {
   const [roles, setRoles] = useState<{ id: number; value: string }[]>([]);
 
   const onSubmit = async (data: registerSchemaType) => {
-    console.log("Form Data:", data);
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/register`,
@@ -77,6 +77,7 @@ const Page = () => {
 
   const handleRoleSelect = (value: number) => {
     setValue("role_id", value || 4);
+    clearErrors("role_id");
   };
 
   return (
