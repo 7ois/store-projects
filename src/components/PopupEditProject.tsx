@@ -4,21 +4,11 @@ import axios from "axios";
 import { CirclePlus, RotateCcw, X } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
-// import Dropdown from "./Dropdown";
-
-interface FormData {
-  project_name_th: string;
-  project_name_en: string;
-  abstract_th: string;
-  abstract_en: string;
-  keyword: string[];
-  date: string;
-  type_id: number;
-  main_owner: { user_id: number; role_group: "main_owner"; value: string };
-  owner: { user_id: number; role_group: "owner"; value: string }[]; // Array of owner objects
-  advisor: { user_id: number; role_group: "advisor"; value: string }[]; // Array of advisor objects
-  file: string | File;
-}
+import {
+  FormProjectData,
+  formProjectSchema,
+  validateFormData,
+} from "@/lib/project";
 
 interface PopupEditProjectProps {
   selectedProjectId: number | null;
@@ -36,7 +26,7 @@ const PopupEditProject = ({
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
     null,
   );
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<FormProjectData>({
     project_name_th: "",
     project_name_en: "",
     abstract_th: "",
@@ -49,6 +39,14 @@ const PopupEditProject = ({
     advisor: [],
     file: "" as string | File,
   });
+
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({});
+
+  const validateForm = (): boolean => {
+    return validateFormData(formData, formProjectSchema, setValidationErrors);
+  };
 
   const [originalFile, setOriginalFile] = useState<string | null>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -242,6 +240,11 @@ const PopupEditProject = ({
       ...prev,
       type_id: value,
     }));
+    setValidationErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors.type_id;
+      return updatedErrors;
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -274,6 +277,9 @@ const PopupEditProject = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const isValid = validateForm();
+    if (!isValid) return;
+
     const mapRoleGroup = [
       {
         user_id: formData.main_owner.user_id,
@@ -322,6 +328,30 @@ const PopupEditProject = ({
     } catch {}
   };
 
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string,
+  ) => {
+    setFormData({ ...formData, [field]: e.target.value });
+    setValidationErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors[field];
+      return updatedErrors;
+    });
+  };
+
+  const handleTextAreaChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    field: string,
+  ) => {
+    setFormData({ ...formData, [field]: e.target.value });
+    setValidationErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors[field];
+      return updatedErrors;
+    });
+  };
+
   return (
     <div className="max-w-[1000px] grid overflow-hidden">
       <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
@@ -333,46 +363,55 @@ const PopupEditProject = ({
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) =>
-              setFormData({ ...formData, project_name_th: e.target.value })
-            }
+            onChange={(e) => handleInputChange(e, "project_name_th")}
             placeholder="project-name"
             value={formData?.project_name_th}
           />
+          {validationErrors.project_name_th && (
+            <div className="text-primary text-base">
+              {validationErrors.project_name_th}
+            </div>
+          )}
 
           <label>Project name EN</label>
           <input
             type="text"
             className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) =>
-              setFormData({ ...formData, project_name_en: e.target.value })
-            }
+            onChange={(e) => handleInputChange(e, "project_name_en")}
             placeholder="project-name-EN"
             value={formData?.project_name_en}
           />
+          {validationErrors.project_name_en && (
+            <div className="text-primary text-base">
+              {validationErrors.project_name_en}
+            </div>
+          )}
 
           <label>Abstract TH</label>
-          <input
-            type="text"
-            className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) =>
-              setFormData({ ...formData, abstract_th: e.target.value })
-            }
+          <textarea
+            className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+            onChange={(e) => handleTextAreaChange(e, "abstract_th")}
             placeholder="abstract_th"
             value={formData?.abstract_th}
           />
+          {validationErrors.abstract_th && (
+            <div className="text-primary text-base">
+              {validationErrors.abstract_th}
+            </div>
+          )}
 
           <label>Abstract EN</label>
-          <input
-            type="text"
-            className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) =>
-              setFormData({ ...formData, abstract_en: e.target.value })
-            }
+          <textarea
+            className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+            onChange={(e) => handleTextAreaChange(e, "abstract_en")}
             placeholder="abstract_en"
             value={formData?.abstract_en}
           />
-
+          {validationErrors.abstract_en && (
+            <div className="text-primary text-base">
+              {validationErrors.abstract_en}
+            </div>
+          )}
           <label>Keyword</label>
           <input
             type="text"
@@ -385,8 +424,18 @@ const PopupEditProject = ({
                 .map((keyword) => keyword.trim());
 
               setFormData({ ...formData, keyword: keywords });
+              setValidationErrors((prevErrors) => {
+                const updatedErrors = { ...prevErrors };
+                delete updatedErrors.keyword;
+                return updatedErrors;
+              });
             }}
           />
+          {validationErrors.keyword && (
+            <div className="text-primary text-base">
+              {validationErrors.keyword}
+            </div>
+          )}
 
           <label>Type Project</label>
           <Dropdown
@@ -395,12 +444,17 @@ const PopupEditProject = ({
             selectedId={formData.type_id}
             className="col-span-3"
           />
+          {validationErrors.type_id && (
+            <div className="text-primary text-base">
+              {validationErrors.type_id}
+            </div>
+          )}
 
           <label>Date</label>
           <input
             type="date"
             className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
-            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+            onChange={(e) => handleInputChange(e, "date")}
             placeholder="Select a date"
             value={formData.date || ""}
           />
