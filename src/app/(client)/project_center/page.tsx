@@ -23,7 +23,6 @@ const Page = () => {
         if (Array.isArray(data)) {
           setTypeProject(data);
         } else {
-          // setError("ข้อมูลไม่ถูกต้อง");
           console.log("ข้อมูลไม่ถูกต้อง");
         }
       } catch (err) {
