@@ -1,7 +1,8 @@
 import "./globals.css";
 export const metadata = {
-  title: "NextLevel Food",
+  title: "จัดเก็บและสืบค้นโครงงาน คณะบริหารธุรกิจ มทร.อีสาน",
   description: "Delicious meals, shared by a food-loving community.",
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({

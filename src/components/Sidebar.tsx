@@ -66,12 +66,15 @@ const Sidebar = () => {
     : menu; // role_id <= 2 แสดงทั้งหมด
 
   useEffect(() => {
-    // ตรวจสอบว่า pathname ตรงกับ Link ใดในเมนู
     const activeMenuItem = menu.find((item) => {
-      // สำหรับหน้า project_center หรือ project_center/[id]
       if (
         item.Link === "/project_center" &&
         pathname.startsWith("/project_center")
+      ) {
+        return true;
+      } else if (
+        item.Link === "/add_project" &&
+        pathname.startsWith("/add_project")
       ) {
         return true;
       }
@@ -80,7 +83,7 @@ const Sidebar = () => {
     if (activeMenuItem) {
       setActiveButton(activeMenuItem.id);
     }
-  }, [pathname]); // เมื่อ pathname เปลี่ยนแปลง, useEffect จะทำงานใหม่
+  }, [pathname]);
 
   return (
     <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5 sticky top-0">

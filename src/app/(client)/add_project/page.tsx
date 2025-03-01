@@ -17,7 +17,7 @@ const Page = () => {
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null,
+    null
   );
   const limit = 10;
   const totalPages = Math.ceil(totalCount / limit);
@@ -51,7 +51,7 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
       );
 
       fetchMyProjects({ limit, offset: (currentPage - 1) * limit });
@@ -70,8 +70,8 @@ const Page = () => {
   };
 
   return (
-    <div className="flex w-full gap-5">
-      <div className="p-5 rounded-[10px] shadow-md w-full h-full">
+    <div className="relative grid w-full gap-5 h-full">
+      <div className="flex flex-col gap-3 max-h-[650px] w-full h-[650px] rounded-lg p-5 overflow-auto shadow-md">
         <div className="relative flex items-center w-full mb-5 justify-end">
           <div className="absolute -left-7 border w-[200px] h-[50px] bg-blue flex items-center justify-center">
             <h1 className="text-xl text-[#fff]">My project</h1>
@@ -86,7 +86,6 @@ const Page = () => {
         </div>
 
         {/* {loading && <p>Loading...</p>} */}
-
         {projects.map((item) => (
           <div
             key={item.project_id}
@@ -146,13 +145,13 @@ const Page = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between items-center mt-4">
+      <div className="absolute bottom-0 w-full flex justify-between items-center mt-4">
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+          className="w-[100px] h-[50px] border border-blue box-border text-blue rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white disabled:border-none"
         >
-          Previous
+          ย้อนกลับ
         </button>
         <span>
           Page {currentPage} of {totalPages}
@@ -160,11 +159,12 @@ const Page = () => {
         <button
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+          className="w-[100px] h-[50px] bg-blue text-white rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed"
         >
-          Next
+          ถัดไป
         </button>
       </div>
+
       <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
         <PopupAddProjects closePopup={handleClosePopup} />
       </Popup>

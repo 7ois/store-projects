@@ -58,7 +58,7 @@ const page = () => {
               <ul className="grid grid-cols-3 gap-5">
                 {typeProjects.map((type) => (
                   <li
-                    className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-lg h-20 px-4"
+                    className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-md h-20 px-4"
                     key={type.type_id}
                   >
                     <div className="w-full">
