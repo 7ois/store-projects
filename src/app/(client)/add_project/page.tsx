@@ -11,14 +11,16 @@ import PopupEditProject from "@/components/PopupEditProject";
 import { useMyProjectStore } from "@/stores/myProjectStore";
 
 const Page = () => {
-  const { projects, fetchMyProjects } = useMyProjectStore();
-  // const [deleteProjectId, setDeleteProjectId] = useState<number | null>(null);
+  const { projects, currentPage, fetchMyProjects, setCurrentPage, totalCount } =
+    useMyProjectStore();
   const [isOpenAddProject, setIsOpenAddProject] = useState(false);
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
+    null,
   );
+  const limit = 10;
+  const totalPages = Math.ceil(totalCount / limit);
 
   const openPopup = (projectId: number) => {
     setSelectedProjectId(projectId);
@@ -33,27 +35,38 @@ const Page = () => {
   }, [selectedProjectId]);
 
   useEffect(() => {
-    fetchMyProjects({});
-  }, []);
+    fetchMyProjects({
+      limit,
+      offset: (currentPage - 1) * limit,
+    });
+  }, [fetchMyProjects, currentPage]);
 
   const handleClosePopup = () => {
     setIsOpenAddProject(false);
     setIsOpenDeleteProject(false);
     setIsOpenEditProject(false);
-    fetchMyProjects({}); // เรียก fetchProjects หลังจากที่ปิด Popup
+    fetchMyProjects({ limit, offset: (currentPage - 1) * limit }); // เรียก fetchProjects หลังจากที่ปิด Popup
   };
 
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
       );
 
-      fetchMyProjects({});
+      fetchMyProjects({ limit, offset: (currentPage - 1) * limit });
       setIsOpenDeleteProject(false);
     } catch (err) {
       console.error("Error deleting project", err);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchMyProjects({
+      limit,
+      offset: (page - 1) * limit,
+    });
   };
 
   return (
@@ -107,13 +120,6 @@ const Page = () => {
                 <Pencil />
               </button>
             </div>
-            {/* {item.keywords && (
-                <p className="text-sm text-gray-500">
-                  Keywords: {item.keywords}
-                </p>
-              )}
-             */}
-            {/* {deleteProjectId && ( */}
             <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
               <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
                 <h1 className="text-xl font-bold mb-3">
@@ -139,6 +145,25 @@ const Page = () => {
             {/* )} */}
           </div>
         ))}
+      </div>
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+        >
+          Next
+        </button>
       </div>
       <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
         <PopupAddProjects closePopup={handleClosePopup} />

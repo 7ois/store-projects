@@ -7,23 +7,44 @@ import { useAllProjectStore } from "@/stores/allProjectStore";
 
 const Page = () => {
   const router = useRouter();
-  const params = useParams(); // ดึงข้อมูลจาก params
-  const { typeId } = params; // ดึงค่าจาก params
+  const params = useParams();
+  const { typeId } = params;
 
-  const { projects, setTypeId, fetchProjects } = useAllProjectStore();
+  const {
+    projects,
+    currentPage,
+    setTypeId,
+    fetchProjects,
+    setCurrentPage,
+    totalCount,
+  } = useAllProjectStore();
+  const limit = 10;
+  const totalPages = Math.ceil(totalCount / limit);
 
   useEffect(() => {
     if (typeId) {
       setTypeId(typeId.toString());
-      fetchProjects({ typeId: typeId.toString() });
+      fetchProjects({
+        typeId: typeId.toString(),
+        limit,
+        offset: (currentPage - 1) * limit,
+      });
     }
-  }, [typeId, setTypeId, fetchProjects]);
+  }, [typeId, setTypeId, fetchProjects, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    fetchProjects({
+      typeId: typeId?.toString(),
+      limit,
+      offset: (page - 1) * limit,
+    });
+  };
 
   return (
     <div className="grid gap-3">
-      {/* <div> */}
       <ChevronLeft onClick={() => router.back()} className="cursor-pointer" />
-      {/* </div> */}
+
       {projects.length > 0 ? (
         projects.map((project) => (
           <Link
@@ -40,6 +61,27 @@ const Page = () => {
       ) : (
         <p>No data available</p>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+          className="px-4 py-2 bg-gray-300 rounded disabled:bg-gray-500"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };

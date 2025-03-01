@@ -4,26 +4,35 @@ import { create } from "zustand";
 
 interface ProjectStore {
   projects: Project[];
-  typeId: string | null; // เพิ่มตัวแปร typeId ใน store
+  typeId: string | null;
+  currentPage: number;
+  totalCount: number;
   setProjects: (projects: Project[]) => void;
-  setTypeId: (typeId: string | null) => void; // เพิ่มฟังก์ชัน setTypeId
+  setTypeId: (typeId: string | null) => void;
+  setCurrentPage: (page: number) => void;
+  setTotalCount: (totalCount: number) => void;
   fetchProjects: (params: {
     typeId?: string;
     search?: string;
     year?: string;
+    limit?: number;
+    offset?: number;
   }) => Promise<void>;
 }
 
 export const useAllProjectStore = create<ProjectStore>((set) => ({
   projects: [],
-  typeId: null, // เริ่มต้นค่าเป็น null
+  typeId: null,
+  currentPage: 1,
+  totalCount: 0,
   setProjects: (projects) => set({ projects }),
-  setTypeId: (typeId) => set({ typeId }), // อัปเดตค่า typeId
-  fetchProjects: async ({ typeId, search, year }) => {
+  setTypeId: (typeId) => set({ typeId }),
+  setCurrentPage: (page) => set({ currentPage: page }),
+  setTotalCount: (totalCount) => set({ totalCount }),
+  fetchProjects: async ({ typeId, search, year, limit = 10, offset = 0 }) => {
     try {
       const params = new URLSearchParams();
 
-      // ตรวจสอบค่า typeId ใน store หากไม่เป็น null หรือ undefined จะใช้ค่าใน store แทน
       const finalTypeId = typeId || useAllProjectStore.getState().typeId;
 
       if (finalTypeId) {
@@ -36,13 +45,18 @@ export const useAllProjectStore = create<ProjectStore>((set) => ({
         params.append("year", year);
       }
 
+      params.append("limit", limit.toString());
+      params.append("offset", offset.toString());
+
       const response = await axios.get(
         `${
           process.env.NEXT_PUBLIC_API_URL
         }/getAllProjects?${params.toString()}`,
       );
+
       const allProjects = response.data.data;
-      set({ projects: allProjects });
+      const totalCount = response.data.totalCount;
+      set({ projects: allProjects, totalCount });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
