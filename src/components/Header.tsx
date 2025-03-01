@@ -8,6 +8,7 @@ import { User } from "@/entity/user";
 import Dropdown from "./Dropdown";
 import { useAllProjectStore } from "@/stores/allProjectStore";
 import { useMyProjectStore } from "@/stores/myProjectStore";
+import { useUsersStore } from "@/stores/userStore";
 
 const Navbar = () => {
   const router = useRouter();
@@ -36,15 +37,19 @@ const Navbar = () => {
 
   const { fetchProjects } = useAllProjectStore();
   const { fetchMyProjects } = useMyProjectStore();
+  const { fetchUsers } = useUsersStore();
 
   useEffect(() => {
     if (
       pathname === "/add_project" ||
+      pathname === "/manage_system" ||
       pathname.startsWith("/project_center/") ||
       value.length >= 2
     ) {
       if (pathname === "/add_project") {
         fetchMyProjects({ search: value, year });
+      } else if (pathname === "/manage_system") {
+        fetchUsers({ search: value });
       } else {
         fetchProjects({
           typeId: typeId?.toLocaleString(),
@@ -53,7 +58,15 @@ const Navbar = () => {
         });
       }
     }
-  }, [value, year, pathname, typeId, fetchProjects, fetchMyProjects]);
+  }, [
+    value,
+    year,
+    pathname,
+    typeId,
+    fetchProjects,
+    fetchMyProjects,
+    fetchUsers,
+  ]);
 
   const handleYearSelect = (_: number, value: string) => {
     setYear(value);
@@ -98,7 +111,9 @@ const Navbar = () => {
   }, [isOpen]);
 
   const shouldShowSearchAndYear =
-    pathname === "/add_project" || /^\/project_center\/\d+$/.test(pathname);
+    pathname === "/add_project" ||
+    "/manage_system" ||
+    /^\/project_center\/\d+$/.test(pathname);
 
   return (
     <div className="h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
@@ -116,14 +131,16 @@ const Navbar = () => {
                 placeholder="Quick Search (ctrl + K)"
               />
             </div>
-            <div className="flex gap-2 justify-center items-center">
-              <h1>ปีการศึกษา</h1>
-              <Dropdown
-                items={yearData}
-                onSelect={handleYearSelect} // อัปเดตค่า year
-                className="border-none"
-              />
-            </div>
+            {pathname !== "/manage_system" && (
+              <div className="flex gap-2 justify-center items-center">
+                <h1>ปีการศึกษา</h1>
+                <Dropdown
+                  items={yearData}
+                  onSelect={handleYearSelect} // อัปเดตค่า year
+                  className="border-none"
+                />
+              </div>
+            )}
           </>
         )}
       </div>
