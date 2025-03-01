@@ -1,4 +1,5 @@
 "use client";
+import { useAllProjectStore } from "@/stores/allProjectStore";
 import axios from "axios";
 import Link from "next/link";
 // import { useRouter } from "next/navigation";
@@ -11,8 +12,11 @@ interface TypeProject {
 }
 
 const page = () => {
+  // const { projects, setTypeId, fetchProjects } = useAllProjectStore();
+
   // const router = useRouter();
   const [typeProject, setTypeProject] = useState<TypeProject[]>([]);
+
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +24,7 @@ const page = () => {
     const fetchTypeProjects = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
         );
         const data = response.data;
 

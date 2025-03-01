@@ -29,7 +29,7 @@ const Page = () => {
           <Link
             href={`/project_center/${project.type_id}/${project.project_id}`}
             key={project.project_id}
-            className="grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
+            className="grid gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden transition delay-75 hover:bg-blue hover:text-white"
           >
             <h1 className="text-xl">{project.project_name_th}</h1>
             <p className="text-[#B4B4B4] text-base w-full truncate">

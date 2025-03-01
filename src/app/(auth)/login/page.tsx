@@ -5,6 +5,9 @@ import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import logo_rmuti from "../../../../public/images/logo_rmuti.png";
+import building1 from "../../../../public/images/business1.jpg";
+import building2 from "../../../../public/images/business2.jpg";
 
 const Page = () => {
   const router = useRouter();
@@ -78,15 +81,15 @@ const Page = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="text-base cursor-pointer">
+          {/* <div className="text-base cursor-pointer">
             <p>For get Password ?</p>
-          </div>
+          </div> */}
           <div className="w-full flex items-center justify-center my-5">
             <button
               type="submit"
-              className="bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px] "
+              className="bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px] transition delay-75 hover:bg-orange"
             >
-              Log In
+              Log in
             </button>
           </div>
         </form>
@@ -98,8 +101,15 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="w-full bg-blue text-[#fff]">
-        <h1>Image</h1>
+      <div className="w-full bg-blue text-[#fff] relative">
+        <Image
+          src={building2}
+          alt="ตึกบริหาร"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full flex items-center justify-center">
+          <Image src={logo_rmuti} alt="Logo" />
+        </div>
       </div>
     </div>
   );

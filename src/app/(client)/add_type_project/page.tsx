@@ -2,7 +2,7 @@
 import AddTypeProject from "@/components/AddTypeProject";
 import { usePopup } from "@/context/PopupContext";
 import axios from "axios";
-import { Plus } from "lucide-react";
+import { CircleX, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface TypeProject {
@@ -31,7 +31,7 @@ const page = () => {
       }
     };
     fetchType();
-  }, []);
+  }, [typeProjects]);
 
   return (
     <>
@@ -42,7 +42,7 @@ const page = () => {
               <h1 className="text-xl text-[#fff]">Add type project</h1>
             </div>
             <button
-              className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]"
+              className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition delay-75 hover:border-orange hover:text-orange"
               onClick={() => setIsOpenAddType(true)}
             >
               <Plus size={20} />
@@ -58,9 +58,12 @@ const page = () => {
               <ul className="max-w-4xl my-4 mx-auto py-4 grid grid-cols-5 gap-5 justify-center">
                 {typeProjects.map((type) => (
                   <li
-                    className="my-4 p-4 bg-blue rounded-lg shadow-lg cursor-pointer"
+                    className="my-4 p-4 bg-blue rounded-lg shadow-lg cursor-pointer relative"
                     key={type.type_id}
                   >
+                    <div className="rounded-full absolute -top-2 -right-2 bg-primary">
+                      <CircleX strokeWidth={1} className="text-white" />
+                    </div>
                     <p className="text-white">{type.type_name}</p>
                   </li>
                 ))}

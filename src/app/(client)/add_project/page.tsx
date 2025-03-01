@@ -17,7 +17,7 @@ const Page = () => {
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null,
+    null
   );
 
   const openPopup = (projectId: number) => {
@@ -46,10 +46,11 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
       );
 
       fetchMyProjects({});
+      setIsOpenDeleteProject(false);
     } catch (err) {
       console.error("Error deleting project", err);
     }
@@ -63,7 +64,7 @@ const Page = () => {
             <h1 className="text-xl text-[#fff]">My project</h1>
           </div>
           <button
-            className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px]"
+            className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition delay-75 hover:border-orange hover:text-orange"
             onClick={() => setIsOpenAddProject(true)}
           >
             <Book size={20} />
@@ -76,7 +77,7 @@ const Page = () => {
         {projects.map((item) => (
           <div
             key={item.project_id}
-            className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden"
+            className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden transition delay-75 hover:bg-blue hover:text-white"
           >
             <div>
               <h1 className="text-xl">{item.project_name_th}</h1>
@@ -100,7 +101,7 @@ const Page = () => {
                 <Trash2 />
               </button>
               <button
-                className="bg-blue text-white rounded-lg p-4"
+                className="bg-blue text-white rounded-lg p-4 transition delay-75 hover:bg-orange"
                 onClick={() => openPopup(item.project_id)}
               >
                 <Pencil />

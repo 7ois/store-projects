@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/entity/user";
+import Image from "next/image";
+import Logo from "@/../../public/images/logo_business.png";
 
 const menu = [
   { id: 1, title: "Project center", Link: "/project_center" },
@@ -55,8 +57,12 @@ const Sidebar = () => {
 
   const filteredMenu = !user
     ? menu.filter((item) => item.id === 1) // ถ้าไม่มี user แสดงเฉพาะ id 1
-    : user.role_id && user.role_id > 2
+    : user.role_id && user.role_id === 2
+    ? menu.filter((item) => [1, 2, 3].includes(item.id)) // role_id > 2 แสดงเฉพาะ id 1 และ 3
+    : user.role_id && user.role_id === 3
     ? menu.filter((item) => [1, 3].includes(item.id)) // role_id > 2 แสดงเฉพาะ id 1 และ 3
+    : user.role_id && user.role_id === 4
+    ? menu.filter((item) => item.id === 1)
     : menu; // role_id <= 2 แสดงทั้งหมด
 
   useEffect(() => {
@@ -79,7 +85,9 @@ const Sidebar = () => {
   return (
     <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5 sticky top-0">
       <div className="mb-10 h-16 flex justify-center items-center">
-        <Link href="/">Logo</Link>
+        <Link href="/project_center">
+          <Image src={Logo} alt="Logo" />
+        </Link>
       </div>
       <div className="flex items-center justify-center flex-col gap-3">
         {filteredMenu.map((item) => (

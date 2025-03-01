@@ -434,12 +434,12 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
         <div className="flex items-center justify-center gap-10 h-auto py-6 shadow-md">
           <button
             type="button"
-            className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary"
+            className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary transition delay-75 hover:bg-primary hover:text-white"
             onClick={closePopup}
           >
             Cancel
           </button>
-          <button className="border w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff]">
+          <button className="border w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff] transition delay-75 hover:bg-orange">
             Submit
           </button>
         </div>

@@ -16,7 +16,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
         );
         setProject(response.data.project);
       } catch (err) {
@@ -80,7 +80,7 @@ const Page = () => {
                       ?.filter(
                         (user) =>
                           user.role_group === "main_owner" ||
-                          user.role_group === "owner",
+                          user.role_group === "owner"
                       )
                       .map((user) => `${user.first_name} ${user.last_name}`)
                       .join(", ")}
@@ -124,7 +124,7 @@ const Page = () => {
           <a
             href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
             download={project.file_name}
-            className="text-blue-500 mt-2 block"
+            className="text-blue-500 mt-2 block border p-3 text-white bg-blue rounded-lg transition delay-75 hover:bg-orange hover:text-white"
           >
             Download PDF
           </a>

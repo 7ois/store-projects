@@ -11,6 +11,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        iphonxr: "414px", //
         sm: "640px", // ขนาดจอเล็ก
         md: "768px", // ขนาดจอกลาง
         lg: "1024px", // ขนาดจอใหญ่
