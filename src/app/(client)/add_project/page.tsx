@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Popup from "@/components/Popup";
 import axios from "axios";
 import PopupAddProjects from "@/components/PopupAddProjects";
-// import SearchDropdown from "@/components/SearchDropdown";
 import Jojo from "../../../../public/images/Jojo.jpg";
 import Image from "next/image";
 import PopupEditProject from "@/components/PopupEditProject";
@@ -17,11 +16,11 @@ const Page = () => {
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
+    null,
   );
   const limit = 10;
   const totalPages = Math.ceil(totalCount / limit);
-
+  const [selectedDelete, setSelectedDelete] = useState<number | null>(null);
   const openPopup = (projectId: number) => {
     setSelectedProjectId(projectId);
     setIsOpenEditProject(true);
@@ -41,6 +40,11 @@ const Page = () => {
     });
   }, [fetchMyProjects, currentPage]);
 
+  const handleTrashDelete = (id: number) => {
+    setSelectedDelete(id);
+    setIsOpenDeleteProject(true);
+  };
+
   const handleClosePopup = () => {
     setIsOpenAddProject(false);
     setIsOpenDeleteProject(false);
@@ -51,7 +55,7 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
       );
 
       fetchMyProjects({ limit, offset: (currentPage - 1) * limit });
@@ -108,7 +112,7 @@ const Page = () => {
             <div className="flex gap-2 items-center justify-center">
               <button
                 className="bg-primary text-white rounded-lg p-4"
-                onClick={() => setIsOpenDeleteProject(true)}
+                onClick={() => handleTrashDelete(item.project_id)}
               >
                 <Trash2 />
               </button>
@@ -119,32 +123,33 @@ const Page = () => {
                 <Pencil />
               </button>
             </div>
-            <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
-              <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
-                <h1 className="text-xl font-bold mb-3">
-                  ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
-                </h1>
-                <Image src={Jojo} alt="Jojo" />
-                <div className="flex gap-4 justify-center">
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg"
-                    onClick={() => handleDelete(item.project_id)}
-                  >
-                    เดินเข้าไปหา!
-                  </button>
-                  <button
-                    className="bg-gray-300 px-4 py-2 rounded-lg"
-                    onClick={() => setIsOpenDeleteProject(false)}
-                  >
-                    รีบเดินหนี!
-                  </button>
-                </div>
-              </div>
-            </Popup>
+
             {/* )} */}
           </div>
         ))}
       </div>
+      <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
+        <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
+          <h1 className="text-xl font-bold mb-3">
+            ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
+          </h1>
+          <Image src={Jojo} alt="Jojo" />
+          <div className="flex gap-4 justify-center">
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded-lg"
+              onClick={() => handleDelete(selectedDelete!)}
+            >
+              เดินเข้าไปหา!
+            </button>
+            <button
+              className="bg-gray-300 px-4 py-2 rounded-lg"
+              onClick={() => setIsOpenDeleteProject(false)}
+            >
+              รีบเดินหนี!
+            </button>
+          </div>
+        </div>
+      </Popup>
       <div className="absolute bottom-0 w-full flex justify-between items-center mt-4">
         <button
           disabled={currentPage === 1}

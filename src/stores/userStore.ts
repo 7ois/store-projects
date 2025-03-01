@@ -38,9 +38,11 @@ export const useUsersStore = create<UserStore>((set) => ({
         data: User[];
         totalCount: number;
       }>(`${process.env.NEXT_PUBLIC_API_URL}/getAllUsers?${params.toString()}`);
-      const users = response.data.data;
+
+      const resUsers = response.data.data;
       const totalCount = response.data.totalCount;
-      set({ users: users, totalCount });
+      console.log("users", resUsers);
+      set({ users: resUsers, totalCount });
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -112,7 +112,7 @@ const Navbar = () => {
 
   const shouldShowSearchAndYear =
     pathname === "/add_project" ||
-    "/manage_system" ||
+    pathname === "/manage_system" ||
     /^\/project_center\/\d+$/.test(pathname);
 
   return (
