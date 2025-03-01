@@ -2,7 +2,7 @@
 import AddTypeProject from "@/components/AddTypeProject";
 import { usePopup } from "@/context/PopupContext";
 import axios from "axios";
-import { CircleX, Plus } from "lucide-react";
+import { CircleX, Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface TypeProject {
@@ -55,16 +55,23 @@ const page = () => {
           </div>
           <div>
             {typeProjects.length > 0 && (
-              <ul className="max-w-4xl my-4 mx-auto py-4 grid grid-cols-5 gap-5 justify-center">
+              <ul className="grid grid-cols-3 gap-5">
                 {typeProjects.map((type) => (
                   <li
-                    className="my-4 p-4 bg-blue rounded-lg shadow-lg cursor-pointer relative"
+                    className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-lg h-20 px-4"
                     key={type.type_id}
                   >
-                    <div className="rounded-full absolute -top-2 -right-2 bg-primary">
-                      <CircleX strokeWidth={1} className="text-white" />
+                    <div className="w-full">
+                      <p>{type.type_name}</p>
                     </div>
-                    <p className="text-white">{type.type_name}</p>
+                    <div className="grid grid-cols-2 gap-2 items-center justify-between w-full">
+                      <button className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition delay-75 hover:bg-primary hover:text-white">
+                        <Trash2 />
+                      </button>
+                      <button className="flex items-center justify-center bg-blue text-white rounded-lg p-4 transition delay-75 hover:bg-orange">
+                        <Pencil />
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>
