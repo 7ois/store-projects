@@ -15,7 +15,7 @@ const Page = () => {
   };
 
   const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -37,7 +37,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
         );
         setProject(response.data.project);
       } catch (err) {
@@ -89,7 +89,7 @@ const Page = () => {
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>ประเภทโครงงาน:</h1>
-              <h1>{project.type_id}</h1>
+              <h1>{project.type_name}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1>เจ้าของ:</h1>
@@ -99,7 +99,7 @@ const Page = () => {
                     ?.filter(
                       (user) =>
                         user.role_group === "main_owner" ||
-                        user.role_group === "owner"
+                        user.role_group === "owner",
                     )
                     .map((user) => `${user.first_name} ${user.last_name}`)
                     .join(", ")}

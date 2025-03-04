@@ -3,6 +3,7 @@ import { User } from "./user";
 export interface Project {
   project_id: number;
   type_id: number;
+  type_name: string;
   project_name_th: string;
   project_name_en: string;
   abstract_th: string;
