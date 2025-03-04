@@ -23,9 +23,10 @@ module.exports = {
         blue: "#1C3B6C",
         orange: "#FF7F00",
       },
-      fontFamily: {
-        thai: ["Athiti", "serif"],
-      },
+      // fontFamily: {
+      //   thai: ["Athiti", "serif"],
+      //   noto: ["Noto Sans Thai", "sans-serif"],
+      // },
     },
     plugins: [],
   },

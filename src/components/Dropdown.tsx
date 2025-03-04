@@ -23,11 +23,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState<string | undefined>("select");
+  const [selected, setSelected] = useState<string | undefined>("กรุณาเลือก");
 
   useEffect(() => {
     const selectedType = items.find((item) => item.id === selectedId);
-    setSelected(selectedType?.value || "select");
+    setSelected(selectedType?.value || "กรุณาเลือก");
   }, [selectedId]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -50,7 +50,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         >
           <h1
             className={`${
-              selected !== "select" ? "text-[#000]" : "text-gray-400"
+              selected !== "กรุณาเลือก" ? "text-[#000]" : "text-gray-400"
             }`}
           >
             {selected}

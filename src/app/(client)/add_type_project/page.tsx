@@ -40,7 +40,7 @@ const Page = () => {
   const fetchType = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+        `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
       );
       setTypeProjects(response.data);
     } catch (err) {
@@ -51,7 +51,7 @@ const Page = () => {
   const handleDelete = async (typeId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteTypeProject/${typeId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteTypeProject/${typeId}`
       );
 
       setIsOpenDeleteType(false);
@@ -82,7 +82,7 @@ const Page = () => {
               <h1 className="text-xl text-[#fff]">Add type project</h1>
             </div>
             <button
-              className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition delay-75 hover:border-orange hover:text-orange"
+              className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
               onClick={() => setIsOpenAddType(true)}
             >
               <Plus size={20} />
@@ -106,13 +106,13 @@ const Page = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-2 items-center justify-between w-full">
                       <button
-                        className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition delay-75 hover:bg-primary hover:text-white"
+                        className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition duration-75 hover:bg-primary hover:text-white"
                         onClick={() => handleTrashDelete(type.type_id)}
                       >
                         <Trash2 />
                       </button>
                       <button
-                        className="flex items-center justify-center bg-blue text-white rounded-lg p-4 transition delay-75 hover:bg-orange"
+                        className="flex items-center justify-center bg-blue text-white rounded-lg p-4 transition duration-75 hover:bg-orange"
                         onClick={() => handleEditClick(type)}
                       >
                         <Pencil />

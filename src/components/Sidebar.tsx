@@ -99,7 +99,7 @@ const Sidebar = () => {
               className={`${
                 activeButton === item.id
                   ? "bg-blue text-[#fff] shadow-md"
-                  : "bg-[#fff] text-[#000] shadow-md transition delay-75 hover:bg-orange hover:text-white"
+                  : "bg-[#fff] text-[#000] shadow-md transition duration-75 hover:bg-orange hover:text-white"
               } w-full h-20 rounded-[10px] text-xl text-left pl-5`}
               onClick={() => setActiveButton(item.id)}
             >

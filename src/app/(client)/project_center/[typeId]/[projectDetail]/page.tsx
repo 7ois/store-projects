@@ -1,6 +1,4 @@
 "use client";
-
-// import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
@@ -9,9 +7,32 @@ import { ChevronLeft } from "lucide-react";
 
 const Page = () => {
   const params = useParams();
+  const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
 
-  const router = useRouter();
+  const handleBack = () => {
+    router.push(`/project_center/${params.type_id}`); // เปลี่ยนเส้นทางกลับไปยัง /d/{id}
+  };
+
+  const handleDownload = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("กรุณาล็อกอินก่อนดาวน์โหลด");
+      router.push("/login");
+      e.preventDefault(); // ป้องกันการดาวน์โหลดเมื่อไม่มี token
+      return;
+    }
+  };
+
+  useEffect(() => {
+    // เก็บหน้า detail_project ไปที่ sessionStorage
+    if (!localStorage.getItem("token")) {
+      sessionStorage.setItem("redirectTo", window.location.pathname);
+    }
+  }, []);
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -29,17 +50,16 @@ const Page = () => {
   return (
     <div>
       <ChevronLeft
-        onClick={() => router.back()}
+        onClick={handleBack}
         size={25}
         color="#1C3B6C"
         className="cursor-pointer"
       />
       {project ? (
-        <div>
-          {/* <h1>{project.project_id}</h1> */}
-          <div className="grid gap-3">
+        <div className="grid gap-5">
+          <div className="grid gap-5 p-5 rounded-lg shadow-md">
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Title:</h1>
+              <h1>ชื่อโครงงาน:</h1>
               <h1>{project.project_name_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
@@ -47,7 +67,7 @@ const Page = () => {
               <h1>{project.project_name_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Abstract:</h1>
+              <h1>บทคัดย่อ:</h1>
               <h1>{project.abstract_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
@@ -64,40 +84,36 @@ const Page = () => {
               </h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Keywords:</h1>
+              <h1>คำสำคัญ:</h1>
               <h1>-</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Type:</h1>
+              <h1>ประเภทโครงงาน:</h1>
               <h1>{project.type_id}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Owner:</h1>
+              <h1>เจ้าของ:</h1>
               <ul className="flex">
                 <li>
-                  <h1>
-                    {project.users
-                      ?.filter(
-                        (user) =>
-                          user.role_group === "main_owner" ||
-                          user.role_group === "owner"
-                      )
-                      .map((user) => `${user.first_name} ${user.last_name}`)
-                      .join(", ")}
-                  </h1>
+                  {project.users
+                    ?.filter(
+                      (user) =>
+                        user.role_group === "main_owner" ||
+                        user.role_group === "owner"
+                    )
+                    .map((user) => `${user.first_name} ${user.last_name}`)
+                    .join(", ")}
                 </li>
               </ul>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Advisor:</h1>
+              <h1>ที่ปรึกษา:</h1>
               <ul className="flex">
                 <li>
-                  <h1>
-                    {project.users
-                      ?.filter((user) => user.role_group === "advisor")
-                      .map((user) => `${user.first_name} ${user.last_name}`)
-                      .join(", ")}
-                  </h1>
+                  {project.users
+                    ?.filter((user) => user.role_group === "advisor")
+                    .map((user) => `${user.first_name} ${user.last_name}`)
+                    .join(", ")}
                 </li>
               </ul>
             </div>
@@ -116,7 +132,8 @@ const Page = () => {
               ))}
             </ul>
           </div> */}
-          <embed
+
+          {/* <embed
             src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
             width="600"
             height="400"
@@ -124,10 +141,48 @@ const Page = () => {
           <a
             href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
             download={project.file_name}
-            className="text-blue-500 mt-2 block border p-3 text-white bg-blue rounded-lg transition delay-75 hover:bg-orange hover:text-white"
+            className="text-blue-500 mt-2 block border p-3 text-white bg-blue rounded-lg transition duration-75 hover:bg-orange hover:text-white"
           >
             Download PDF
-          </a>
+          </a> */}
+          {project.file_path ? (
+            <div className="flex w-full gap-5 p-5 rounded-lg shadow-md items-center justify-between">
+              <div>
+                {project.file_name && (
+                  // <p className="text-gray-700 font-medium">
+                  //   ไฟล์: {project.file_name}
+                  // </p>
+                  <div className="grid grid-cols-[200px_auto]">
+                    <h1>ไฟล์:</h1>
+                    <h1>{project.file_name}</h1>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center gap-3 w-1/3">
+                <a
+                  href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}#toolbar=0`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center text-center border border-blue text-blue h-[50px] w-full rounded-lg transition duration-75 hover:text-orange hover:border-orange"
+                >
+                  ดูโครงงาน
+                </a>
+
+                <a
+                  href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
+                  target="_blank"
+                  download={project.file_name}
+                  onClick={handleDownload}
+                  className="flex items-center justify-center text-center text-white bg-blue h-[50px] w-full rounded-lg transition duration-75 hover:bg-orange"
+                >
+                  ดาวน์โหลดโครงงาน
+                </a>
+              </div>
+            </div>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
       ) : (
         <p>Loading...</p>

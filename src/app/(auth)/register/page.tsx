@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { registerSchema, registerSchemaType } from "@/lib/types";
 import axios from "axios";
+import building2 from "../../../../public/images/business2.jpg";
+import logo_rmuti from "../../../../public/images/logo_rmuti.png";
 
 const Page = () => {
   const {
@@ -35,7 +37,7 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
@@ -54,12 +56,12 @@ const Page = () => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`
         );
         const formattedRoles = response.data.data
           .filter(
             (data: { role_id: number }) =>
-              data.role_id === 2 || data.role_id === 3,
+              data.role_id === 2 || data.role_id === 3
           )
           .map((item: { role_id: number; role_name: string }) => ({
             id: item.role_id,
@@ -95,88 +97,93 @@ const Page = () => {
           width={150}
           height={150}
         />
-        <h1 className="text-5xl my-5">Register</h1>
+        <h1 className="text-5xl my-5 font-[400]">สมัครสมาชิก</h1>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="grid gap-5 w-full text-2xl"
         >
-          <div className="grid gap-1">
+          <div className="grid gap-1 relative">
             <label htmlFor="email" className="text-xl">
               อีเมล
             </label>
             <input
               {...register("email")}
+              placeholder="กรอกอีเมลของคุณ"
               type="email"
               className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
             />
             {errors.email && (
-              <p className="text-primary text-base">{`${errors.email.message}`}</p>
+              <p className="text-primary text-base absolute -bottom-6">{`${errors.email.message}`}</p>
             )}
           </div>
 
-          <div className="grid gap-1">
+          <div className="grid gap-1 relative">
             <label htmlFor="password" className="text-xl">
               รหัสผ่าน
             </label>
             <input
               {...register("password")}
+              placeholder="รหัสผ่าน"
               type="password"
               className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
             />
             {errors.password && (
-              <p className="text-primary text-base">{`${errors.password.message}`}</p>
+              <p className="text-primary text-base absolute -bottom-6">{`${errors.password.message}`}</p>
             )}
           </div>
 
-          <div className="grid gap-1">
+          <div className="grid gap-1 relative">
             <label htmlFor="confirmPassword" className="text-xl">
               ยืนยันรหัสผ่าน
             </label>
             <input
               {...register("confirmPassword")}
+              placeholder="ยืนยันรหัสผ่าน"
               type="password"
               className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
             />
             {errors.confirmPassword && (
-              <p className="text-primary text-base">{`${errors.confirmPassword.message}`}</p>
+              <p className="text-primary text-base absolute -bottom-6">{`${errors.confirmPassword.message}`}</p>
             )}
           </div>
 
           {email ? (
             email.endsWith("@rmuti.ac.th") ? (
               <div className={`grid grid-cols-2 gap-5 w-full`}>
-                <div className="grid gap-1 w-full">
+                <div className="grid gap-1 w-full relative">
                   <label className="text-xl">ชื่อ</label>
                   <input
                     {...register("first_name")}
+                    placeholder='กรุณากรอก "ชื่อ"'
                     type="text"
                     className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
                   />
                   {errors.first_name && (
-                    <p className="text-primary text-base">{`${errors.first_name.message}`}</p>
+                    <p className="text-primary text-base absolute -bottom-6">{`${errors.first_name.message}`}</p>
                   )}
                 </div>
 
-                <div className="grid gap-1 w-full">
+                <div className="grid gap-1 w-full relative">
                   <label className="text-xl">นามสกุล</label>
                   <input
                     {...register("last_name")}
+                    placeholder='กรุณากรอก "นามสกุล"'
                     type="text"
                     className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
                   />
                   {errors.last_name && (
-                    <p className="text-primary text-base">{`${errors.last_name.message}`}</p>
+                    <p className="text-primary text-base absolute -bottom-6">{`${errors.last_name.message}`}</p>
                   )}
                 </div>
 
-                <div className="grid">
+                <div className="grid relative">
                   <Dropdown
                     items={roles}
                     onSelect={handleRoleSelect}
                     labelName="ประเภทผู้ใช้"
                   />
                   {errors.role_id && (
-                    <p className="text-primary text-base">{`${errors.role_id.message}`}</p>
+                    <p className="text-primary text-base absolute -bottom-6">{`${errors.role_id.message}`}</p>
                   )}
                 </div>
               </div>
@@ -186,16 +193,23 @@ const Page = () => {
           <div className="w-full flex items-center justify-center my-5">
             <button
               type="submit"
-              className="bg-blue text-[#fff] w-[200px] h-[60px] border border-[#c5c5c5] rounded-[10px]"
+              className="bg-blue text-[#fff] w-[200px] h-[60px] border-[#c5c5c5] rounded-[10px] duration-75 hover:bg-orange"
             >
-              Register
+              สมัครสมาชิก
             </button>
           </div>
         </form>
       </div>
 
-      <div className="w-full bg-blue text-[#fff]">
-        <h1>Image</h1>
+      <div className="w-full bg-blue text-[#fff] relative">
+        <Image
+          src={building2}
+          alt="ตึกบริหาร"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white w-full flex items-center justify-center">
+          <Image src={logo_rmuti} alt="Logo" />
+        </div>
       </div>
     </div>
   );

@@ -3,14 +3,14 @@ import { z } from "zod";
 export const registerSchema = z
   .object({
     role_id: z.number().optional(),
-    email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Confirm Password is required"),
+    email: z.string().email({ message: 'กรุณากรอก "อีเมล" ให้ถูกต้อง' }),
+    password: z.string().min(8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"),
+    confirmPassword: z.string().min(1, "จำเป็นต้องยืนยันรหัสผ่าน"),
     first_name: z.string().optional(),
     last_name: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
+    message: "รหัสผ่านจะต้องตรงกัน",
     path: ["confirmPassword"],
   })
   // ตรวจสอบ first_name
@@ -22,9 +22,9 @@ export const registerSchema = z
       return true;
     },
     {
-      message: "First name is required for @rmuti.ac.th emails",
+      message: "กรุณากรอกชื่อจริง",
       path: ["first_name"],
-    },
+    }
   )
   // ตรวจสอบ last_name
   .refine(
@@ -35,9 +35,9 @@ export const registerSchema = z
       return true;
     },
     {
-      message: "Last name is required for @rmuti.ac.th emails",
+      message: "กรุณากรอกนามสกุล",
       path: ["last_name"],
-    },
+    }
   )
   // ตรวจสอบ role_id
   .refine(
@@ -52,9 +52,9 @@ export const registerSchema = z
       return true;
     },
     {
-      message: "Role is required for @rmuti.ac.th emails",
+      message: 'กรุณาเลือก "ประเภทผู้ใช้"',
       path: ["role_id"],
-    },
+    }
   );
 
 export type registerSchemaType = z.infer<typeof registerSchema>;

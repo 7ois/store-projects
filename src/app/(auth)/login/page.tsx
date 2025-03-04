@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import logo_rmuti from "../../../../public/images/logo_rmuti.png";
-import building1 from "../../../../public/images/business1.jpg";
 import building2 from "../../../../public/images/business2.jpg";
 
 const Page = () => {
@@ -34,16 +33,19 @@ const Page = () => {
           password: formData.password,
         }
       );
-
+      const redirectTo =
+        sessionStorage.getItem("redirectTo") || "/project_center";
+      sessionStorage.removeItem("redirectTo");
       localStorage.setItem("token", response.data.token);
-      router.push("/project_center");
+      router.push(redirectTo);
+      // router.push("/project_center");
     } catch {
       alert("Login failed");
     }
   };
 
   return (
-    <div className="w-full h-[800px] flex rounded-[10px] overflow-hidden shadow-lg">
+    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg">
       <div className="relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20">
         <div
           className="absolute top-5 left-5 cursor-pointer"
@@ -57,47 +59,44 @@ const Page = () => {
           width={150}
           height={150}
         />
-        <h1 className="text-5xl my-5">Log In</h1>
+        <h1 className="text-5xl my-5 font-[400]">เข้าสู่ระบบ</h1>
         <form onSubmit={handleLogin} className="grid gap-5 w-full text-2xl">
           <div className="grid gap-2">
-            <label className="text-xl">Email</label>
+            <label className="text-xl">อีเมล</label>
             <input
               type="email"
               name="email"
               className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
-              placeholder="Enter email."
+              placeholder="กรอกอีเมล"
               value={formData.email}
               onChange={handleChange}
             />
           </div>
           <div className="grid gap-2">
-            <label className="text-xl">Password</label>
+            <label className="text-xl">รหัสผ่าน</label>
             <input
               type="password"
               name="password"
               className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
-              placeholder="Enter password."
+              placeholder="กรอกรหัสผ่าน"
               value={formData.password}
               onChange={handleChange}
             />
           </div>
-          {/* <div className="text-base cursor-pointer">
-            <p>For get Password ?</p>
-          </div> */}
           <div className="w-full flex items-center justify-center my-5">
             <button
               type="submit"
-              className="bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px] transition delay-75 hover:bg-orange"
+              className="bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px] transition duration-75 hover:bg-orange"
             >
-              Log in
+              เข้าสู่ระบบ
             </button>
           </div>
         </form>
         <div
-          className="cursor-pointer"
+          className="cursor-pointer h-fit border-b-[1px] border-orange text-orange"
           onClick={() => router.push("/register")}
         >
-          <p>You are not a member yet?</p>
+          <p>คุณยังไม่ได้เป็นสมาชิก?</p>
         </div>
       </div>
 

@@ -147,7 +147,7 @@ const Navbar = () => {
 
       <div className="relative">
         <div
-          className="flex items-center gap-2 cursor-pointer transition delay-75 hover:text-orange"
+          className="flex items-center gap-2 cursor-pointer transition duration-75 hover:text-orange"
           onClick={toggleModal}
         >
           <p className="text-base">{user?.email ? user.email : "account"}</p>
@@ -171,7 +171,7 @@ const Navbar = () => {
               <button
                 id="modal"
                 type="button"
-                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-[#fff] text-base transition delay-75 hover:bg-orange"
+                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-[#fff] text-base transition duration-75 hover:bg-orange"
                 onClick={() => router.push("/login")}
               >
                 Login
@@ -180,7 +180,7 @@ const Navbar = () => {
             <button
               id="modal"
               type="button"
-              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition delay-75 hover:bg-orange"
+              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={() => router.push("/register")}
             >
               <Pencil size={15} />
@@ -206,7 +206,7 @@ const Navbar = () => {
               <p className="text-[#B4B4B4]">{user?.email ? user.email : ""}</p>
             </div>
             <button
-              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition delay-75 hover:bg-orange"
+              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={handleLogout}
             >
               <DoorOpen size={20} />

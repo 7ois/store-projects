@@ -30,7 +30,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null); //สำหรับเช็คว่าอยู่ input ไหน
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null,
+    null
   ); //สำหรับเช็คว่าอยู่ input ไหน
 
   const [validationErrors, setValidationErrors] = useState<{
@@ -62,7 +62,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number,
+    index?: number
   ) => {
     const newData = [...formData[field]];
 
@@ -103,13 +103,13 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          }),
+          })
         );
         setTypes(formattedTypes);
       } catch {}
@@ -144,7 +144,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor",
+    field: "owner" | "advisor"
   ) => {
     const newData = [...formData[field]];
     newData[index].value = e.target.value;
@@ -156,7 +156,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : "",
+      field === "advisor" ? "2" : ""
     );
 
     if (field === "advisor") {
@@ -243,7 +243,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       closePopup();
@@ -252,7 +252,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -264,7 +264,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
   const handleTextAreaChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -276,241 +276,264 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
   return (
     <div className="max-w-[1000px] grid overflow-hidden">
-      <div className=" h-10 flex items-center justify-center py-6 shadow-sm">
-        Add project
+      <div className="h-20 flex items-center justify-center py-6 shadow-sm">
+        เพิ่มโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="px-10 my-5 grid grid-cols-4 gap-2 text-lg items-center overflow-y-auto max-h-[460px]">
-          <label>Project name TH</label>
-          <input
-            type="text"
-            className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) => handleInputChange(e, "project_name_th")}
-            placeholder="project-name"
-            value={formData.project_name_th}
-          />
-          {validationErrors.project_name_th && (
-            <div className="text-primary text-base">
-              {validationErrors.project_name_th}
-            </div>
-          )}
+        <div className="grid gap-6 px-10 py-5 text-lg items-center overflow-y-auto max-h-[460px]">
+          <div className="grid grid-cols-4 items-center relative">
+            <label>ชื่อโครงงาน</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              onChange={(e) => handleInputChange(e, "project_name_th")}
+              placeholder="ชื่อโครงงาน"
+              value={formData.project_name_th}
+            />
+            {validationErrors.project_name_th && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.project_name_th}
+              </div>
+            )}
+          </div>
 
-          <label>Project name EN</label>
-          <input
-            type="text"
-            className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            onChange={(e) => handleInputChange(e, "project_name_en")}
-            placeholder="project-name-EN"
-            value={formData.project_name_en}
-          />
-          {validationErrors.project_name_en && (
-            <div className="text-primary text-base">
-              {validationErrors.project_name_en}
-            </div>
-          )}
+          <div className="grid grid-cols-4 items-center relative">
+            <label>Project name</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              onChange={(e) => handleInputChange(e, "project_name_en")}
+              placeholder="project name"
+              value={formData.project_name_en}
+            />
+            {validationErrors.project_name_en && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.project_name_en}
+              </div>
+            )}
+          </div>
 
-          <label>Abstract TH</label>
-          <textarea
-            className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
-            onChange={(e) => handleTextAreaChange(e, "abstract_th")}
-            placeholder="abstract_th"
-            value={formData.abstract_th}
-          />
-          {validationErrors.abstract_th && (
-            <div className="text-primary text-base">
-              {validationErrors.abstract_th}
-            </div>
-          )}
+          <div className="grid grid-cols-4 relative">
+            <label>บทคัดย่อ</label>
+            <textarea
+              className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+              onChange={(e) => handleTextAreaChange(e, "abstract_th")}
+              placeholder="บทคัดย่อ"
+              value={formData.abstract_th}
+            />
+            {validationErrors.abstract_th && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.abstract_th}
+              </div>
+            )}
+          </div>
 
-          <label>Abstract EN</label>
-          <textarea
-            className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
-            onChange={(e) => handleTextAreaChange(e, "abstract_en")}
-            placeholder="abstract_en"
-            value={formData.abstract_en}
-          />
-          {validationErrors.abstract_en && (
-            <div className="text-primary text-base">
-              {validationErrors.abstract_en}
-            </div>
-          )}
+          <div className="grid grid-cols-4 relative">
+            <label>Abstract</label>
+            <textarea
+              className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+              onChange={(e) => handleTextAreaChange(e, "abstract_en")}
+              placeholder="abstract"
+              value={formData.abstract_en}
+            />
+            {validationErrors.abstract_en && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.abstract_en}
+              </div>
+            )}
+          </div>
 
-          <label>Keyword</label>
-          <input
-            type="text"
-            className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
-            placeholder="Enter keywords, separated by commas"
-            value={formData.keyword.join(", ")}
-            onChange={(e) => {
-              const keywords = e.target.value
-                .split(",")
-                .map((keyword) => keyword.trim());
-              setFormData({ ...formData, keyword: keywords });
-              setValidationErrors((prevErrors) => {
-                const updatedErrors = { ...prevErrors };
-                delete updatedErrors.keyword;
-                return updatedErrors;
-              });
-            }}
-          />
-          {validationErrors.keyword && (
-            <div className="text-primary text-base">
-              {validationErrors.keyword}
-            </div>
-          )}
+          <div className="grid grid-cols-4 items-center relative">
+            <label>คำสำคัญ</label>
+            <input
+              type="text"
+              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              placeholder='ป้อนคำหลักโดยคั่นด้วยเครื่องหมายจุลภาค ","'
+              value={formData.keyword.join(", ")}
+              onChange={(e) => {
+                const keywords = e.target.value
+                  .split(",")
+                  .map((keyword) => keyword.trim());
+                setFormData({ ...formData, keyword: keywords });
+                setValidationErrors((prevErrors) => {
+                  const updatedErrors = { ...prevErrors };
+                  delete updatedErrors.keyword;
+                  return updatedErrors;
+                });
+              }}
+            />
+            {validationErrors.keyword && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.keyword}
+              </div>
+            )}
+          </div>
 
-          <label>Type Project</label>
-          <Dropdown
-            items={types}
-            onSelect={handleTypeSelect}
-            className="col-span-3"
-          />
-          {validationErrors.type_id && (
-            <div className="text-primary text-base">
-              {validationErrors.type_id}
-            </div>
-          )}
+          <div className="grid grid-cols-4 items-center relative">
+            <label>ประเภทโครงงาน</label>
+            <Dropdown
+              items={types}
+              onSelect={handleTypeSelect}
+              className="col-span-3"
+            />
+            {validationErrors.type_id && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.type_id}
+              </div>
+            )}
+          </div>
 
-          <label>Date</label>
-          <input
-            type="date"
-            className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
-            onChange={(e) => handleInputChange(e, "date")}
-            placeholder="Select a date"
-            value={formData.date}
-          />
-          {validationErrors.date && (
-            <div className="text-primary text-base">
-              {validationErrors.date}
-            </div>
-          )}
+          <div className="grid grid-cols-4 items-center relative">
+            <label>Date</label>
+            <input
+              type="date"
+              className="h-[50px] col-span-3 pl-2 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
+              onChange={(e) => handleInputChange(e, "date")}
+              placeholder="Select a date"
+              value={formData.date}
+            />
+            {validationErrors.date && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.date}
+              </div>
+            )}
+          </div>
 
-          <label>Main owner</label>
-          <div className="col-span-3 col-start-2 relative">
+          <div className="grid grid-cols-4 items-center relative">
+            <label>เจ้าของหลัก</label>
             <input
               disabled
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+              className="h-[50px] col-span-3 col-start-2 pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
               value={formData.main_owner.value}
               placeholder="main owner"
             />
           </div>
-          <label>Owner</label>
-          {formData.owner.map((owner, index) => (
-            <div key={index} className="col-span-3 col-start-2 relative">
-              <input
-                type="text"
-                className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
-                value={owner.value}
-                placeholder="owner"
-                onChange={(e) => handleChange(e, index, "owner")}
-                onFocus={() => setActiveOwnerIndex(index)}
-                onBlur={() => setTimeout(() => setActiveOwnerIndex(null), 200)}
-              />
-              {index === activeOwnerIndex &&
-                owner.value &&
-                Array.isArray(ownerSuggestions) &&
-                ownerSuggestions.length > 0 && (
-                  <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
-                    {ownerSuggestions.map((value, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2 cursor-pointer hover:bg-gray-100"
-                        onClick={() =>
-                          handleSelectUserForField(value, "owner", index)
-                        }
-                      >
-                        {value.first_name} {value.last_name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              <X
-                size={20}
-                className="text-primary cursor-pointer absolute top-1/2 right-3 -translate-y-1/2"
-                onClick={() => handleRemove("owner", index)}
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => handleAdd("owner")}
-            className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3"
-          >
-            <CirclePlus size={20} />
-            ADD owner
-          </button>
 
-          <label>Advisor</label>
-          {formData.advisor.map((advisor, index) => (
-            <div key={index} className="col-span-3 col-start-2 relative">
-              <input
-                type="text"
-                className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
-                value={advisor.value}
-                placeholder="advisor"
-                onChange={(e) => handleChange(e, index, "advisor")}
-                onFocus={() => setActiveAdvisorIndex(index)}
-                onBlur={() =>
-                  setTimeout(() => setActiveAdvisorIndex(null), 200)
-                }
-              />
-              {index === activeAdvisorIndex &&
-                advisor.value &&
-                Array.isArray(advisorSuggestions) &&
-                advisorSuggestions.length > 0 && (
-                  <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
-                    {advisorSuggestions.map((value, idx) => (
-                      <div
-                        key={idx}
-                        className="p-2 cursor-pointer hover:bg-gray-100"
-                        onClick={() =>
-                          handleSelectUserForField(value, "advisor", index)
-                        }
-                      >
-                        {value.first_name} {value.last_name}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              <X
-                size={20}
-                className="text-primary cursor-pointer absolute top-1/2 right-3 -translate-y-1/2"
-                onClick={() => handleRemove("advisor", index)}
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => handleAdd("advisor")}
-            className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3"
-          >
-            <CirclePlus size={20} />
-            ADD advisor
-          </button>
+          <div className="grid grid-cols-4 items-center">
+            <label>เจ้าของ</label>
+            {formData.owner.map((owner, index) => (
+              <div key={index} className="col-span-3 col-start-2 relative mb-2">
+                <input
+                  type="text"
+                  className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+                  value={owner.value}
+                  placeholder="เจ้าของ"
+                  onChange={(e) => handleChange(e, index, "owner")}
+                  onFocus={() => setActiveOwnerIndex(index)}
+                  onBlur={() =>
+                    setTimeout(() => setActiveOwnerIndex(null), 200)
+                  }
+                />
+                {index === activeOwnerIndex &&
+                  owner.value &&
+                  Array.isArray(ownerSuggestions) &&
+                  ownerSuggestions.length > 0 && (
+                    <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
+                      {ownerSuggestions.map((value, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2 cursor-pointer hover:bg-gray-100"
+                          onClick={() =>
+                            handleSelectUserForField(value, "owner", index)
+                          }
+                        >
+                          {value.first_name} {value.last_name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                <X
+                  size={20}
+                  className="text-primary cursor-pointer absolute top-1/2 right-3 -translate-y-1/2"
+                  onClick={() => handleRemove("owner", index)}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleAdd("owner")}
+              className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+            >
+              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-centerr">
+                <CirclePlus size={20} />
+                <p>เพิ่มเจ้าของ</p>
+              </div>
+            </button>
+          </div>
 
-          <label>File</label>
-          <input
-            onChange={handleFileChange}
-            type="file"
-            accept=".pdf"
-            className="h-[50px] pl-2 border-[#c5c5c5] text-base"
-          />
-          {validationErrors.file && (
-            <div className="text-primary text-base">
-              {validationErrors.file}
-            </div>
-          )}
+          <div className="grid grid-cols-4 items-center">
+            <label>ที่ปรึกษา</label>
+            {formData.advisor.map((advisor, index) => (
+              <div key={index} className="col-span-3 col-start-2 relative mb-2">
+                <input
+                  type="text"
+                  className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+                  value={advisor.value}
+                  placeholder="ที่ปรึกษา"
+                  onChange={(e) => handleChange(e, index, "advisor")}
+                  onFocus={() => setActiveAdvisorIndex(index)}
+                  onBlur={() =>
+                    setTimeout(() => setActiveAdvisorIndex(null), 200)
+                  }
+                />
+                {index === activeAdvisorIndex &&
+                  advisor.value &&
+                  Array.isArray(advisorSuggestions) &&
+                  advisorSuggestions.length > 0 && (
+                    <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
+                      {advisorSuggestions.map((value, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2 cursor-pointer hover:bg-gray-100"
+                          onClick={() =>
+                            handleSelectUserForField(value, "advisor", index)
+                          }
+                        >
+                          {value.first_name} {value.last_name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                <X
+                  size={20}
+                  className="text-primary cursor-pointer absolute top-1/2 right-3 -translate-y-1/2"
+                  onClick={() => handleRemove("advisor", index)}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleAdd("advisor")}
+              className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+            >
+              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-center">
+                <CirclePlus size={20} />
+                <p>เพิ่มที่ปรึกษา</p>
+              </div>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-4 items-center relative">
+            <label>File</label>
+            <input onChange={handleFileChange} type="file" accept=".pdf" />
+            {validationErrors.file && (
+              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+                {validationErrors.file}
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="flex items-center justify-center gap-10 h-auto py-6 shadow-md">
           <button
             type="button"
-            className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary transition delay-75 hover:bg-primary hover:text-white"
+            className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary transition duration-75 hover:bg-primary hover:text-white"
             onClick={closePopup}
           >
             Cancel
           </button>
-          <button className="border w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff] transition delay-75 hover:bg-orange">
+          <button className="border w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff] transition duration-75 hover:bg-orange">
             Submit
           </button>
         </div>

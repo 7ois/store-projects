@@ -63,7 +63,7 @@ const PopupTypeProject = ({
               headers: {
                 "Content-Type": "application/json",
               },
-            },
+            }
           );
         } else {
           response = await axios.post(
@@ -73,7 +73,7 @@ const PopupTypeProject = ({
               headers: {
                 "Content-Type": "application/json",
               },
-            },
+            }
           );
         }
 
@@ -109,12 +109,12 @@ const PopupTypeProject = ({
           <div className="flex items-center justify-between gap-2 p-5 border-t-[1px]">
             <button
               type="button"
-              className="border border-primary text-primary h-[40px] w-full rounded-lg transition delay-75 hover:bg-primary hover:text-white"
+              className="border border-primary text-primary h-[40px] w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
               onClick={setOpenPopup}
             >
               Cancel
             </button>
-            <button className="bg-blue text-white h-[40px] w-full rounded-lg transition delay-75 hover:bg-orange hover:text-white">
+            <button className="bg-blue text-white h-[40px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
               {editData ? "Save Changes" : "Submit"}
             </button>
           </div>
