@@ -41,18 +41,19 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   return (
-    <div className={clsx("relative inline-block text-left", className)}>
+    <div
+      className={clsx("relative inline-block text-left text-base", className)}
+    >
       <div className="grid gap-1">
-        <label className="text-xl">{labelName}</label>
+        <label>{labelName}</label>
         <div
-          // type='button'
           onClick={toggleDropdown}
-          className="cursor-pointer flex w-full h-[50px] items-center justify-between rounded-lg border border-[#c5c5c5] bg-white text-base text-gray-700 focus:outline-none px-2"
+          className="cursor-pointer flex min-w-[110px] h-[50px] px-2 items-center justify-between rounded-lg border border-[#c5c5c5] bg-white text-gray-700 focus:outline-none"
         >
           <h1
             className={`${
-              selected !== "กรุณาเลือก" ? "text-[#000]" : "text-gray-400"
-            }`}
+              selected !== "กรุณาเลือก" ? "text-black" : "text-gray-400"
+            } w-full truncate overflow-hidden whitespace-nowrap`}
           >
             {selected}
           </h1>
@@ -65,13 +66,13 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-full h-auto rounded-md shadow-lg border border-[#c5c5c5] bg-[#fff] z-10">
+        <div className="absolute mt-2 w-full h-auto rounded-md shadow-lg border border-[#c5c5c5] bg-[#fff] z-10">
           <div role="menu">
             {items.map((item, index) => (
               <div
                 key={index}
                 onClick={() => handleSelect(item.id, item.value)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#e1e1e1] cursor-pointer"
+                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-[#e1e1e1] cursor-pointer"
                 role="menuitem"
               >
                 {item.value}

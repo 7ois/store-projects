@@ -91,7 +91,7 @@ const PopupTypeProject = ({
   return (
     <Popup isOpen={isOpenAddType} onClose={setOpenPopup} className="w-1/4">
       <div className="text-base">
-        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white">
+        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-xl">
           <h1>{editData ? "แก้ไขประเภทโครงงาน" : "เพิ่มประเภทโครงงาน"}</h1>
         </div>
         <form onSubmit={handleSubmit}>

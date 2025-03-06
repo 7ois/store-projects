@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useAllProjectStore } from "@/stores/allProjectStore";
 
 const Page = () => {
-  const router = useRouter();
   const params = useParams();
   const { typeId } = params;
 
@@ -40,10 +39,6 @@ const Page = () => {
       offset: (page - 1) * limit,
     });
   };
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [router]);
 
   return (
     <div className="h-full w-full relative">

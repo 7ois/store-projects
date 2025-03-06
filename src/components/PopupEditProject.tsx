@@ -353,8 +353,8 @@ const PopupEditProject = ({
   };
 
   return (
-    <div className="max-w-[1000px] grid overflow-hidden">
-      <div className="h-20 flex items-center justify-center py-6 shadow-sm">
+    <div className="max-w-[1000px] text-base grid">
+      <div className="text-xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
         แก้ไขโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">

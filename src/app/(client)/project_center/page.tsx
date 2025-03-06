@@ -50,8 +50,8 @@ const Page = () => {
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center p-5 rounded-lg shadow-md h-[86px]">
-        <h1>Select Type Project</h1>
+      <div className="flex text-xl text-white items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
+        <h1>เลือกประเภทโครงการ</h1>
       </div>
 
       <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
@@ -64,8 +64,8 @@ const Page = () => {
                     {type.type_name}
                   </span>
 
-                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                    {formatProjectCount(type.project_count)} Projects
+                  <span className="absolute top-2 right-2 bg-primary text-white text-sm font-bold px-3 py-1 rounded-full">
+                    {formatProjectCount(type.project_count)} โครงงาน
                   </span>
                 </li>
               </Link>

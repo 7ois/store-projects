@@ -116,7 +116,7 @@ const Navbar = () => {
     /^\/project_center\/\d+$/.test(pathname);
 
   return (
-    <div className="h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
+    <div className="text-base h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
       <div className="w-3/4 flex items-center gap-5">
         {/* แสดง Search และปีการศึกษาตามเงื่อนไข */}
         {shouldShowSearchAndYear && (
@@ -128,11 +128,11 @@ const Navbar = () => {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 className="p-3 w-full h-full focus:outline-none"
-                placeholder="Quick Search (ctrl + K)"
+                placeholder="ค้นหาโครงงาน"
               />
             </div>
             {pathname !== "/manage_system" && (
-              <div className="flex gap-2 text-base justify-center items-center">
+              <div className="flex gap-2 justify-center items-center">
                 <p>ปีการศึกษา</p>
                 <Dropdown
                   items={yearData}
@@ -150,7 +150,7 @@ const Navbar = () => {
           className="flex items-center gap-2 cursor-pointer transition duration-75 hover:text-orange"
           onClick={toggleModal}
         >
-          <p className="text-base">{user?.email ? user.email : "account"}</p>
+          <p>{user?.email ? user.email : "account"}</p>
           <ChevronDown
             size={15}
             className={`${isOpen ? "-scale-100" : "scale-100"}`}
@@ -162,7 +162,7 @@ const Navbar = () => {
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-white border-[1px] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
+            classNameContainer="flex flex-col bg-white rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
           >
             <div
               id="modal"
@@ -171,20 +171,20 @@ const Navbar = () => {
               <button
                 id="modal"
                 type="button"
-                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-white text-base transition duration-75 hover:bg-orange"
+                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-white transition duration-75 hover:bg-orange"
                 onClick={() => router.push("/login")}
               >
-                Login
+                เข้าสู่ระบบ
               </button>
             </div>
             <button
               id="modal"
               type="button"
-              className="bg-blue text-white text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
+              className="bg-blue text-white text-left h-[50px] rounded-b-[10px] flex gap-3 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={() => router.push("/register")}
             >
               <Pencil size={15} />
-              Create an account
+              สร้างบัญชี
             </button>
           </Modal>
         ) : (
@@ -192,25 +192,21 @@ const Navbar = () => {
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-white border-[1px] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
+            classNameContainer="flex flex-col bg-white rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
           >
             <div className="grid gap-1 pl-3 py-3">
               <div className="flex gap-2">
-                <p className="text-base">
-                  {user?.first_name ? user.first_name : ""}
-                </p>
-                <p className="text-base">
-                  {user?.last_name ? user.last_name : ""}
-                </p>
+                <p>{user?.first_name ? user.first_name : ""}</p>
+                <p>{user?.last_name ? user.last_name : ""}</p>
               </div>
               <p className="text-[#B4B4B4]">{user?.email ? user.email : ""}</p>
             </div>
             <button
-              className="bg-blue text-white text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
+              className="bg-blue text-white text-left h-[50px] rounded-b-[10px] flex gap-3 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={handleLogout}
             >
               <DoorOpen size={20} />
-              Logout
+              ออกจากระบบ
             </button>
           </Modal>
         )}

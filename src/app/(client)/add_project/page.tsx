@@ -4,13 +4,12 @@ import React, { useEffect, useState } from "react";
 import Popup from "@/components/Popup";
 import axios from "axios";
 import PopupAddProjects from "@/components/PopupAddProjects";
-import Jojo from "../../../../public/images/Jojo.jpg";
-import Image from "next/image";
 import PopupEditProject from "@/components/PopupEditProject";
 import { useMyProjectStore } from "@/stores/myProjectStore";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const Page = () => {
+  const pathname = usePathname();
   const router = useRouter();
   const { projects, currentPage, fetchMyProjects, setCurrentPage, totalCount } =
     useMyProjectStore();
@@ -41,6 +40,10 @@ const Page = () => {
       offset: (currentPage - 1) * limit,
     });
   }, [fetchMyProjects, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [pathname]);
 
   const handleTrashDelete = (id: number) => {
     setSelectedDelete(id);
@@ -77,14 +80,14 @@ const Page = () => {
 
   return (
     <div className="h-full w-full text-base relative">
-      <div className="flex items-center justify-between p-5 rounded-lg shadow-md">
-        <h1>My project</h1>
+      <div className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white">
+        <h1 className="text-xl text-white">โครงงานของฉัน</h1>
         <button
-          className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
+          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
           onClick={() => setIsOpenAddProject(true)}
         >
           <Book size={20} />
-          Add Project
+          เพิ่มโครงงาน
         </button>
       </div>
       <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
@@ -116,7 +119,10 @@ const Page = () => {
               </div>
               <div className="flex gap-2 items-center justify-center">
                 <button
-                  className="bg-primary text-white rounded-lg p-4"
+                  className="bg-primary text-white rounded-lg p-4 disabled:bg-black"
+                  disabled={item.users?.every(
+                    (user) => user.role_group !== "main_owner"
+                  )}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleTrashDelete(item.project_id);

@@ -51,8 +51,8 @@ const Page = () => {
 
   return (
     <div className="h-full w-full text-base relative">
-      <div className="flex items-center p-5 rounded-lg shadow-md h-[86px]">
-        <h1>Manage User</h1>
+      <div className="text-xl text-white flex items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
+        <h1>จัดการผู้ใช้</h1>
       </div>
 
       <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
@@ -142,7 +142,7 @@ const Page = () => {
           ย้อนกลับ
         </button>
         <span>
-          Page {currentPage} of {totalPages}
+          หน้า {currentPage} จาก {totalPages}
         </span>
         <button
           disabled={currentPage === totalPages}

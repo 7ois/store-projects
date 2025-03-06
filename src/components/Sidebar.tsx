@@ -8,10 +8,10 @@ import Image from "next/image";
 import Logo from "@/../../public/images/logo_business.png";
 
 const menu = [
-  { id: 1, title: "Project center", Link: "/project_center" },
-  { id: 2, title: "Add type project", Link: "/add_type_project" },
-  { id: 3, title: "Add project", Link: "/add_project" },
-  { id: 4, title: "Manage system", Link: "/manage_system" },
+  { id: 1, title: "โครงงานทั้งหมด", Link: "/project_center" },
+  { id: 2, title: "เพิ่มประเภทโครงงาน", Link: "/add_type_project" },
+  { id: 3, title: "เพิ่มโครงงาน", Link: "/add_project" },
+  { id: 4, title: "จัดการผู้ใช้", Link: "/manage_system" },
 ];
 
 const Sidebar = () => {
@@ -89,7 +89,7 @@ const Sidebar = () => {
     <div className="z-10 w-[400px] h-screen bg-white drop-shadow-lg p-5 sticky top-0">
       <div className="mb-10 h-16 flex justify-center items-center">
         <Link href="/project_center">
-          <Image src={Logo} alt="Logo" />
+          <Image src={Logo} alt="Logo" width={200} />
         </Link>
       </div>
       <div className="flex items-center justify-center flex-col gap-3">
@@ -99,7 +99,7 @@ const Sidebar = () => {
               className={`${
                 activeButton === item.id
                   ? "bg-blue text-white shadow-md"
-                  : "bg-white text-black shadow-md transition duration-75 hover:bg-orange hover:text-white"
+                  : "bg-white text-black shadow-md transition duration-75 hover:text-white hover:bg-gradient-to-r from-orange to-white"
               } w-full h-20 rounded-[10px] text-lg font-medium text-left pl-5`}
               onClick={() => setActiveButton(item.id)}
             >

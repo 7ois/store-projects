@@ -75,14 +75,14 @@ const Page = () => {
 
   return (
     <div className="w-full h-full">
-      <div className="flex items-center justify-between p-5 rounded-lg shadow-md text-base">
-        <h1>Add type project</h1>
+      <div className="flex items-center justify-between p-5 rounded-lg shadow-md text-base bg-gradient-to-r from-blue to-white">
+        <h1 className="text-xl text-white">เพิ่มประเภทโครงงาน</h1>
         <button
-          className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
+          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
           onClick={() => setIsOpenAddType(true)}
         >
           <Plus size={20} />
-          Add type project
+          เพิ่มประเภทโครงงาน
         </button>
       </div>
 
