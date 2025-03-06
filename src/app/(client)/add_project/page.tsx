@@ -1,5 +1,5 @@
 "use client";
-import { Book, Pencil, Trash2, TriangleAlert } from "lucide-react";
+import { Book, CircleX, Pencil, Trash2, TriangleAlert } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Popup from "@/components/Popup";
 import axios from "axios";
@@ -8,8 +8,10 @@ import Jojo from "../../../../public/images/Jojo.jpg";
 import Image from "next/image";
 import PopupEditProject from "@/components/PopupEditProject";
 import { useMyProjectStore } from "@/stores/myProjectStore";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+  const router = useRouter();
   const { projects, currentPage, fetchMyProjects, setCurrentPage, totalCount } =
     useMyProjectStore();
   const [isOpenAddProject, setIsOpenAddProject] = useState(false);
@@ -74,80 +76,93 @@ const Page = () => {
   };
 
   return (
-    <div className="relative grid w-full gap-5 h-full">
-      <div className="flex flex-col gap-3 max-h-[650px] w-full h-[650px] rounded-lg p-5 overflow-auto shadow-md">
-        <div className="relative flex items-center w-full mb-5 justify-end">
-          <div className="absolute -left-7 border w-[200px] h-[50px] bg-blue flex items-center justify-center">
-            <h1 className="text-xl text-[#fff]">My project</h1>
-          </div>
-          <button
-            className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
-            onClick={() => setIsOpenAddProject(true)}
-          >
-            <Book size={20} />
-            Add Project
-          </button>
-        </div>
-
-        {/* {loading && <p>Loading...</p>} */}
-        {projects.map((item) => (
-          <div
-            key={item.project_id}
-            className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden transition duration-75 hover:bg-blue hover:text-white"
-          >
-            <div>
-              <h1 className="text-xl">{item.project_name_th}</h1>
-              <p className="text-[#B4B4B4] text-base w-full truncate">
-                {item.abstract_th}
-              </p>
-              {!item.type_id && (
-                <div className="flex items-center gap-2">
-                  <TriangleAlert className="text-primary" />
-                  <p className="text-primary text-sm">
-                    ประเภทโครงงานไม่มีแล้วนะจ๊ะ
-                  </p>
-                </div>
-              )}
-            </div>
-            <div className="flex gap-2 items-center justify-center">
-              <button
-                className="bg-primary text-white rounded-lg p-4"
-                onClick={() => handleTrashDelete(item.project_id)}
-              >
-                <Trash2 />
-              </button>
-              <button
-                className="bg-blue text-white rounded-lg p-4 transition duration-75 hover:bg-orange"
-                onClick={() => openPopup(item.project_id)}
-              >
-                <Pencil />
-              </button>
-            </div>
-          </div>
-        ))}
+    <div className="h-full w-full text-base relative">
+      <div className="flex items-center justify-between p-5 rounded-lg shadow-md">
+        <h1>My project</h1>
+        <button
+          className="flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
+          onClick={() => setIsOpenAddProject(true)}
+        >
+          <Book size={20} />
+          Add Project
+        </button>
       </div>
-      <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
-        <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
-          <h1 className="text-xl font-bold mb-3">
-            ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
-          </h1>
-          <Image src={Jojo} alt="Jojo" />
-          <div className="flex gap-4 justify-center">
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-              onClick={() => handleDelete(selectedDelete!)}
+      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
+        <div className="grid gap-3">
+          {projects.length === 0 && (
+            <div className="grid items-center justify-center">
+              <h1>ไม่มีข้อมูล</h1>
+            </div>
+          )}
+          {projects.map((item) => (
+            <div
+              onClick={() => router.push(`/add_project/${item.project_id}`)}
+              key={item.project_id}
+              className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden transition duration-75 hover:bg-blue hover:text-white"
             >
-              เดินเข้าไปหา!
-            </button>
+              <div className="w-full overflow-hidden grid gap-3">
+                <h1>{item.project_name_th}</h1>
+                <p className="text-[#B4B4B4] text-sm w-full truncate">
+                  {item.abstract_th}
+                </p>
+                {!item.type_id && (
+                  <div className="flex items-center gap-2">
+                    <TriangleAlert className="text-primary" />
+                    <p className="text-primary text-sm">
+                      ประเภทโครงงานไม่มีแล้วนะจ๊ะ
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="flex gap-2 items-center justify-center">
+                <button
+                  className="bg-primary text-white rounded-lg p-4"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleTrashDelete(item.project_id);
+                  }}
+                >
+                  <Trash2 />
+                </button>
+                <button
+                  className="bg-blue text-white rounded-lg p-4 transition duration-75 hover:bg-orange"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openPopup(item.project_id);
+                  }}
+                >
+                  <Pencil />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
+        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center">
+          <div className="w-full p-5 text-primary grid items-center justify-center">
+            <CircleX strokeWidth={1} className="w-40 h-40" />
+            <p className="text-lg font-medium">ยืนยันการลบ</p>
+          </div>
+          <div className="flex gap-4 items-center justify-center w-[400px] p-5">
             <button
-              className="bg-gray-300 px-4 py-2 rounded-lg"
+              className="bg-gray-300 text-gray-800 px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-gray-400"
               onClick={() => setIsOpenDeleteProject(false)}
             >
-              รีบเดินหนี!
+              ยกเลิก
+            </button>
+
+            <button
+              className="bg-primary text-white px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-[#E04B4B]"
+              onClick={() => handleDelete(selectedDelete!)}
+            >
+              ยืนยัน
             </button>
           </div>
         </div>
       </Popup>
+
       <div className="absolute bottom-0 w-full flex justify-between items-center mt-4">
         <button
           disabled={currentPage === 1}
@@ -157,7 +172,7 @@ const Page = () => {
           ย้อนกลับ
         </button>
         <span>
-          Page {currentPage} of {totalPages}
+          หน้า {currentPage} จาก {totalPages}
         </span>
         <button
           disabled={currentPage === totalPages}
@@ -171,6 +186,7 @@ const Page = () => {
       <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
         <PopupAddProjects closePopup={handleClosePopup} />
       </Popup>
+
       <Popup isOpen={isOpenEditProject} onClose={handleClosePopup}>
         <PopupEditProject
           selectedProjectId={selectedProjectId}

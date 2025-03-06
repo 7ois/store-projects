@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import { PopupProvider } from "@/context/PopupContext";
+import { Bai_Jamjuree } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "จัดเก็บและสืบค้นโครงงาน คณะบริหารธุรกิจ มทร.อีสาน",
@@ -10,23 +11,30 @@ export const metadata: Metadata = {
   icons: "/favicon.ico",
 };
 
+const baiJamjuree = Bai_Jamjuree({
+  subsets: ["thai", "latin"],
+  weight: ["200", "300", "400", "500", "600", "700"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body>
-        <PopupProvider>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            {/* Main Content */}
-            <div className="flex flex-col w-full relative">
-              <Header />
-              <div className="flex-1 overflow-y-auto p-10">{children}</div>
-              <Footer />
+        <div className={`${baiJamjuree.className}`}>
+          <PopupProvider>
+            <div className="flex min-h-screen">
+              <Sidebar />
+              {/* Main Content */}
+              <div className="flex flex-col w-full relative">
+                <Header />
+                <div className="flex-1 overflow-y-auto p-10">{children}</div>
+                <Footer />
+              </div>
             </div>
-          </div>
-        </PopupProvider>
+          </PopupProvider>
+        </div>
       </body>
     </html>
   );

@@ -23,10 +23,9 @@ module.exports = {
         blue: "#1C3B6C",
         orange: "#FF7F00",
       },
-      // fontFamily: {
-      //   thai: ["Athiti", "serif"],
-      //   noto: ["Noto Sans Thai", "sans-serif"],
-      // },
+      fontFamily: {
+        baiJamjuree: ["Bai Jamjuree", "sans-serif"], // เพิ่มฟอนต์ใหม่ใน Tailwind
+      },
     },
     plugins: [],
   },

@@ -10,12 +10,12 @@ const Page = () => {
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
 
-  const handleBack = () => {
-    router.push(`/project_center/${params.type_id}`); // เปลี่ยนเส้นทางกลับไปยัง /d/{id}
-  };
+  // const handleBack = () => {
+  //   router.push(`/project_center/${params.type_id}`); // เปลี่ยนเส้นทางกลับไปยัง /d/{id}
+  // };
 
   const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -37,7 +37,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
         );
         setProject(response.data.project);
       } catch (err) {
@@ -48,34 +48,34 @@ const Page = () => {
   }, [params]);
 
   return (
-    <div>
-      <ChevronLeft
+    <div className="text-base">
+      {/* <ChevronLeft
         onClick={handleBack}
         size={25}
         color="#1C3B6C"
         className="cursor-pointer"
-      />
+      /> */}
       {project ? (
         <div className="grid gap-5">
           <div className="grid gap-5 p-5 rounded-lg shadow-md">
             <div className="grid grid-cols-[200px_auto]">
-              <h1>ชื่อโครงงาน:</h1>
+              <h1 className="font-medium">ชื่อโครงงาน:</h1>
               <h1>{project.project_name_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Orter Title:</h1>
+              <h1 className="font-medium">Orter Title:</h1>
               <h1>{project.project_name_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>บทคัดย่อ:</h1>
+              <h1 className="font-medium">บทคัดย่อ:</h1>
               <h1>{project.abstract_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Orter Abstract:</h1>
+              <h1 className="font-medium">Orter Abstract:</h1>
               <h1>{project.abstract_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>Date:</h1>
+              <h1 className="font-medium">Date:</h1>
               <h1>
                 {" "}
                 {new Date(project.date).toLocaleDateString("en-CA", {
@@ -84,22 +84,22 @@ const Page = () => {
               </h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>คำสำคัญ:</h1>
+              <h1 className="font-medium">คำสำคัญ:</h1>
               <h1>-</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>ประเภทโครงงาน:</h1>
+              <h1 className="font-medium">ประเภทโครงงาน:</h1>
               <h1>{project.type_name}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>เจ้าของ:</h1>
+              <h1 className="font-medium">เจ้าของ:</h1>
               <ul className="flex">
                 <li>
                   {project.users
                     ?.filter(
                       (user) =>
                         user.role_group === "main_owner" ||
-                        user.role_group === "owner",
+                        user.role_group === "owner"
                     )
                     .map((user) => `${user.first_name} ${user.last_name}`)
                     .join(", ")}
@@ -107,7 +107,7 @@ const Page = () => {
               </ul>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1>ที่ปรึกษา:</h1>
+              <h1 className="font-medium">ที่ปรึกษา:</h1>
               <ul className="flex">
                 <li>
                   {project.users
@@ -118,42 +118,13 @@ const Page = () => {
               </ul>
             </div>
           </div>
-          {/* <div className="mt-4">
-            <h3>Users in this Project:</h3>
-            <ul>
-              {project.users?.map((user) => (
-                <li key={user.user_id}>
-                  <strong>
-                    {user.first_name} {user.last_name}
-                  </strong>{" "}
-                  ({user.role_group})<br />
-                  Email: <a href={`mailto:${user.email}`}>{user.email}</a>
-                </li>
-              ))}
-            </ul>
-          </div> */}
 
-          {/* <embed
-            src={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
-            width="600"
-            height="400"
-          />
-          <a
-            href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
-            download={project.file_name}
-            className="text-blue-500 mt-2 block border p-3 text-white bg-blue rounded-lg transition duration-75 hover:bg-orange hover:text-white"
-          >
-            Download PDF
-          </a> */}
           {project.file_path ? (
-            <div className="flex w-full gap-5 p-5 rounded-lg shadow-md items-center justify-between">
+            <div className="flex w-full gap-5 p-5 rounded-lg shadow-md items-center justify-between text-base">
               <div>
                 {project.file_name && (
-                  // <p className="text-gray-700 font-medium">
-                  //   ไฟล์: {project.file_name}
-                  // </p>
                   <div className="grid grid-cols-[200px_auto]">
-                    <h1>ไฟล์:</h1>
+                    <h1 className="font-medium">ไฟล์:</h1>
                     <h1>{project.file_name}</h1>
                   </div>
                 )}

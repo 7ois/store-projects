@@ -89,8 +89,8 @@ const PopupTypeProject = ({
   };
 
   return (
-    <>
-      <Popup isOpen={isOpenAddType} onClose={setOpenPopup}>
+    <Popup isOpen={isOpenAddType} onClose={setOpenPopup} className="w-1/4">
+      <div className="text-base">
         <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white">
           <h1>{editData ? "แก้ไขประเภทโครงงาน" : "เพิ่มประเภทโครงงาน"}</h1>
         </div>
@@ -112,15 +112,15 @@ const PopupTypeProject = ({
               className="border border-primary text-primary h-[40px] w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
               onClick={setOpenPopup}
             >
-              Cancel
+              ยกเลิก
             </button>
             <button className="bg-blue text-white h-[40px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
-              {editData ? "Save Changes" : "Submit"}
+              {editData ? "บันทึก" : "เพิ่ม"}
             </button>
           </div>
         </form>
-      </Popup>
-    </>
+      </div>
+    </Popup>
   );
 };
 

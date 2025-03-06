@@ -132,8 +132,8 @@ const Navbar = () => {
               />
             </div>
             {pathname !== "/manage_system" && (
-              <div className="flex gap-2 justify-center items-center">
-                <h1>ปีการศึกษา</h1>
+              <div className="flex gap-2 text-base justify-center items-center">
+                <p>ปีการศึกษา</p>
                 <Dropdown
                   items={yearData}
                   onSelect={handleYearSelect} // อัปเดตค่า year
@@ -162,7 +162,7 @@ const Navbar = () => {
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-[#fff] border-[1px] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
+            classNameContainer="flex flex-col bg-white border-[1px] rounded-[10px] shadow-xl w-[300px] h-[140px] top-[40px]"
           >
             <div
               id="modal"
@@ -171,7 +171,7 @@ const Navbar = () => {
               <button
                 id="modal"
                 type="button"
-                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-[#fff] text-base transition duration-75 hover:bg-orange"
+                className="w-[260px] h-[50px] bg-blue rounded-[10px] text-white text-base transition duration-75 hover:bg-orange"
                 onClick={() => router.push("/login")}
               >
                 Login
@@ -180,7 +180,7 @@ const Navbar = () => {
             <button
               id="modal"
               type="button"
-              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
+              className="bg-blue text-white text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={() => router.push("/register")}
             >
               <Pencil size={15} />
@@ -192,7 +192,7 @@ const Navbar = () => {
           <Modal
             isOpen={isOpen}
             position="right"
-            classNameContainer="flex flex-col bg-[#fff] border-[1px] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
+            classNameContainer="flex flex-col bg-white border-[1px] rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
           >
             <div className="grid gap-1 pl-3 py-3">
               <div className="flex gap-2">
@@ -206,7 +206,7 @@ const Navbar = () => {
               <p className="text-[#B4B4B4]">{user?.email ? user.email : ""}</p>
             </div>
             <button
-              className="bg-blue text-[#fff] text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
+              className="bg-blue text-white text-base text-left h-[50px] rounded-b-[10px] flex gap-2 items-center pl-5 transition duration-75 hover:bg-orange"
               onClick={handleLogout}
             >
               <DoorOpen size={20} />

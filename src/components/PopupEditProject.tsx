@@ -358,18 +358,18 @@ const PopupEditProject = ({
         แก้ไขโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div className="grid gap-6 px-10 py-5 text-lg items-center overflow-y-auto max-h-[460px]">
+        <div className="grid gap-6 px-10 py-5 items-center overflow-y-auto max-h-[460px]">
           <div className="grid grid-cols-4 items-center relative">
             <label>ชื่อโครงงาน</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               onChange={(e) => handleInputChange(e, "project_name_th")}
               placeholder="ชื่อโครงงาน"
               value={formData?.project_name_th}
             />
             {validationErrors.project_name_th && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.project_name_th}
               </div>
             )}
@@ -379,13 +379,13 @@ const PopupEditProject = ({
             <label>Project name</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               onChange={(e) => handleInputChange(e, "project_name_en")}
               placeholder="Project name"
               value={formData?.project_name_en}
             />
             {validationErrors.project_name_en && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.project_name_en}
               </div>
             )}
@@ -394,13 +394,13 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center relative">
             <label>บทคัดย่อ</label>
             <textarea
-              className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+              className="h-[150px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
               onChange={(e) => handleTextAreaChange(e, "abstract_th")}
               placeholder="บทคัดย่อ"
               value={formData?.abstract_th}
             />
             {validationErrors.abstract_th && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.abstract_th}
               </div>
             )}
@@ -409,13 +409,13 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center relative">
             <label>Abstract</label>
             <textarea
-              className="h-[150px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg resize-none"
+              className="h-[150px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
               onChange={(e) => handleTextAreaChange(e, "abstract_en")}
               placeholder="abstract"
               value={formData?.abstract_en}
             />
             {validationErrors.abstract_en && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.abstract_en}
               </div>
             )}
@@ -425,7 +425,7 @@ const PopupEditProject = ({
             <label>คำสำคัญ</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] text-base col-span-3 rounded-lg"
+              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               placeholder='ป้อนคำหลักโดยคั่นด้วยเครื่องหมายจุลภาค ","'
               value={(formData?.keyword || []).join(", ")}
               onChange={(e) => {
@@ -442,7 +442,7 @@ const PopupEditProject = ({
               }}
             />
             {validationErrors.keyword && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.keyword}
               </div>
             )}
@@ -457,7 +457,7 @@ const PopupEditProject = ({
               className="col-span-3"
             />
             {validationErrors.type_id && (
-              <div className="text-primary text-base absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4">
                 {validationErrors.type_id}
               </div>
             )}
@@ -467,7 +467,7 @@ const PopupEditProject = ({
             <label>Date</label>
             <input
               type="date"
-              className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-base text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
+              className="h-[50px] col-span-3 pl-3 pr-4 border border-[#c5c5c5] text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
               onChange={(e) => handleInputChange(e, "date")}
               placeholder="Select a date"
               value={formData.date || ""}
@@ -479,7 +479,7 @@ const PopupEditProject = ({
             <input
               disabled
               type="text"
-              className="h-[50px] col-span-3 col-start-2 pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+              className="h-[50px] col-span-3 col-start-2 pl-2 border border-[#c5c5c5] w-full rounded-lg"
               value={formData.main_owner.value}
               placeholder="main owner"
             />
@@ -491,7 +491,7 @@ const PopupEditProject = ({
               <div key={index} className="col-span-3 col-start-2 relative mb-2">
                 <input
                   type="text"
-                  className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+                  className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={owner.value}
                   placeholder="เจ้าของ"
                   onChange={(e) => handleChange(e, index, "owner")}
@@ -504,7 +504,7 @@ const PopupEditProject = ({
                   owner.value &&
                   Array.isArray(ownerSuggestions) &&
                   ownerSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
+                    <div className="absolute top-full left-0 w-full bg-white border-[1px] rounded-lg border-[#c5c5c5] shadow-md mt-2 z-10 overflow-hidden">
                       {ownerSuggestions.map((value, idx) => (
                         <div
                           key={idx}
@@ -513,7 +513,9 @@ const PopupEditProject = ({
                             handleSelectUserForField(value, "owner", index)
                           }
                         >
-                          {value.first_name} {value.last_name}
+                          <p>
+                            {value.first_name} {value.last_name}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -529,7 +531,7 @@ const PopupEditProject = ({
             <button
               type="button"
               onClick={() => handleAdd("owner")}
-              className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+              className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
               <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-centerr">
                 <CirclePlus size={20} />
@@ -544,7 +546,7 @@ const PopupEditProject = ({
               <div key={index} className="col-span-3 col-start-2 relative mb-2">
                 <input
                   type="text"
-                  className="h-[50px] pl-2 border border-[#c5c5c5] text-base w-full rounded-lg"
+                  className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={advisor.value}
                   placeholder="ที่ปรึกษา"
                   onChange={(e) => handleChange(e, index, "advisor")}
@@ -557,7 +559,7 @@ const PopupEditProject = ({
                   advisor.value &&
                   Array.isArray(advisorSuggestions) &&
                   advisorSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 w-full bg-white border border-[#c5c5c5] shadow-lg mt-2 z-10">
+                    <div className="absolute top-full left-0 w-full bg-white border-[1px] rounded-lg border-[#c5c5c5] shadow-md mt-2 z-10 overflow-hidden">
                       {advisorSuggestions.map((value, idx) => (
                         <div
                           key={idx}
@@ -566,7 +568,9 @@ const PopupEditProject = ({
                             handleSelectUserForField(value, "advisor", index)
                           }
                         >
-                          {value.first_name} {value.last_name}
+                          <p>
+                            {value.first_name} {value.last_name}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -581,7 +585,7 @@ const PopupEditProject = ({
             <button
               type="button"
               onClick={() => handleAdd("advisor")}
-              className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+              className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
               <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-center">
                 <CirclePlus size={20} />
@@ -594,7 +598,7 @@ const PopupEditProject = ({
             <label>File</label>
             {formData.file && typeof formData.file === "string" && (
               <div>
-                <p>Current file:</p>
+                <p>ไฟล์ปัจจุบัน:</p>
                 <a
                   href={formData.file}
                   target="_blank"
@@ -617,7 +621,7 @@ const PopupEditProject = ({
               <button
                 type="button"
                 onClick={handleRevertFile}
-                className="h-[50px] text-white pl-2 bg-blue text-base col-span-3 rounded-lg col-start-2 flex items-center justify-center mt-5"
+                className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center mt-5 transition duration-75 hover:bg-orange"
               >
                 <div className="w-full grid grid-cols-[auto_200px] gap-5 items-center justify-center">
                   <RotateCcw size={20} />
@@ -634,10 +638,10 @@ const PopupEditProject = ({
             className="border w-[300px] h-[50px] rounded-[10px] border-primary text-primary transition duration-75 hover:bg-primary hover:text-white"
             onClick={closePopup}
           >
-            Cancel
+            ยกเลิก
           </button>
           <button className="w-[300px] h-[50px] rounded-[10px] bg-blue text-[#fff] transition duration-75 hover:bg-orange">
-            Submit
+            บันทึก
           </button>
         </div>
       </form>

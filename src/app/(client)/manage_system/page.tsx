@@ -2,10 +2,8 @@
 import Popup from "@/components/Popup";
 import { useUsersStore } from "@/stores/userStore";
 import axios from "axios";
-import { Trash2 } from "lucide-react";
+import { CircleX, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Jojo from "../../../../public/images/Jojo.jpg";
-import Image from "next/image";
 
 const Page = () => {
   const { users, currentPage, fetchUsers, setCurrentPage, totalCount } =
@@ -34,7 +32,7 @@ const Page = () => {
   const handleDelete = async (userId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`
       );
 
       fetchUsers({ limit, offset: (currentPage - 1) * limit });
@@ -52,72 +50,89 @@ const Page = () => {
   }, [currentPage, fetchUsers]);
 
   return (
-    <>
-      <table className="w-full cursor-default">
-        <thead className="bg-blue text-white">
-          <tr className="h-16">
-            <th>user_id</th>
-            <th>role_name</th>
-            <th>email</th>
-            <th>first_name</th>
-            <th>last_name</th>
-            <th>manage</th>
-          </tr>
-        </thead>
-        {users.length > 0 && (
-          <tbody>
-            {users.map((item, index) => (
-              <tr
-                key={item.user_id}
-                className={`h-auto ${index % 2 === 0 ? "" : "bg-[#D6E0F5]"}`}
-              >
-                <td className="px-4">{item.user_id}</td>
-                <td className="px-4">{item.role_name}</td>
-                <td className="px-4">{item.first_name}</td>
-                <td className="px-4">{item.last_name}</td>
-                <td className="px-4">{item.email}</td>
-                <td className="px-4 flex items-center p-4">
-                  <button
-                    disabled={item.role_id === 1}
-                    onClick={() => handleTrashDelete(item.user_id!)}
-                    className="w-full h-full flex items-center justify-center gap-2 p-2 rounded-md bg-primary text-white hover:bg-[#E04B4B]"
+    <div className="h-full w-full text-base relative">
+      <div className="flex items-center p-5 rounded-lg shadow-md h-[86px]">
+        <h1>Manage User</h1>
+      </div>
+
+      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
+        <table className="w-full cursor-default">
+          <thead className="bg-blue text-white">
+            <tr className="h-16">
+              <th>user_id</th>
+              <th>role_name</th>
+              <th>email</th>
+              <th>first_name</th>
+              <th>last_name</th>
+              <th>manage</th>
+            </tr>
+          </thead>
+          {users.length > 0 ? (
+            <tbody>
+              {users.map((item, index) => (
+                <tr
+                  key={item.user_id}
+                  className={`h-auto ${index % 2 === 0 ? "" : "bg-[#D6E0F5]"}`}
+                >
+                  <td className="px-4">{item.user_id}</td>
+                  <td className="px-4">{item.role_name}</td>
+                  <td className="px-4">{item.first_name}</td>
+                  <td className="px-4">{item.last_name}</td>
+                  <td className="px-4">{item.email}</td>
+                  <td
+                    className={`${
+                      item.role_id === 1 && "h-[82px]"
+                    } p-4 flex items-center`}
                   >
-                    <Trash2 size={18} />
-                  </button>
+                    <button
+                      disabled={item.role_id === 1}
+                      onClick={() => handleTrashDelete(item.user_id!)}
+                      className={`${
+                        item.role_id === 1 && "hidden"
+                      } w-full h-[50px] flex items-center justify-center gap-2 p-2 rounded-md bg-primary text-white transition duration-75 hover:bg-[#E04B4B]`}
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan={6} className="text-center py-4 text-gray-500">
+                  ไม่มีข้อมูล
                 </td>
               </tr>
-            ))}
-          </tbody>
-        )}
-        {users.length === 0 && (
-          <div className="text-blue text-center">
-            <h2>There are no User yet.</h2>
-            <p>Start adding some!</p>
-          </div>
-        )}
-      </table>
+            </tbody>
+          )}
+        </table>
+      </div>
+
       <Popup isOpen={isOpenDeleteUser} onClose={handleClosePopup}>
-        <div className="p-5 bg-white rounded-lg shadow-lg text-center flex flex-col items-center justify-center">
-          <h1 className="text-xl font-bold mb-3">
-            ไม่เดินออกไปแต่กดเข้ามางั้นรึ!!!!!!!!!
-          </h1>
-          <Image src={Jojo} alt="Jojo" />
-          <div className="flex gap-4 justify-center">
+        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center">
+          <div className="w-full p-5 text-primary grid items-center justify-center">
+            <CircleX strokeWidth={1} className="w-40 h-40" />
+            <p className="text-lg font-medium">ยืนยันการลบ</p>
+          </div>
+          <div className="flex gap-4 items-center justify-center w-[400px] p-5">
             <button
-              className="bg-red-500 text-white px-4 py-2 rounded-lg"
-              onClick={() => handleDelete(selectedDelete!)}
-            >
-              เดินเข้าไปหา!
-            </button>
-            <button
-              className="bg-gray-300 px-4 py-2 rounded-lg"
+              className="bg-gray-300 text-gray-800 px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-gray-400"
               onClick={() => setIsOpenDeleteUser(false)}
             >
-              รีบเดินหนี!
+              ยกเลิก
+            </button>
+
+            <button
+              className="bg-primary text-white px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-[#E04B4B]"
+              onClick={() => handleDelete(selectedDelete!)}
+            >
+              ยืนยัน
             </button>
           </div>
         </div>
       </Popup>
+
       <div className="absolute bottom-0 w-full flex justify-between items-center mt-4">
         <button
           disabled={currentPage === 1}
@@ -137,7 +152,7 @@ const Page = () => {
           ถัดไป
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

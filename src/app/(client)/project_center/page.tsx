@@ -49,27 +49,32 @@ const Page = () => {
   };
 
   return (
-    <div className="relative rounded-lg shadow-md w-full h-auto p-5">
-      <div className="absolute -left-2 border w-[200px] h-[50px] bg-blue flex items-center justify-center">
-        <h1 className="text-xl text-[#fff]">Select Type Project</h1>
+    <div className="w-full h-full">
+      <div className="flex items-center p-5 rounded-lg shadow-md h-[86px]">
+        <h1>Select Type Project</h1>
       </div>
-      <ul className="grid grid-cols-3 gap-5 mt-20">
-        {typeProject.length > 0 ? (
-          typeProject.map((type) => (
-            <Link key={type.type_id} href={`/project_center/${type.type_id}`}>
-              <li className="relative flex flex-col items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition-transform duration-75  hover:-translate-y-1 hover:bg-orange">
-                <span className="text-lg font-semibold">{type.type_name}</span>
 
-                <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  {formatProjectCount(type.project_count)} Projects
-                </span>
-              </li>
-            </Link>
-          ))
-        ) : (
-          <p>ไม่พบข้อมูล</p>
-        )}
-      </ul>
+      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
+        <ul className="grid grid-cols-3 gap-5">
+          {typeProject.length > 0 ? (
+            typeProject.map((type) => (
+              <Link key={type.type_id} href={`/project_center/${type.type_id}`}>
+                <li className="relative flex flex-col items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition-transform duration-75  hover:-translate-y-1 hover:bg-orange">
+                  <span className="text-base font-medium">
+                    {type.type_name}
+                  </span>
+
+                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    {formatProjectCount(type.project_count)} Projects
+                  </span>
+                </li>
+              </Link>
+            ))
+          ) : (
+            <p>ไม่พบข้อมูล</p>
+          )}
+        </ul>
+      </div>
     </div>
   );
 };

@@ -86,7 +86,7 @@ const Sidebar = () => {
   }, [pathname]);
 
   return (
-    <div className="z-10 w-[400px] h-screen bg-[#fff] drop-shadow-lg p-5 sticky top-0">
+    <div className="z-10 w-[400px] h-screen bg-white drop-shadow-lg p-5 sticky top-0">
       <div className="mb-10 h-16 flex justify-center items-center">
         <Link href="/project_center">
           <Image src={Logo} alt="Logo" />
@@ -98,9 +98,9 @@ const Sidebar = () => {
             <button
               className={`${
                 activeButton === item.id
-                  ? "bg-blue text-[#fff] shadow-md"
-                  : "bg-[#fff] text-[#000] shadow-md transition duration-75 hover:bg-orange hover:text-white"
-              } w-full h-20 rounded-[10px] text-xl text-left pl-5`}
+                  ? "bg-blue text-white shadow-md"
+                  : "bg-white text-black shadow-md transition duration-75 hover:bg-orange hover:text-white"
+              } w-full h-20 rounded-[10px] text-lg font-medium text-left pl-5`}
               onClick={() => setActiveButton(item.id)}
             >
               {item.title}

@@ -23,7 +23,7 @@ const Page = () => {
     }));
   };
 
-  const handleLogin = async (e: any) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -33,13 +33,20 @@ const Page = () => {
           password: formData.password,
         }
       );
-      const redirectTo =
+
+      let redirectTo =
         sessionStorage.getItem("redirectTo") || "/project_center";
-      sessionStorage.removeItem("redirectTo");
+
+      // ป้องกัน redirectTo เป็น undefined หรือค่าที่ไม่ถูกต้อง
+      if (typeof redirectTo !== "string" || !redirectTo.startsWith("/")) {
+        redirectTo = "/project_center";
+      }
+
       localStorage.setItem("token", response.data.token);
+      sessionStorage.removeItem("redirectTo");
       router.push(redirectTo);
-      // router.push("/project_center");
-    } catch {
+    } catch (error) {
+      console.error("Login failed:", error);
       alert("Login failed");
     }
   };

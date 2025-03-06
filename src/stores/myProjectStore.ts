@@ -48,7 +48,7 @@ export const useMyProjectStore = create<MyProjectStore>((set) => ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       const myProjects = response.data.data;
       const totalCount = response.data.totalCount;
