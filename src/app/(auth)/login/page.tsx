@@ -66,25 +66,25 @@ const Page = () => {
           width={150}
           height={150}
         />
-        <h1 className="text-5xl my-5 font-[400]">เข้าสู่ระบบ</h1>
-        <form onSubmit={handleLogin} className="grid gap-5 w-full text-2xl">
+        <h1 className="text-xl my-5 font-[400]">เข้าสู่ระบบ</h1>
+        <form onSubmit={handleLogin} className="grid gap-5 w-full text-base">
           <div className="grid gap-2">
-            <label className="text-xl">อีเมล</label>
+            <label>อีเมล</label>
             <input
               type="email"
               name="email"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
               placeholder="กรอกอีเมล"
               value={formData.email}
               onChange={handleChange}
             />
           </div>
           <div className="grid gap-2">
-            <label className="text-xl">รหัสผ่าน</label>
+            <label>รหัสผ่าน</label>
             <input
               type="password"
               name="password"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
               placeholder="กรอกรหัสผ่าน"
               value={formData.password}
               onChange={handleChange}
@@ -93,7 +93,7 @@ const Page = () => {
           <div className="w-full flex items-center justify-center my-5">
             <button
               type="submit"
-              className="bg-blue text-[#fff] w-[200px] h-[60px] border rounded-[10px] transition duration-75 hover:bg-orange"
+              className="bg-blue text-white w-[200px] h-[60px] border rounded-[10px] transition duration-75 hover:bg-orange"
             >
               เข้าสู่ระบบ
             </button>
@@ -107,7 +107,7 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="w-full bg-blue text-[#fff] relative">
+      <div className="w-full bg-blue text-white relative">
         <Image
           src={building2}
           alt="ตึกบริหาร"

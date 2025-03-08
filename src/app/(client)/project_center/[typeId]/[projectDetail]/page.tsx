@@ -130,15 +130,15 @@ const Page = () => {
                 )}
               </div>
 
-              <div className="flex items-center gap-3 w-1/3">
-                <a
+              <div className="flex items-center gap-3 w-1/4">
+                {/* <a
                   href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}#toolbar=0`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center text-center border border-blue text-blue h-[50px] w-full rounded-lg transition duration-75 hover:text-orange hover:border-orange"
                 >
                   ดูโครงงาน
-                </a>
+                </a> */}
 
                 <a
                   href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
