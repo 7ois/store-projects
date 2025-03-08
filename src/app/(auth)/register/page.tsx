@@ -16,6 +16,7 @@ const Page = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     reset,
     setValue,
     clearErrors,
@@ -37,7 +38,7 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -46,9 +47,14 @@ const Page = () => {
         router.push("/login");
       }
     } catch (error) {
-      // ถ้ามีข้อผิดพลาดในการสมัคร
-      console.error("Error during registration:", error);
-      alert("Submitting form failed");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setError("email", {
+            type: "manual",
+            message: "อีเมลนี้มีอยู่ในระบบแล้ว",
+          });
+        }
+      }
     }
   };
 
@@ -56,12 +62,12 @@ const Page = () => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`
+          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`,
         );
         const formattedRoles = response.data.data
           .filter(
             (data: { role_id: number }) =>
-              data.role_id === 2 || data.role_id === 3
+              data.role_id === 2 || data.role_id === 3,
           )
           .map((item: { role_id: number; role_name: string }) => ({
             id: item.role_id,

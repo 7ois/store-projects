@@ -15,7 +15,7 @@ const Page = () => {
   // };
 
   const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -37,7 +37,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
         );
         setProject(response.data.project);
       } catch (err) {
@@ -99,7 +99,7 @@ const Page = () => {
                     ?.filter(
                       (user) =>
                         user.role_group === "main_owner" ||
-                        user.role_group === "owner"
+                        user.role_group === "owner",
                     )
                     .map((user) => `${user.first_name} ${user.last_name}`)
                     .join(", ")}
@@ -131,15 +131,6 @@ const Page = () => {
               </div>
 
               <div className="flex items-center gap-3 w-1/4">
-                {/* <a
-                  href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}#toolbar=0`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center text-center border border-blue text-blue h-[50px] w-full rounded-lg transition duration-75 hover:text-orange hover:border-orange"
-                >
-                  ดูโครงงาน
-                </a> */}
-
                 <a
                   href={`${process.env.NEXT_PUBLIC_UPLOAD_URL}${project.file_path}`}
                   target="_blank"

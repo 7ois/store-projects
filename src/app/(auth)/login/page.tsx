@@ -31,7 +31,7 @@ const Page = () => {
         {
           email: formData.email,
           password: formData.password,
-        }
+        },
       );
 
       let redirectTo =
@@ -46,8 +46,11 @@ const Page = () => {
       sessionStorage.removeItem("redirectTo");
       router.push(redirectTo);
     } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed");
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          alert("บัญชีถูกระงับ");
+        }
+      }
     }
   };
 
