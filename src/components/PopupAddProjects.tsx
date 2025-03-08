@@ -335,8 +335,8 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   };
 
   return (
-    <div className="max-w-[1000px] text-base grid">
-      <div className="text-xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
+    <div className="max-w-[1000px] text-lg grid">
+      <div className="text-2xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
         เพิ่มโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -521,9 +521,11 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               onClick={() => handleAdd("owner")}
               className="h-[50px] text-white px-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
-              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-centerr">
-                <CirclePlus size={20} />
-                <p>เพิ่มเจ้าของ</p>
+              <div className="w-full grid grid-cols-2 gap-5 items-center justify-centerr">
+                <div className="w-full flex  items-center justify-end">
+                  <CirclePlus size={20} />
+                </div>
+                <p className="text-start">เพิ่มเจ้าของ</p>
               </div>
             </button>
           </div>
@@ -579,9 +581,11 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               onClick={() => handleAdd("advisor")}
               className="h-[50px] text-white px-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
-              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-center">
-                <CirclePlus size={20} />
-                <p>เพิ่มที่ปรึกษา</p>
+              <div className="w-full grid grid-cols-2 gap-5 items-center justify-centerr">
+                <div className="w-full flex  items-center justify-end">
+                  <CirclePlus size={20} />
+                </div>
+                <p className="text-start">เพิ่มที่ปรึกษา</p>
               </div>
             </button>
           </div>

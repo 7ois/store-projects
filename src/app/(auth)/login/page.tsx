@@ -31,7 +31,7 @@ const Page = () => {
         {
           email: formData.email,
           password: formData.password,
-        },
+        }
       );
 
       let redirectTo =
@@ -55,7 +55,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg">
+    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg text-lg">
       <div className="relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 p-20">
         <div
           className="absolute top-5 left-5 cursor-pointer"
@@ -69,8 +69,8 @@ const Page = () => {
           width={150}
           height={150}
         />
-        <h1 className="text-xl my-5 font-[400]">เข้าสู่ระบบ</h1>
-        <form onSubmit={handleLogin} className="grid gap-5 w-full text-base">
+        <h1 className="text-3xl my-5 font-[400]">เข้าสู่ระบบ</h1>
+        <form onSubmit={handleLogin} className="grid gap-5 w-full">
           <div className="grid gap-2">
             <label>อีเมล</label>
             <input

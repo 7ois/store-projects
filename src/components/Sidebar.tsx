@@ -22,6 +22,10 @@ const Sidebar = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    sessionStorage.removeItem("redirectTo");
+  }, [activeButton, pathname]);
+
+  useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -100,7 +104,7 @@ const Sidebar = () => {
                 activeButton === item.id
                   ? "bg-blue text-white shadow-md"
                   : "bg-white text-black shadow-md transition duration-75 hover:text-white hover:bg-gradient-to-r from-orange to-white"
-              } w-full h-20 rounded-[10px] text-lg font-medium text-left pl-5`}
+              } w-full h-20 rounded-[10px] text-xl font-medium text-left pl-5`}
               onClick={() => setActiveButton(item.id)}
             >
               {item.title}

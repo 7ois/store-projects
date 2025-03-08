@@ -2,7 +2,7 @@
 import Popup from "@/components/Popup";
 import { useUsersStore } from "@/stores/userStore";
 import axios from "axios";
-import { CircleX, Trash2 } from "lucide-react";
+import { CircleX, LockKeyhole, LockKeyholeOpen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
@@ -12,11 +12,15 @@ const Page = () => {
   const totalPages = Math.ceil(totalCount / limit);
   const [isOpenDeleteUser, setIsOpenDeleteUser] = useState(false);
   const [selectedDelete, setSelectedDelete] = useState<number | null>(null);
+  const [selectDate, setSelectDate] = useState<string | "">("");
 
-  const handleTrashDelete = (id: number) => {
+  const handleTrashDelete = (id: number, date: string | "") => {
+    console.log("h: , ", date);
+    setSelectDate(date);
     setSelectedDelete(id);
     setIsOpenDeleteUser(true);
   };
+
   const handleClosePopup = () => {
     setIsOpenDeleteUser(false);
   };
@@ -29,16 +33,29 @@ const Page = () => {
     });
   };
 
-  const handleDelete = async (userId: number) => {
-    try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`
-      );
+  const handleDelete = async (userId: number, date: string) => {
+    if (date == "") {
+      try {
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`
+        );
 
-      fetchUsers({ limit, offset: (currentPage - 1) * limit });
-      setIsOpenDeleteUser(false);
-    } catch (err) {
-      console.error("Error deleting project", err);
+        fetchUsers({ limit, offset: (currentPage - 1) * limit });
+        setIsOpenDeleteUser(false);
+      } catch (err) {
+        console.error("Error deleting project", err);
+      }
+    } else {
+      try {
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL}/rollbackUser/${userId}`
+        );
+
+        fetchUsers({ limit, offset: (currentPage - 1) * limit });
+        setIsOpenDeleteUser(false);
+      } catch (err) {
+        console.error("Error deleting project", err);
+      }
     }
   };
 
@@ -50,21 +67,21 @@ const Page = () => {
   }, [currentPage, fetchUsers]);
 
   return (
-    <div className="h-full w-full text-base relative">
-      <div className="text-xl text-white flex items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
+    <div className="flex flex-col gap-2 h-full w-full text-lg relative">
+      <div className="text-2xl text-white flex items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
         <h1>จัดการผู้ใช้</h1>
       </div>
 
       <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
-        <table className="w-full cursor-default">
+        <table className="w-full border-collapse cursor-default">
           <thead className="bg-blue text-white">
             <tr className="h-16">
-              <th>user_id</th>
-              <th>role_name</th>
-              <th>email</th>
-              <th>first_name</th>
-              <th>last_name</th>
-              <th>manage</th>
+              <th className="border-r border-gray-100">รหัสผู้ใช้</th>
+              <th className="border-r border-gray-100">บทบาท</th>
+              <th className="border-r border-gray-100">ชื่อจริง</th>
+              <th className="border-r border-gray-100">นามสกุล</th>
+              <th className="border-r border-gray-100">อีเมล</th>
+              <th className="w-60">จัดการผู้ใช้</th>
             </tr>
           </thead>
           {users.length > 0 ? (
@@ -74,24 +91,52 @@ const Page = () => {
                   key={item.user_id}
                   className={`h-auto ${index % 2 === 0 ? "" : "bg-[#D6E0F5]"}`}
                 >
-                  <td className="px-4">{item.user_id}</td>
-                  <td className="px-4">{item.role_name}</td>
-                  <td className="px-4">{item.first_name}</td>
-                  <td className="px-4">{item.last_name}</td>
-                  <td className="px-4">{item.email}</td>
+                  <td className="px-4 text-center border-r border-gray-100">
+                    {item.user_id}
+                  </td>
+                  <td className="px-4 border-r border-gray-100">
+                    {item.role_name}
+                  </td>
+                  <td className="px-4 border-r border-gray-100">
+                    {item.first_name}
+                  </td>
+                  <td className="px-4 border-r border-gray-100">
+                    {item.last_name}
+                  </td>
+                  <td className="px-4 border-r border-gray-100">
+                    {item.email}
+                  </td>
                   <td
                     className={`${
                       item.role_id === 1 && "h-[82px]"
-                    } p-4 flex items-center`}
+                    } p-4 flex items-center justify-center`}
                   >
                     <button
                       disabled={item.role_id === 1}
-                      onClick={() => handleTrashDelete(item.user_id!)}
+                      onClick={() =>
+                        handleTrashDelete(
+                          item.user_id!,
+                          item.deleted_at ? item.deleted_at : ""
+                        )
+                      }
                       className={`${
                         item.role_id === 1 && "hidden"
-                      } w-full h-[50px] flex items-center justify-center gap-2 p-2 rounded-md bg-primary text-white transition duration-75 hover:bg-[#E04B4B]`}
+                      } w-[150px] h-[50px] grid grid-cols-[55px_auto] items-center gap-2 rounded-md bg-primary text-white transition duration-75 hover:bg-[#E04B4B] ${
+                        item.deleted_at !== null
+                          ? "bg-[#1C3B6C] hover:bg-orange"
+                          : ""
+                      }`}
                     >
-                      <Trash2 size={18} />
+                      <div className="flex items-center justify-center w-full">
+                        {item.deleted_at !== null ? (
+                          <LockKeyholeOpen size={20} strokeWidth={1.5} />
+                        ) : (
+                          <LockKeyhole size={20} strokeWidth={1.5} />
+                        )}
+                      </div>
+                      <p className="text-left">
+                        {item.deleted_at !== null ? "ปลดระงับ" : "ระงับ"}
+                      </p>
                     </button>
                   </td>
                 </tr>
@@ -111,21 +156,31 @@ const Page = () => {
 
       <Popup isOpen={isOpenDeleteUser} onClose={handleClosePopup}>
         <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center">
-          <div className="w-full p-5 text-primary grid items-center justify-center">
-            <CircleX strokeWidth={1} className="w-40 h-40" />
-            <p className="text-lg font-medium">ยืนยันการลบ</p>
+          <div
+            className={`w-full p-5 flex gap-3 items-center justify-center border ${
+              selectDate ? "text-blue" : "text-primary"
+            } `}
+          >
+            {selectDate ? (
+              <LockKeyholeOpen size={17} strokeWidth={2} />
+            ) : (
+              <LockKeyhole size={17} strokeWidth={2} />
+            )}
+            <p className="font-bold">
+              {selectDate ? 'ยืนยันการ "ปลดระงับ"' : 'ยืนยันการ "ระงับ"'}
+            </p>
           </div>
-          <div className="flex gap-4 items-center justify-center w-[400px] p-5">
+          <div className="flex gap-4 items-center justify-center w-[400px] p-4">
             <button
-              className="bg-gray-300 text-gray-800 px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-gray-400"
+              className="bg-white text-primary border-[1px] border-primary px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-primary hover:text-white"
               onClick={() => setIsOpenDeleteUser(false)}
             >
               ยกเลิก
             </button>
 
             <button
-              className="bg-primary text-white px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-[#E04B4B]"
-              onClick={() => handleDelete(selectedDelete!)}
+              className="bg-blue text-white px-4 h-[50px] w-full rounded-lg shadow-md transition-all duration-75 hover:bg-orange"
+              onClick={() => handleDelete(selectedDelete!, selectDate)}
             >
               ยืนยัน
             </button>

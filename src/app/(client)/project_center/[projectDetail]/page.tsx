@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Project } from "@/entity/project";
-import { ChevronLeft } from "lucide-react";
 import { convertToThaiDate } from "@/lib/convertToThaiDate";
 
 const Page = () => {
@@ -16,7 +15,7 @@ const Page = () => {
   // };
 
   const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -38,7 +37,7 @@ const Page = () => {
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${params.projectDetail}`
         );
         setProject(response.data.project);
       } catch (err) {
@@ -49,13 +48,7 @@ const Page = () => {
   }, [params]);
 
   return (
-    <div className="text-base">
-      {/* <ChevronLeft
-        onClick={handleBack}
-        size={25}
-        color="#1C3B6C"
-        className="cursor-pointer"
-      /> */}
+    <div className="text-lg">
       {project ? (
         <div className="grid gap-5">
           <div className="grid gap-5 p-5 rounded-lg shadow-md">
@@ -64,7 +57,7 @@ const Page = () => {
               <h1>{project.project_name_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1 className="font-medium">Title:</h1>
+              <h1 className="font-medium">Orter Title:</h1>
               <h1>{project.project_name_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
@@ -72,7 +65,7 @@ const Page = () => {
               <h1>{project.abstract_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1 className="font-medium">Abstract:</h1>
+              <h1 className="font-medium">Orter Abstract:</h1>
               <h1>{project.abstract_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
@@ -95,7 +88,7 @@ const Page = () => {
                     ?.filter(
                       (user) =>
                         user.role_group === "main_owner" ||
-                        user.role_group === "owner",
+                        user.role_group === "owner"
                     )
                     .map((user) => `${user.first_name} ${user.last_name}`)
                     .join(", ")}
@@ -116,7 +109,7 @@ const Page = () => {
           </div>
 
           {project.file_path ? (
-            <div className="flex w-full gap-5 p-5 rounded-lg shadow-md items-center justify-between text-base">
+            <div className="flex w-full gap-5 p-5 rounded-lg shadow-md items-center justify-between">
               <div>
                 {project.file_name && (
                   <div className="grid grid-cols-[200px_auto]">

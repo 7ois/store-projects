@@ -14,17 +14,13 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname(); // ดึง pathname ปัจจุบัน
   const params = useParams(); // ดึงข้อมูลจาก params
-  const { typeId } = params;
+  const { paramTypeId } = params;
 
   const [value, setValue] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [year, setYear] = useState("");
-
-  useEffect(() => {
-    setValue("");
-    setYear("");
-  }, [pathname]);
+  const [indexYear, setIndexYear] = useState(0);
 
   const currentYear = new Date().getFullYear();
   const yearData = [
@@ -35,15 +31,21 @@ const Navbar = () => {
     }),
   ];
 
-  const { fetchProjects } = useAllProjectStore();
+  const { fetchProjects, typeId } = useAllProjectStore();
   const { fetchMyProjects } = useMyProjectStore();
   const { fetchUsers } = useUsersStore();
+
+  useEffect(() => {
+    setValue("");
+    setYear("");
+    setIndexYear(0);
+  }, [pathname, typeId]);
 
   useEffect(() => {
     if (
       pathname === "/add_project" ||
       pathname === "/manage_system" ||
-      pathname.startsWith("/project_center/") ||
+      pathname === "/project_center" ||
       value.length >= 2
     ) {
       if (pathname === "/add_project") {
@@ -52,7 +54,7 @@ const Navbar = () => {
         fetchUsers({ search: value });
       } else {
         fetchProjects({
-          typeId: typeId?.toLocaleString(),
+          typeId: paramTypeId?.toLocaleString(),
           search: value,
           year,
         });
@@ -62,13 +64,14 @@ const Navbar = () => {
     value,
     year,
     pathname,
-    typeId,
+    paramTypeId,
     fetchProjects,
     fetchMyProjects,
     fetchUsers,
   ]);
 
-  const handleYearSelect = (_: number, value: string) => {
+  const handleYearSelect = (index: number, value: string) => {
+    setIndexYear(index);
     setYear(value);
   };
 
@@ -113,10 +116,11 @@ const Navbar = () => {
   const shouldShowSearchAndYear =
     pathname === "/add_project" ||
     pathname === "/manage_system" ||
-    /^\/project_center\/\d+$/.test(pathname);
+    pathname === "/project_center";
+  // /^\/project_center\/\d+$/.test(pathname);
 
   return (
-    <div className="text-base h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
+    <div className="text-lg h-[100px] w-full px-20 flex justify-between items-center shadow-md sticky top-0 z-10 bg-white">
       <div className="w-3/4 flex items-center gap-5">
         {/* แสดง Search และปีการศึกษาตามเงื่อนไข */}
         {shouldShowSearchAndYear && (
@@ -135,6 +139,7 @@ const Navbar = () => {
               <div className="flex gap-2 justify-center items-center">
                 <p>ปีการศึกษา</p>
                 <Dropdown
+                  selectedId={indexYear}
                   items={yearData}
                   onSelect={handleYearSelect} // อัปเดตค่า year
                   className="border-none"

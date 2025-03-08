@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom";
-import { usePopup } from "../context/PopupContext";
 import clsx from "clsx";
 import { Bai_Jamjuree } from "next/font/google";
 

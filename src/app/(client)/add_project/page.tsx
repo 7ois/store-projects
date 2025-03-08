@@ -1,5 +1,5 @@
 "use client";
-import { Book, CircleX, Pencil, Trash2, TriangleAlert } from "lucide-react";
+import { Book, CircleAlert, CircleX, Pencil, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Popup from "@/components/Popup";
 import axios from "axios";
@@ -79,9 +79,9 @@ const Page = () => {
   };
 
   return (
-    <div className="h-full w-full text-base relative">
+    <div className="flex flex-col gap-2 h-full w-full text-lg relative">
       <div className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white">
-        <h1 className="text-xl text-white">โครงงานของฉัน</h1>
+        <h1 className="text-2xl text-white">โครงงานของฉัน</h1>
         <button
           className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
           onClick={() => setIsOpenAddProject(true)}
@@ -101,18 +101,18 @@ const Page = () => {
             <div
               onClick={() => router.push(`/add_project/${item.project_id}`)}
               key={item.project_id}
-              className="grid grid-cols-[auto_120px] gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full h-[100px] overflow-hidden transition duration-75 hover:bg-blue hover:text-white"
+              className="grid grid-cols-[auto_120px] h-auto gap-2 items-center rounded-[10px] shadow-md px-5 py-2 cursor-pointer w-full min-h-[100px] overflow-hidden transition duration-75 hover:bg-blue hover:text-white"
             >
               <div className="w-full overflow-hidden grid gap-3">
                 <h1>{item.project_name_th}</h1>
-                <p className="text-[#B4B4B4] text-sm w-full truncate">
+                <p className="text-[#B4B4B4] text-base w-full truncate">
                   {item.abstract_th}
                 </p>
                 {!item.type_id && (
                   <div className="flex items-center gap-2">
-                    <TriangleAlert className="text-primary" />
+                    <CircleAlert className="text-primary" size={15} />
                     <p className="text-primary text-sm">
-                      ประเภทโครงงานไม่มีแล้วนะจ๊ะ
+                      ประเภทโครงงานไม่มีแล้ว
                     </p>
                   </div>
                 )}
@@ -144,10 +144,10 @@ const Page = () => {
       </div>
 
       <Popup isOpen={isOpenDeleteProject} onClose={handleClosePopup}>
-        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center">
+        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center text-lg">
           <div className="w-full p-5 text-primary grid items-center justify-center">
             <CircleX strokeWidth={1} className="w-40 h-40" />
-            <p className="text-lg font-medium">ยืนยันการลบ</p>
+            <p className="font-medium">ยืนยันการลบ</p>
           </div>
           <div className="flex gap-4 items-center justify-center w-[400px] p-5">
             <button

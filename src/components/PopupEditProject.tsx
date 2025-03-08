@@ -413,8 +413,8 @@ const PopupEditProject = ({
   };
 
   return (
-    <div className="max-w-[1000px] text-base grid">
-      <div className="text-xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
+    <div className="max-w-[1000px] text-lg grid">
+      <div className="text-2xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
         แก้ไขโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -423,7 +423,7 @@ const PopupEditProject = ({
             <label>ชื่อโครงงาน</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
+              className="h-[50px] px-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               onChange={(e) => handleInputChange(e, "project_name_th")}
               placeholder="ชื่อโครงงาน"
               value={formData?.project_name_th}
@@ -439,7 +439,7 @@ const PopupEditProject = ({
             <label>Project name</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
+              className="h-[50px] px-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               onChange={(e) => handleInputChange(e, "project_name_en")}
               placeholder="Project name"
               value={formData?.project_name_en}
@@ -454,7 +454,7 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center relative">
             <label>บทคัดย่อ</label>
             <textarea
-              className="h-[150px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
+              className="h-[150px] px-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
               onChange={(e) => handleTextAreaChange(e, "abstract_th")}
               placeholder="บทคัดย่อ"
               value={formData?.abstract_th}
@@ -469,7 +469,7 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center relative">
             <label>Abstract</label>
             <textarea
-              className="h-[150px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
+              className="h-[150px] px-2 border border-[#c5c5c5] col-span-3 rounded-lg resize-none"
               onChange={(e) => handleTextAreaChange(e, "abstract_en")}
               placeholder="abstract"
               value={formData?.abstract_en}
@@ -485,7 +485,7 @@ const PopupEditProject = ({
             <label>คำสำคัญ</label>
             <input
               type="text"
-              className="h-[50px] pl-2 border border-[#c5c5c5] col-span-3 rounded-lg"
+              className="h-[50px] px-2 border border-[#c5c5c5] col-span-3 rounded-lg"
               placeholder='ป้อนคำหลักโดยคั่นด้วยเครื่องหมายจุลภาค ","'
               value={(formData?.keyword || []).join(", ")}
               onChange={(e) => {
@@ -539,7 +539,7 @@ const PopupEditProject = ({
             <input
               disabled
               type="text"
-              className="h-[50px] col-span-3 col-start-2 pl-2 border border-[#c5c5c5] w-full rounded-lg"
+              className="h-[50px] col-span-3 col-start-2 px-2 border border-[#c5c5c5] w-full rounded-lg"
               value={formData.main_owner.value}
               placeholder="main owner"
             />
@@ -551,7 +551,7 @@ const PopupEditProject = ({
               <div key={index} className="col-span-3 col-start-2 relative mb-6">
                 <input
                   type="text"
-                  className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
+                  className="h-[50px] px-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={owner.value}
                   placeholder="เจ้าของ"
                   onChange={(e) => handleChange(e, index, "owner")}
@@ -595,11 +595,13 @@ const PopupEditProject = ({
             <button
               type="button"
               onClick={() => handleAdd("owner")}
-              className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+              className="h-[50px] text-white px-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
-              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-centerr">
-                <CirclePlus size={20} />
-                <p>เพิ่มเจ้าของ</p>
+              <div className="w-full grid grid-cols-2 gap-5 items-center justify-centerr">
+                <div className="w-full flex  items-center justify-end">
+                  <CirclePlus size={20} />
+                </div>
+                <p className="text-start">เพิ่มเจ้าของ</p>
               </div>
             </button>
           </div>
@@ -610,7 +612,7 @@ const PopupEditProject = ({
               <div key={index} className="col-span-3 col-start-2 relative mb-6">
                 <input
                   type="text"
-                  className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
+                  className="h-[50px] px-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={advisor.value}
                   placeholder="ที่ปรึกษา"
                   onChange={(e) => handleChange(e, index, "advisor")}
@@ -653,11 +655,13 @@ const PopupEditProject = ({
             <button
               type="button"
               onClick={() => handleAdd("advisor")}
-              className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
+              className="h-[50px] text-white px-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center gap-3 transition duration-75 hover:bg-orange"
             >
-              <div className="grid grid-cols-[auto_90px] gap-5 items-center justify-center">
-                <CirclePlus size={20} />
-                <p>เพิ่มที่ปรึกษา</p>
+              <div className="w-full grid grid-cols-2 gap-5 items-center justify-centerr">
+                <div className="w-full flex  items-center justify-end">
+                  <CirclePlus size={20} />
+                </div>
+                <p className="text-start">เพิ่มที่ปรึกษา</p>
               </div>
             </button>
           </div>
@@ -689,7 +693,7 @@ const PopupEditProject = ({
               <button
                 type="button"
                 onClick={handleRevertFile}
-                className="h-[50px] text-white pl-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center mt-5 transition duration-75 hover:bg-orange"
+                className="h-[50px] text-white px-2 bg-blue col-span-3 rounded-lg col-start-2 flex items-center justify-center mt-5 transition duration-75 hover:bg-orange"
               >
                 <div className="w-full grid grid-cols-[auto_200px] gap-5 items-center justify-center">
                   <RotateCcw size={20} />

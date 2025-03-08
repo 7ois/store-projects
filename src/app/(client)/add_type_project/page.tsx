@@ -4,8 +4,6 @@ import PopupTypeProject from "@/components/PopupTypeProject";
 import axios from "axios";
 import { CircleX, Pencil, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Jojo from "../../../../public/images/Jojo.jpg";
-import Image from "next/image";
 
 interface TypeProject {
   type_id: number;
@@ -74,9 +72,9 @@ const Page = () => {
   }, [isOpenAddType, isOpenEditType, isOpenDeleteType]);
 
   return (
-    <div className="w-full h-full">
-      <div className="flex items-center justify-between p-5 rounded-lg shadow-md text-base bg-gradient-to-r from-blue to-white">
-        <h1 className="text-xl text-white">เพิ่มประเภทโครงงาน</h1>
+    <div className="flex flex-col gap-2 w-full h-full text-lg">
+      <div className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white">
+        <h1 className="text-2xl text-white">เพิ่มประเภทโครงงาน</h1>
         <button
           className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
           onClick={() => setIsOpenAddType(true)}
@@ -91,7 +89,7 @@ const Page = () => {
         setOpenPopup={handleAddPopup}
       />
 
-      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md text-base">
+      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
         {typeProjects.length > 0 && (
           <ul className="grid grid-cols-3 gap-5">
             {typeProjects.map((type) => (
@@ -122,16 +120,16 @@ const Page = () => {
         )}
         {typeProjects.length === 0 && (
           <div className="text-blue text-center">
-            <h2>There are no typeProject yet.</h2>
-            <p>Start adding some!</p>
+            <h2>ยังไม่มีประเภทโครงการ</h2>
+            <p>เริ่มเพิ่มบางส่วน!</p>
           </div>
         )}
       </div>
       <Popup isOpen={isOpenDeleteType} onClose={handleClosePopup}>
-        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center">
+        <div className="bg-white rounded-lg shadow-lg text-center grid items-center justify-center text-lg">
           <div className="w-full p-5 text-primary grid items-center justify-center">
             <CircleX strokeWidth={1} className="w-40 h-40" />
-            <p className="text-lg font-medium">ยืนยันการลบ</p>
+            <p className="font-medium">ยืนยันการลบ</p>
           </div>
           <div className="flex gap-4 items-center justify-center w-[400px] p-5">
             <button

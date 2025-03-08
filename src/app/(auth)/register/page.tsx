@@ -38,7 +38,7 @@ const Page = () => {
           headers: {
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (response.status === 200) {
@@ -62,12 +62,12 @@ const Page = () => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getRoles`
         );
         const formattedRoles = response.data.data
           .filter(
             (data: { role_id: number }) =>
-              data.role_id === 2 || data.role_id === 3,
+              data.role_id === 2 || data.role_id === 3
           )
           .map((item: { role_id: number; role_name: string }) => ({
             id: item.role_id,
@@ -89,7 +89,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg">
+    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg text-lg">
       <div className="relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 px-20 py-5">
         <div
           className="absolute top-5 left-5 cursor-pointer"
@@ -103,53 +103,44 @@ const Page = () => {
           width={150}
           height={150}
         />
-        <h1 className="text-5xl my-5 font-[400]">สมัครสมาชิก</h1>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="grid gap-5 w-full text-2xl"
-        >
+        <h1 className="text-3xl my-5 font-[400]">สมัครสมาชิก</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5 w-full">
           <div className="grid gap-1 relative">
-            <label htmlFor="email" className="text-xl">
-              อีเมล
-            </label>
+            <label htmlFor="email">อีเมล</label>
             <input
               {...register("email")}
               placeholder="กรอกอีเมลของคุณ"
               type="email"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
             />
             {errors.email && (
-              <p className="text-primary text-base absolute -bottom-6">{`${errors.email.message}`}</p>
+              <p className="text-primary absolute -bottom-6 text-base">{`${errors.email.message}`}</p>
             )}
           </div>
 
           <div className="grid gap-1 relative">
-            <label htmlFor="password" className="text-xl">
-              รหัสผ่าน
-            </label>
+            <label htmlFor="password">รหัสผ่าน</label>
             <input
               {...register("password")}
               placeholder="รหัสผ่าน"
               type="password"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
             />
             {errors.password && (
-              <p className="text-primary text-base absolute -bottom-6">{`${errors.password.message}`}</p>
+              <p className="text-primary absolute -bottom-6 text-base">{`${errors.password.message}`}</p>
             )}
           </div>
 
           <div className="grid gap-1 relative">
-            <label htmlFor="confirmPassword" className="text-xl">
-              ยืนยันรหัสผ่าน
-            </label>
+            <label htmlFor="confirmPassword">ยืนยันรหัสผ่าน</label>
             <input
               {...register("confirmPassword")}
               placeholder="ยืนยันรหัสผ่าน"
               type="password"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
             />
             {errors.confirmPassword && (
-              <p className="text-primary text-base absolute -bottom-6">{`${errors.confirmPassword.message}`}</p>
+              <p className="text-primary absolute -bottom-6 text-base">{`${errors.confirmPassword.message}`}</p>
             )}
           </div>
 
@@ -157,28 +148,28 @@ const Page = () => {
             email.endsWith("@rmuti.ac.th") ? (
               <div className={`grid grid-cols-2 gap-5 w-full`}>
                 <div className="grid gap-1 w-full relative">
-                  <label className="text-xl">ชื่อ</label>
+                  <label>ชื่อ</label>
                   <input
                     {...register("first_name")}
                     placeholder='กรุณากรอก "ชื่อ"'
                     type="text"
-                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
                   />
                   {errors.first_name && (
-                    <p className="text-primary text-base absolute -bottom-6">{`${errors.first_name.message}`}</p>
+                    <p className="text-primary absolute -bottom-6 text-base">{`${errors.first_name.message}`}</p>
                   )}
                 </div>
 
                 <div className="grid gap-1 w-full relative">
-                  <label className="text-xl">นามสกุล</label>
+                  <label>นามสกุล</label>
                   <input
                     {...register("last_name")}
                     placeholder='กรุณากรอก "นามสกุล"'
                     type="text"
-                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg text-base"
+                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
                   />
                   {errors.last_name && (
-                    <p className="text-primary text-base absolute -bottom-6">{`${errors.last_name.message}`}</p>
+                    <p className="text-primary absolute -bottom-6 text-base">{`${errors.last_name.message}`}</p>
                   )}
                 </div>
 
@@ -189,7 +180,7 @@ const Page = () => {
                     labelName="ประเภทผู้ใช้"
                   />
                   {errors.role_id && (
-                    <p className="text-primary text-base absolute -bottom-6">{`${errors.role_id.message}`}</p>
+                    <p className="text-primary absolute -bottom-6 text-base">{`${errors.role_id.message}`}</p>
                   )}
                 </div>
               </div>

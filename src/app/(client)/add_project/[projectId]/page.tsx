@@ -28,7 +28,7 @@ const Page = () => {
   }, [params]);
 
   return (
-    <div>
+    <div className="text-lg">
       {/* <ChevronLeft
         onClick={handleBack}
         size={25}

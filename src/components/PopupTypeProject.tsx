@@ -19,7 +19,6 @@ const PopupTypeProject = ({
   const [formData, setFormData] = useState({ user_id: "", type_name: "" });
   const [user, setUser] = useState<User | null>(null);
 
-  // If editData is provided, populate formData with the existing data
   useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
@@ -50,6 +49,10 @@ const PopupTypeProject = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (formData.type_name === "") {
+      setOpenPopup();
+      return;
+    }
     if (user && user.user_id) {
       try {
         const updatedFormData = { ...formData, user_id: user.user_id };
@@ -90,8 +93,8 @@ const PopupTypeProject = ({
 
   return (
     <Popup isOpen={isOpenAddType} onClose={setOpenPopup} className="w-1/4">
-      <div className="text-base">
-        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-xl">
+      <div className="text-lg">
+        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-2xl">
           <h1>{editData ? "แก้ไขประเภทโครงงาน" : "เพิ่มประเภทโครงงาน"}</h1>
         </div>
         <form onSubmit={handleSubmit}>

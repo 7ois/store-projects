@@ -35,7 +35,7 @@ export const useAllProjectStore = create<ProjectStore>((set) => ({
 
       const finalTypeId = typeId || useAllProjectStore.getState().typeId;
 
-      if (finalTypeId) {
+      if (finalTypeId && finalTypeId !== "0") {
         params.append("type_id", finalTypeId);
       }
       if (search) {
@@ -49,9 +49,7 @@ export const useAllProjectStore = create<ProjectStore>((set) => ({
       params.append("offset", offset.toString());
 
       const response = await axios.get(
-        `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/getAllProjects?${params.toString()}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/getAllProjects?${params.toString()}`
       );
 
       const allProjects = response.data.data;
