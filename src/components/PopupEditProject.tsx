@@ -24,7 +24,7 @@ const PopupEditProject = ({
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null);
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null
+    null,
   );
   const [formData, setFormData] = useState<FormProjectData>({
     project_name_th: "",
@@ -54,17 +54,32 @@ const PopupEditProject = ({
 
   const getAllUsers = async (query: string, role_id?: string) => {
     try {
-      if (query.length < 2) return;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/getAllUsers`;
 
-      let url = `${process.env.NEXT_PUBLIC_API_URL}/getAllUsers?search=${query}`;
+      const params = new URLSearchParams();
+      if (query) {
+        params.append("search", query);
+      }
       if (role_id) {
-        url += `&role_id=${role_id}`;
+        params.append("role_id", role_id);
+      }
+
+      if (params.toString()) {
+        url += `?${params.toString()}`;
       }
 
       const response = await axios.get(url);
       const data = await response.data.data;
 
-      return Array.isArray(data) ? data : [];
+      const filteredData = Array.isArray(data)
+        ? data.filter(
+            (user) =>
+              user.role_id !== 4 &&
+              user.user_id !== formData.main_owner.user_id,
+          )
+        : [];
+
+      return filteredData;
     } catch {
       return [];
     }
@@ -76,13 +91,13 @@ const PopupEditProject = ({
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          })
+          }),
         );
         setTypes(formattedTypes);
       } catch {}
@@ -91,10 +106,10 @@ const PopupEditProject = ({
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`,
         );
         const mainOwner = response.data.project.users.find(
-          (user: User) => user.role_group === "main_owner"
+          (user: User) => user.role_group === "main_owner",
         ) || { user_id: 0, role_group: "main_owner", value: "" };
 
         const owners = response.data.project.users
@@ -150,14 +165,31 @@ const PopupEditProject = ({
     fetchProject();
   }, []);
 
+  const handleFocus = async (index: number, field: "owner" | "advisor") => {
+    const suggestions = await getAllUsers("", field === "advisor" ? "2" : "");
+
+    if (field === "advisor") {
+      setActiveAdvisorIndex(index);
+      setAdvisorSuggestions(suggestions!);
+    } else {
+      setActiveOwnerIndex(index);
+      setOwnerSuggestions(suggestions!);
+    }
+  };
+
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor"
+    field: "owner" | "advisor",
   ) => {
     const newData = [...formData[field]];
-    newData[index].value = e.target.value;
+    newData[index] = {
+      user_id: 0,
+      value: e.target.value,
+      role_group: field,
+    };
 
+    // อัปเดต formData
     setFormData({
       ...formData,
       [field]: newData,
@@ -165,7 +197,7 @@ const PopupEditProject = ({
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : ""
+      field === "advisor" ? "2" : "",
     );
 
     if (field === "advisor") {
@@ -178,7 +210,7 @@ const PopupEditProject = ({
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number
+    index?: number,
   ) => {
     const newData = [...formData[field]];
 
@@ -233,6 +265,30 @@ const PopupEditProject = ({
       ...formData,
       [field]: formData[field].filter((_, i) => i !== index), // ลบ item ที่ index ที่กำหนด
     });
+
+    setValidationErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+
+      Object.keys(updatedErrors).forEach((key) => {
+        if (key.startsWith(`${field}.${field}.${index}`)) {
+          delete updatedErrors[key];
+        }
+      });
+
+      Object.keys(updatedErrors).forEach((key) => {
+        const keyParts = key.split(".");
+        if (keyParts[0] === field && keyParts[1] === field) {
+          const errorIndex = parseInt(keyParts[2], 10);
+          if (errorIndex > index) {
+            const newKey = `${field}.${field}.${errorIndex - 1}`;
+            updatedErrors[newKey] = updatedErrors[key];
+            delete updatedErrors[key];
+          }
+        }
+      });
+
+      return updatedErrors;
+    });
   };
 
   const handleTypeSelect = (value: number) => {
@@ -286,16 +342,20 @@ const PopupEditProject = ({
         role_group: formData.main_owner.role_group,
       },
       ...(formData.owner && formData.owner.length > 0
-        ? formData.owner.map((owner) => ({
-            user_id: owner.user_id,
-            role_group: owner.role_group,
-          }))
+        ? formData.owner
+            .filter((owner) => owner.user_id)
+            .map((owner) => ({
+              user_id: owner.user_id,
+              role_group: owner.role_group,
+            }))
         : []),
       ...(formData.advisor && formData.advisor.length > 0
-        ? formData.advisor.map((advisor) => ({
-            user_id: advisor.user_id,
-            role_group: advisor.role_group,
-          }))
+        ? formData.advisor
+            .filter((advisor) => advisor.user_id)
+            .map((advisor) => ({
+              user_id: advisor.user_id,
+              role_group: advisor.role_group,
+            }))
         : []),
     ];
 
@@ -321,7 +381,7 @@ const PopupEditProject = ({
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       closePopup();
@@ -330,7 +390,7 @@ const PopupEditProject = ({
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: string
+    field: string,
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -342,7 +402,7 @@ const PopupEditProject = ({
 
   const handleTextAreaChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    field: string
+    field: string,
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -488,20 +548,24 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center">
             <label>เจ้าของ</label>
             {formData.owner.map((owner, index) => (
-              <div key={index} className="col-span-3 col-start-2 relative mb-2">
+              <div key={index} className="col-span-3 col-start-2 relative mb-6">
                 <input
                   type="text"
                   className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={owner.value}
                   placeholder="เจ้าของ"
                   onChange={(e) => handleChange(e, index, "owner")}
-                  onFocus={() => setActiveOwnerIndex(index)}
+                  onFocus={() => handleFocus(index, "owner")}
                   onBlur={() =>
                     setTimeout(() => setActiveOwnerIndex(null), 200)
                   }
                 />
+                {validationErrors[`owner.${index}`] && (
+                  <div className="text-primary absolute -bottom-6 left-0">
+                    {validationErrors[`owner.${index}`]}
+                  </div>
+                )}
                 {index === activeOwnerIndex &&
-                  owner.value &&
                   Array.isArray(ownerSuggestions) &&
                   ownerSuggestions.length > 0 && (
                     <div className="absolute top-full left-0 w-full bg-white border-[1px] rounded-lg border-[#c5c5c5] shadow-md mt-2 z-10 overflow-hidden">
@@ -543,20 +607,24 @@ const PopupEditProject = ({
           <div className="grid grid-cols-4 items-center">
             <label>ที่ปรึกษา</label>
             {formData.advisor.map((advisor, index) => (
-              <div key={index} className="col-span-3 col-start-2 relative mb-2">
+              <div key={index} className="col-span-3 col-start-2 relative mb-6">
                 <input
                   type="text"
                   className="h-[50px] pl-2 border border-[#c5c5c5] w-full rounded-lg"
                   value={advisor.value}
                   placeholder="ที่ปรึกษา"
                   onChange={(e) => handleChange(e, index, "advisor")}
-                  onFocus={() => setActiveAdvisorIndex(index)}
+                  onFocus={() => handleFocus(index, "advisor")}
                   onBlur={() =>
                     setTimeout(() => setActiveAdvisorIndex(null), 200)
                   }
                 />
+                {validationErrors[`advisor.${index}`] && (
+                  <div className="text-primary absolute -bottom-6 left-0">
+                    {validationErrors[`advisor.${index}`]}
+                  </div>
+                )}
                 {index === activeAdvisorIndex &&
-                  advisor.value &&
                   Array.isArray(advisorSuggestions) &&
                   advisorSuggestions.length > 0 && (
                     <div className="absolute top-full left-0 w-full bg-white border-[1px] rounded-lg border-[#c5c5c5] shadow-md mt-2 z-10 overflow-hidden">

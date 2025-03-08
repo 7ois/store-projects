@@ -17,7 +17,7 @@ const Page = () => {
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null
+    null,
   );
   const limit = 10;
   const totalPages = Math.ceil(totalCount / limit);
@@ -60,7 +60,7 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
       );
 
       fetchMyProjects({ limit, offset: (currentPage - 1) * limit });
@@ -119,10 +119,8 @@ const Page = () => {
               </div>
               <div className="flex gap-2 items-center justify-center">
                 <button
-                  className="bg-primary text-white rounded-lg p-4 disabled:bg-black"
-                  disabled={item.users?.every(
-                    (user) => user.role_group !== "main_owner"
-                  )}
+                  className="bg-primary text-white rounded-lg p-4 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={item.role_group !== "main_owner"}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleTrashDelete(item.project_id);

@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { Project } from "@/entity/project";
 import { ChevronLeft } from "lucide-react";
+import { convertToThaiDate } from "@/lib/convertToThaiDate";
 
 const Page = () => {
   const params = useParams();
@@ -63,7 +64,7 @@ const Page = () => {
               <h1>{project.project_name_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1 className="font-medium">Orter Title:</h1>
+              <h1 className="font-medium">Title:</h1>
               <h1>{project.project_name_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
@@ -71,17 +72,12 @@ const Page = () => {
               <h1>{project.abstract_th}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1 className="font-medium">Orter Abstract:</h1>
+              <h1 className="font-medium">Abstract:</h1>
               <h1>{project.abstract_en}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
-              <h1 className="font-medium">Date:</h1>
-              <h1>
-                {" "}
-                {new Date(project.date).toLocaleDateString("en-CA", {
-                  timeZone: "Asia/Bangkok",
-                })}
-              </h1>
+              <h1 className="font-medium">วันที่เผยแพร่:</h1>
+              <h1>{convertToThaiDate(project.date, "short")}</h1>
             </div>
             <div className="grid grid-cols-[200px_auto]">
               <h1 className="font-medium">คำสำคัญ:</h1>
