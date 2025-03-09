@@ -93,6 +93,13 @@ const Navbar = () => {
 
   const handleEditClick = () => {
     setIsOpenEditUser(true);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setUser(null);
+    } else {
+      const decoded: any = jwtDecode(token);
+      setUser(decoded);
+    }
   };
 
   useEffect(() => {
@@ -241,7 +248,7 @@ const Navbar = () => {
         )}
 
         <PopupEditUser
-          isOpenAddType={isOpenEditUser}
+          isOpenEditUser={isOpenEditUser}
           setOpenPopup={handleEditPopup}
           editData={user!}
         />

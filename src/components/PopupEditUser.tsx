@@ -4,13 +4,17 @@ import Popup from "./Popup";
 import { User } from "@/entity/user";
 import axios from "axios";
 
-interface TypeEdit {
-  isOpenAddType: boolean;
+interface UserEdit {
+  isOpenEditUser: boolean;
   setOpenPopup: () => void;
   editData?: User;
 }
 
-const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
+const PopupEditUser = ({
+  isOpenEditUser,
+  setOpenPopup,
+  editData,
+}: UserEdit) => {
   const [formData, setFormData] = useState({
     user_id: 0,
     first_name: "",
@@ -26,7 +30,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
         last_name: editData.last_name,
       }));
     }
-  }, [isOpenAddType]);
+  }, [isOpenEditUser]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,7 +67,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
   };
 
   return (
-    <Popup isOpen={isOpenAddType} onClose={setOpenPopup} className="w-auto">
+    <Popup isOpen={isOpenEditUser} onClose={setOpenPopup} className="w-auto">
       <div className="text-lg">
         <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-2xl">
           <h1>แก้ไขชื่อผู้ใช้</h1>
@@ -102,7 +106,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
               ยกเลิก
             </button>
             <button className="bg-blue text-white h-[40px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
-              {editData ? "บันทึก" : "เพิ่ม"}
+              บันทึก
             </button>
           </div>
         </form>
