@@ -26,7 +26,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
         last_name: editData.last_name,
       }));
     }
-  }, [editData, isOpenAddType]);
+  }, [isOpenAddType]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,17 +39,25 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
     try {
       const updatedFormData = { ...formData };
 
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/updateUser/${editData?.user_id}`,
         updatedFormData,
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
-      console.log("Response: ", response.data);
+      localStorage.setItem("token", response.data.token);
       setOpenPopup();
     } catch {}
   };
@@ -65,7 +73,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
             <div className="flex gap-2 m-5 items-center justify-center">
               <label>ชื่อจริง</label>
               <input
-                name="type_name"
+                name="first_name"
                 className="border h-[50px] rounded-lg pl-2"
                 placeholder="กรอกชื่อจริง"
                 type="text"
@@ -76,7 +84,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
             <div className="flex gap-2 m-5 items-center justify-center">
               <label>นามสกุล</label>
               <input
-                name="type_name"
+                name="last_name"
                 className="border h-[50px] rounded-lg pl-2"
                 placeholder="กรอกนามสกุล"
                 type="text"
