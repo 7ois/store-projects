@@ -24,7 +24,7 @@ const PopupEditProject = ({
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null);
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null,
+    null
   );
   const [formData, setFormData] = useState<FormProjectData>({
     project_name_th: "",
@@ -74,8 +74,7 @@ const PopupEditProject = ({
       const filteredData = Array.isArray(data)
         ? data.filter(
             (user) =>
-              user.role_id !== 4 &&
-              user.user_id !== formData.main_owner.user_id,
+              user.role_id !== 4 && user.user_id !== formData.main_owner.user_id
           )
         : [];
 
@@ -91,13 +90,13 @@ const PopupEditProject = ({
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          }),
+          })
         );
         setTypes(formattedTypes);
       } catch {}
@@ -106,10 +105,10 @@ const PopupEditProject = ({
     const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getProject/${selectedProjectId}`
         );
         const mainOwner = response.data.project.users.find(
-          (user: User) => user.role_group === "main_owner",
+          (user: User) => user.role_group === "main_owner"
         ) || { user_id: 0, role_group: "main_owner", value: "" };
 
         const owners = response.data.project.users
@@ -180,7 +179,7 @@ const PopupEditProject = ({
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor",
+    field: "owner" | "advisor"
   ) => {
     const newData = [...formData[field]];
     newData[index] = {
@@ -197,7 +196,7 @@ const PopupEditProject = ({
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : "",
+      field === "advisor" ? "2" : ""
     );
 
     if (field === "advisor") {
@@ -210,7 +209,7 @@ const PopupEditProject = ({
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number,
+    index?: number
   ) => {
     const newData = [...formData[field]];
 
@@ -381,7 +380,7 @@ const PopupEditProject = ({
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       closePopup();
@@ -390,7 +389,7 @@ const PopupEditProject = ({
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -402,7 +401,7 @@ const PopupEditProject = ({
 
   const handleTextAreaChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -429,7 +428,7 @@ const PopupEditProject = ({
               value={formData?.project_name_th}
             />
             {validationErrors.project_name_th && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.project_name_th}
               </div>
             )}
@@ -445,7 +444,7 @@ const PopupEditProject = ({
               value={formData?.project_name_en}
             />
             {validationErrors.project_name_en && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.project_name_en}
               </div>
             )}
@@ -460,7 +459,7 @@ const PopupEditProject = ({
               value={formData?.abstract_th}
             />
             {validationErrors.abstract_th && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.abstract_th}
               </div>
             )}
@@ -475,7 +474,7 @@ const PopupEditProject = ({
               value={formData?.abstract_en}
             />
             {validationErrors.abstract_en && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.abstract_en}
               </div>
             )}
@@ -502,7 +501,7 @@ const PopupEditProject = ({
               }}
             />
             {validationErrors.keyword && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.keyword}
               </div>
             )}
@@ -517,7 +516,7 @@ const PopupEditProject = ({
               className="col-span-3"
             />
             {validationErrors.type_id && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.type_id}
               </div>
             )}
@@ -561,7 +560,7 @@ const PopupEditProject = ({
                   }
                 />
                 {validationErrors[`owner.${index}`] && (
-                  <div className="text-primary absolute -bottom-6 left-0">
+                  <div className="text-primary absolute -bottom-6 left-0 text-base">
                     {validationErrors[`owner.${index}`]}
                   </div>
                 )}
@@ -622,7 +621,7 @@ const PopupEditProject = ({
                   }
                 />
                 {validationErrors[`advisor.${index}`] && (
-                  <div className="text-primary absolute -bottom-6 left-0">
+                  <div className="text-primary absolute -bottom-6 left-0 text-base">
                     {validationErrors[`advisor.${index}`]}
                   </div>
                 )}

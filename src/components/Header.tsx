@@ -1,5 +1,11 @@
 "use client";
-import { ChevronDown, DoorOpen, Pencil, Search } from "lucide-react";
+import {
+  ChevronDown,
+  DoorOpen,
+  Pencil,
+  PencilLine,
+  Search,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname, useParams } from "next/navigation";
 import Modal from "./Modal";
@@ -9,6 +15,13 @@ import Dropdown from "./Dropdown";
 import { useAllProjectStore } from "@/stores/allProjectStore";
 import { useMyProjectStore } from "@/stores/myProjectStore";
 import { useUsersStore } from "@/stores/userStore";
+import PopupEditUser from "./PopupEditUser";
+
+interface TypeUser {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+}
 
 const Navbar = () => {
   const router = useRouter();
@@ -21,6 +34,12 @@ const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
   const [year, setYear] = useState("");
   const [indexYear, setIndexYear] = useState(0);
+  const [isOpenEditUser, setIsOpenEditUser] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<TypeUser | null>(null);
+
+  const handleEditPopup = () => {
+    setIsOpenEditUser(!isOpenEditUser);
+  };
 
   const currentYear = new Date().getFullYear();
   const yearData = [
@@ -78,6 +97,15 @@ const Navbar = () => {
   const toggleModal = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleEditClick = () => {
+    // setSelectedUser(type);
+    setIsOpenEditUser(true);
+  };
+  // const handleEditClick = (type: TypeUser) => {
+  //   setSelectedUser(type);
+  //   setIsOpenEditUser(true);
+  // };
 
   useEffect(() => {
     const checkToken = () => {
@@ -200,9 +228,15 @@ const Navbar = () => {
             classNameContainer="flex flex-col bg-white rounded-[10px] shadow-xl w-[300px] h-auto top-[40px]"
           >
             <div className="grid gap-1 pl-3 py-3">
-              <div className="flex gap-2">
+              <div className="flex gap-2 relative">
                 <p>{user?.first_name ? user.first_name : ""}</p>
                 <p>{user?.last_name ? user.last_name : ""}</p>
+                <div
+                  className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-blue hover:text-orange"
+                  onClick={() => handleEditClick()}
+                >
+                  <PencilLine size={20} />
+                </div>
               </div>
               <p className="text-[#B4B4B4]">{user?.email ? user.email : ""}</p>
             </div>
@@ -215,6 +249,12 @@ const Navbar = () => {
             </button>
           </Modal>
         )}
+
+        <PopupEditUser
+          isOpenAddType={isOpenEditUser}
+          setOpenPopup={handleEditPopup}
+          editData={selectedUser!}
+        />
       </div>
     </div>
   );

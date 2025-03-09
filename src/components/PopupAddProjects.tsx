@@ -30,7 +30,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const [activeOwnerIndex, setActiveOwnerIndex] = useState<number | null>(null); //สำหรับเช็คว่าอยู่ input ไหน
   const [advisorSuggestions, setAdvisorSuggestions] = useState<User[]>([]);
   const [activeAdvisorIndex, setActiveAdvisorIndex] = useState<number | null>(
-    null,
+    null
   ); //สำหรับเช็คว่าอยู่ input ไหน
 
   const [validationErrors, setValidationErrors] = useState<{
@@ -63,8 +63,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
       const filteredData = Array.isArray(data)
         ? data.filter(
             (user) =>
-              user.role_id !== 4 &&
-              user.user_id !== formData.main_owner.user_id,
+              user.role_id !== 4 && user.user_id !== formData.main_owner.user_id
           )
         : [];
 
@@ -77,7 +76,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const handleSelectUserForField = (
     user: User,
     field: "owner" | "advisor",
-    index?: number,
+    index?: number
   ) => {
     const newData = [...formData[field]];
 
@@ -118,13 +117,13 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
     const fetchType = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`,
+          `${process.env.NEXT_PUBLIC_API_URL}/getAllTypeProjects`
         );
         const formattedTypes = response.data.map(
           (item: { type_id: number; type_name: string }) => ({
             id: item.type_id,
             value: item.type_name,
-          }),
+          })
         );
         setTypes(formattedTypes);
       } catch {}
@@ -171,7 +170,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
-    field: "owner" | "advisor",
+    field: "owner" | "advisor"
   ) => {
     const newData = [...formData[field]];
     newData[index] = {
@@ -188,7 +187,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
     const suggestions = await getAllUsers(
       e.target.value,
-      field === "advisor" ? "2" : "",
+      field === "advisor" ? "2" : ""
     );
 
     if (field === "advisor") {
@@ -303,7 +302,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
 
       closePopup();
@@ -312,7 +311,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -324,7 +323,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
 
   const handleTextAreaChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
-    field: string,
+    field: string
   ) => {
     setFormData({ ...formData, [field]: e.target.value });
     setValidationErrors((prevErrors) => {
@@ -351,7 +350,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.project_name_th}
             />
             {validationErrors.project_name_th && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.project_name_th}
               </div>
             )}
@@ -367,7 +366,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.project_name_en}
             />
             {validationErrors.project_name_en && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.project_name_en}
               </div>
             )}
@@ -382,7 +381,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.abstract_th}
             />
             {validationErrors.abstract_th && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.abstract_th}
               </div>
             )}
@@ -397,7 +396,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.abstract_en}
             />
             {validationErrors.abstract_en && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.abstract_en}
               </div>
             )}
@@ -423,7 +422,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               }}
             />
             {validationErrors.keyword && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.keyword}
               </div>
             )}
@@ -437,7 +436,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               className="col-span-3"
             />
             {validationErrors.type_id && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.type_id}
               </div>
             )}
@@ -453,7 +452,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
               value={formData.date}
             />
             {validationErrors.date && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.date}
               </div>
             )}
@@ -486,7 +485,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
                   }
                 />
                 {validationErrors[`owner.${index}`] && (
-                  <div className="text-primary absolute -bottom-6 left-0">
+                  <div className="text-primary absolute -bottom-6 left-0 text-base">
                     {validationErrors[`owner.${index}`]}
                   </div>
                 )}
@@ -546,7 +545,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
                   }
                 />
                 {validationErrors[`advisor.${index}`] && (
-                  <div className="text-primary absolute -bottom-6 left-0">
+                  <div className="text-primary absolute -bottom-6 left-0 text-base">
                     {validationErrors[`advisor.${index}`]}
                   </div>
                 )}
@@ -594,7 +593,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
             <label>File</label>
             <input onChange={handleFileChange} type="file" accept=".pdf" />
             {validationErrors.file && (
-              <div className="text-primary absolute -bottom-6 left-1/4">
+              <div className="text-primary absolute -bottom-6 left-1/4 text-base">
                 {validationErrors.file}
               </div>
             )}
