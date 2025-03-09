@@ -99,13 +99,8 @@ const Navbar = () => {
   };
 
   const handleEditClick = () => {
-    // setSelectedUser(type);
     setIsOpenEditUser(true);
   };
-  // const handleEditClick = (type: TypeUser) => {
-  //   setSelectedUser(type);
-  //   setIsOpenEditUser(true);
-  // };
 
   useEffect(() => {
     const checkToken = () => {
@@ -232,7 +227,9 @@ const Navbar = () => {
                 <p>{user?.first_name ? user.first_name : ""}</p>
                 <p>{user?.last_name ? user.last_name : ""}</p>
                 <div
-                  className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-blue hover:text-orange"
+                  className={`${
+                    user.role_id === 4 ? "hidden" : ""
+                  } absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-blue hover:text-orange`}
                   onClick={() => handleEditClick()}
                 >
                   <PencilLine size={20} />

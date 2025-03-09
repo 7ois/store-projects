@@ -121,10 +121,10 @@ const Page = () => {
                       }
                       className={`${
                         item.role_id === 1 && "hidden"
-                      } w-[150px] h-[50px] grid grid-cols-[55px_auto] items-center gap-2 rounded-md bg-primary text-white transition duration-75 hover:bg-[#E04B4B] ${
+                      } w-[150px] h-[50px] grid grid-cols-[55px_auto] items-center gap-2 rounded-md text-white transition duration-75] ${
                         item.deleted_at !== null
-                          ? "bg-[#1C3B6C] hover:bg-orange"
-                          : ""
+                          ? "bg-blue hover:bg-orange"
+                          : "bg-primary hover:bg-[#E04B4B"
                       }`}
                     >
                       <div className="flex items-center justify-center w-full">
