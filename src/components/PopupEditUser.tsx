@@ -2,44 +2,32 @@
 import React, { useEffect, useState } from "react";
 import Popup from "./Popup";
 import { User } from "@/entity/user";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 interface TypeEdit {
   isOpenAddType: boolean;
   setOpenPopup: () => void;
-  editData?: { first_name: string; last_name: string; user_id: number };
+  editData?: User;
 }
 
 const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
   const [formData, setFormData] = useState({
+    user_id: 0,
     first_name: "",
     last_name: "",
   });
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const checkToken = () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setUser(null);
-      } else {
-        const decoded: any = jwtDecode(token);
-        setUser(decoded);
-      }
-    };
-    checkToken();
-  }, []);
 
   useEffect(() => {
     if (editData) {
       setFormData((prev) => ({
         ...prev,
+        user_id: editData.user_id!,
         first_name: editData.first_name,
         last_name: editData.last_name,
       }));
     }
-  }, [editData, user]);
+    console.log("editData : ", editData);
+  }, [editData, isOpenAddType]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,42 +37,22 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (user && user.user_id) {
-      try {
-        const updatedFormData = { ...formData, user_id: user.user_id };
+    try {
+      const updatedFormData = { ...formData };
 
-        let response;
-        if (editData) {
-          response = await axios.put(
-            `${process.env.NEXT_PUBLIC_API_URL}/updateUser/${editData.user_id}`,
-            updatedFormData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        } else {
-          response = await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/postTypeProjects`,
-            updatedFormData,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-        }
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/updateUser/${editData?.user_id}`,
+        updatedFormData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-        console.log("Response: ", response.data);
-        setOpenPopup();
-        setFormData({ first_name: "", last_name: "" });
-      } catch (err) {
-        console.log("Error: ", err);
-      }
-    } else {
-      console.log("User is not logged in or no user_id available");
-    }
+      console.log("Response: ", response.data);
+      setOpenPopup();
+    } catch {}
   };
 
   return (
@@ -114,7 +82,7 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
                 placeholder="กรอกนามสกุล"
                 type="text"
                 onChange={handleChange}
-                value={formData.first_name}
+                value={formData.last_name}
               />
             </div>
           </div>

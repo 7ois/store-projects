@@ -17,12 +17,6 @@ import { useMyProjectStore } from "@/stores/myProjectStore";
 import { useUsersStore } from "@/stores/userStore";
 import PopupEditUser from "./PopupEditUser";
 
-interface TypeUser {
-  user_id: number;
-  first_name: string;
-  last_name: string;
-}
-
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname(); // ดึง pathname ปัจจุบัน
@@ -35,7 +29,6 @@ const Navbar = () => {
   const [year, setYear] = useState("");
   const [indexYear, setIndexYear] = useState(0);
   const [isOpenEditUser, setIsOpenEditUser] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<TypeUser | null>(null);
 
   const handleEditPopup = () => {
     setIsOpenEditUser(!isOpenEditUser);
@@ -250,7 +243,7 @@ const Navbar = () => {
         <PopupEditUser
           isOpenAddType={isOpenEditUser}
           setOpenPopup={handleEditPopup}
-          editData={selectedUser!}
+          editData={user!}
         />
       </div>
     </div>

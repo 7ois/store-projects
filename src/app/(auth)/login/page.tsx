@@ -4,7 +4,7 @@ import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo_rmuti from "../../../../public/images/logo_rmuti.png";
 import building2 from "../../../../public/images/business2.jpg";
 
@@ -31,7 +31,7 @@ const Page = () => {
         {
           email: formData.email,
           password: formData.password,
-        }
+        },
       );
 
       let redirectTo =
@@ -47,9 +47,19 @@ const Page = () => {
       router.push(redirectTo);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
+        const errorMessage = error.response?.data?.error;
+
+        if (errorMessage === "This account has been deleted") {
           alert("บัญชีถูกระงับ");
+        } else if (errorMessage === "Invalid data") {
+          alert("กรุณาสมัครสมาชิก");
+        } else if (errorMessage === "Invalid email or password") {
+          alert("อีเมล หรือ รหัสผ่าน ผิดกรุณาตรวจสอบ");
+        } else {
+          alert("เกิดข้อผิดพลาดในการล็อกอิน กรุณาลองอีกครั้ง");
         }
+      } else {
+        alert("เกิดข้อผิดพลาดในการล็อกอิน กรุณาลองอีกครั้ง");
       }
     }
   };
