@@ -26,7 +26,6 @@ const PopupEditUser = ({ isOpenAddType, setOpenPopup, editData }: TypeEdit) => {
         last_name: editData.last_name,
       }));
     }
-    console.log("editData : ", editData);
   }, [editData, isOpenAddType]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
