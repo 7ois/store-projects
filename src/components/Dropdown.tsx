@@ -14,6 +14,7 @@ interface DropdownProps {
   selectedId?: number;
   labelName?: string;
   className?: string;
+  classNameInput?: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -22,6 +23,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   selectedId,
   labelName,
   className,
+  classNameInput,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | undefined>("กรุณาเลือก");
@@ -42,18 +44,24 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <div
-      className={clsx("relative inline-block text-left text-base", className)}
+      className={clsx(
+        "relative inline-block text-left lg:text-base",
+        className
+      )}
     >
       <div className="grid gap-1">
         <label>{labelName}</label>
         <div
           onClick={toggleDropdown}
-          className="cursor-pointer flex min-w-[110px] h-[50px] px-2 items-center justify-between rounded-lg border border-[#c5c5c5] bg-white text-gray-700 focus:outline-none"
+          className={clsx(
+            "cursor-pointer flex px-2 items-center justify-between rounded-lg border border-[#c5c5c5] bg-white text-gray-700 focus:outline-none lg:w-[110px] lg:h-[50px]",
+            classNameInput
+          )}
         >
           <h1
             className={`${
               selected !== "กรุณาเลือก" ? "text-black" : "text-gray-400"
-            } w-full truncate overflow-hidden whitespace-nowrap`}
+            } w-full truncate whitespace-nowrap`}
           >
             {selected}
           </h1>
@@ -72,7 +80,8 @@ const Dropdown: React.FC<DropdownProps> = ({
               <div
                 key={index}
                 onClick={() => handleSelect(item.id, item.value)}
-                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-[#e1e1e1] cursor-pointer"
+                className="w-full text-left py-2 text-gray-700 hover:bg-[#e1e1e1] cursor-pointer truncate px-2
+                lg:px-4"
                 role="menuitem"
               >
                 {item.value}

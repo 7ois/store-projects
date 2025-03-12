@@ -92,9 +92,13 @@ const PopupTypeProject = ({
   };
 
   return (
-    <Popup isOpen={isOpenAddType} onClose={setOpenPopup} className="w-1/4">
-      <div className="text-lg">
-        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-2xl">
+    <Popup
+      isOpen={isOpenAddType}
+      onClose={setOpenPopup}
+      className="lg:w-2/4 2xl:w-1/4"
+    >
+      <div className="lg:text-lg">
+        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white lg:text-xl 2xl:text-2xl">
           <h1>{editData ? "แก้ไขประเภทโครงงาน" : "เพิ่มประเภทโครงงาน"}</h1>
         </div>
         <form onSubmit={handleSubmit}>
@@ -102,7 +106,7 @@ const PopupTypeProject = ({
             <label>ชื่อประเภทโครงงาน</label>
             <input
               name="type_name"
-              className="border h-[50px] rounded-lg pl-2"
+              className="border h-[50px] rounded-lg px-2"
               placeholder="กรอกชื่อประเภทโครงงาน"
               type="text"
               onChange={handleChange}
@@ -112,12 +116,12 @@ const PopupTypeProject = ({
           <div className="flex items-center justify-between gap-2 p-5 border-t-[1px]">
             <button
               type="button"
-              className="border border-primary text-primary h-[40px] w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
+              className="border border-primary text-primary h-[50px] w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
               onClick={setOpenPopup}
             >
               ยกเลิก
             </button>
-            <button className="bg-blue text-white h-[40px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
+            <button className="bg-blue text-white h-[50px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
               {editData ? "บันทึก" : "เพิ่ม"}
             </button>
           </div>

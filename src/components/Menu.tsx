@@ -4,8 +4,6 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/entity/user";
-import Image from "next/image";
-import Logo from "@/../../public/images/logo_business.png";
 
 const menu = [
   { id: 1, title: "โครงงานทั้งหมด", Link: "/project_center" },
@@ -14,7 +12,7 @@ const menu = [
   { id: 4, title: "จัดการผู้ใช้", Link: "/manage_system" },
 ];
 
-const Sidebar = () => {
+const Menu = () => {
   const router = useRouter();
 
   const [activeButton, setActiveButton] = useState<number | null>(null);
@@ -53,27 +51,21 @@ const Sidebar = () => {
     };
 
     const intervalId = setInterval(checkToken, 5000);
+
     checkToken();
 
     return () => clearInterval(intervalId);
   }, [router]);
 
-  const [filteredMenu, setFilteredMenu] = useState(menu);
-
-  useEffect(() => {
-    const newFilteredMenu = !user
-      ? menu.filter((item) => item.id === 1) // ถ้าไม่มี user แสดงเฉพาะ id 1
-      : user.role_id === 2
-      ? menu.filter((item) => [1, 2, 3].includes(item.id)) // role_id 2 แสดง 1, 2, 3
-      : user.role_id === 3
-      ? menu.filter((item) => [1, 3].includes(item.id)) // role_id 3 แสดง 1, 3
-      : user.role_id === 4
-      ? menu.filter((item) => item.id === 1) // role_id 4 แสดงเฉพาะ id 1
-      : menu;
-
-    console.log("New filtered menu:", user);
-    setFilteredMenu(newFilteredMenu);
-  }, [user, menu]); // ให้ `useEffect` ทำงานเมื่อ `user` หรือ `menu` เปลี่ยนแปลง
+  const filteredMenu = !user
+    ? menu.filter((item) => item.id === 1) // ถ้าไม่มี user แสดงเฉพาะ id 1
+    : user.role_id && user.role_id === 2
+    ? menu.filter((item) => [1, 2, 3].includes(item.id)) // role_id > 2 แสดงเฉพาะ id 1 และ 3
+    : user.role_id && user.role_id === 3
+    ? menu.filter((item) => [1, 3].includes(item.id)) // role_id > 2 แสดงเฉพาะ id 1 และ 3
+    : user.role_id && user.role_id === 4
+    ? menu.filter((item) => item.id === 1)
+    : menu; // role_id <= 2 แสดงทั้งหมด
 
   useEffect(() => {
     const activeMenuItem = menu.find((item) => {
@@ -96,32 +88,25 @@ const Sidebar = () => {
   }, [pathname]);
 
   return (
-    <div>
-      <div className="mb-10 h-16 flex justify-center items-center">
-        <Link href="/project_center">
-          <Image src={Logo} alt="Logo" width={200} />
-        </Link>
-      </div>
-      <div className="flex items-center justify-center flex-col gap-3">
-        {filteredMenu.map((item) => (
-          <Link key={item.title} href={item.Link} className="w-full">
-            <button
-              className={`${
-                activeButton === item.id
-                  ? "bg-blue text-white shadow-md"
-                  : "bg-white text-black shadow-md transition duration-75 hover:text-white hover:bg-gradient-to-r from-orange to-white"
-              } w-full h-20 rounded-[10px] font-medium text-left pl-5
+    <div className="flex items-center justify-center flex-col border-t-[1px]">
+      {filteredMenu.map((item) => (
+        <Link key={item.title} href={item.Link} className="w-full">
+          <button
+            className={`${
+              activeButton === item.id
+                ? "bg-blue text-white"
+                : "bg-white text-black transition duration-75 hover:text-white hover:bg-gradient-to-r from-orange to-white"
+            } w-full h-[50px] font-medium text-left pl-5
               lg:text-lg
               2xl:text-xl`}
-              onClick={() => setActiveButton(item.id)}
-            >
-              {item.title}
-            </button>
-          </Link>
-        ))}
-      </div>
+            onClick={() => setActiveButton(item.id)}
+          >
+            {item.title}
+          </button>
+        </Link>
+      ))}
     </div>
   );
 };
 
-export default Sidebar;
+export default Menu;

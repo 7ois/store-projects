@@ -68,90 +68,96 @@ const Page = () => {
 
   return (
     <div className="flex flex-col gap-2 h-full w-full text-lg relative">
-      <div className="text-2xl text-white flex items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
+      <div
+        className="text-white flex items-center p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white
+        lg:text-xl lg:h-[80px]
+        2xl:text-2xl 2xl:h-[100px]"
+      >
         <h1>จัดการผู้ใช้</h1>
       </div>
 
-      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
-        <table className="w-full border-collapse cursor-default">
-          <thead className="bg-blue text-white">
-            <tr className="h-16">
-              <th className="border-r border-gray-100">รหัสผู้ใช้</th>
-              <th className="border-r border-gray-100">บทบาท</th>
-              <th className="border-r border-gray-100">ชื่อจริง</th>
-              <th className="border-r border-gray-100">นามสกุล</th>
-              <th className="border-r border-gray-100">อีเมล</th>
-              <th className="w-60">จัดการผู้ใช้</th>
-            </tr>
-          </thead>
-          {users.length > 0 ? (
-            <tbody>
-              {users.map((item, index) => (
-                <tr
-                  key={item.user_id}
-                  className={`h-auto ${index % 2 === 0 ? "" : "bg-[#D6E0F5]"}`}
-                >
-                  <td className="px-4 text-center border-r border-gray-100">
-                    {item.user_id}
-                  </td>
-                  <td className="px-4 border-r border-gray-100">
-                    {item.role_name}
-                  </td>
-                  <td className="px-4 border-r border-gray-100">
-                    {item.first_name}
-                  </td>
-                  <td className="px-4 border-r border-gray-100">
-                    {item.last_name}
-                  </td>
-                  <td className="px-4 border-r border-gray-100">
-                    {item.email}
-                  </td>
-                  <td
-                    className={`${
-                      item.role_id === 1 && "h-[82px]"
-                    } p-4 flex items-center justify-center`}
+      <div className="max-h-[550px] w-full h-auto rounded-lg p-5 shadow-md">
+        <div className="relative overflow-auto w-full">
+          <table className="w-full min-w-max border-collapse cursor-default table-auto">
+            <thead className="bg-blue text-white w-full">
+              <tr className="h-16 text-sm lg:text-base">
+                <th className="border-r border-gray-100 whitespace-nowrap px-4">
+                  รหัสผู้ใช้
+                </th>
+                <th className="border-r border-gray-100 px-4">บทบาท</th>
+                <th className="border-r border-gray-100 px-4">ชื่อจริง</th>
+                <th className="border-r border-gray-100 px-4">นามสกุล</th>
+                <th className="border-r border-gray-100 px-4">อีเมล</th>
+                <th className="w-60">จัดการผู้ใช้</th>
+              </tr>
+            </thead>
+            {users.length > 0 ? (
+              <tbody>
+                {users.map((item, index) => (
+                  <tr
+                    key={item.user_id}
+                    className={`h-auto ${
+                      index % 2 === 0 ? "" : "bg-[#D6E0F5]"
+                    }`}
                   >
-                    <button
-                      disabled={item.role_id === 1}
-                      onClick={() =>
-                        handleTrashDelete(
-                          item.user_id!,
-                          item.deleted_at ? item.deleted_at : ""
-                        )
-                      }
-                      className={`${
-                        item.role_id === 1 && "hidden"
-                      } w-[150px] h-[50px] grid grid-cols-[55px_auto] items-center gap-2 rounded-md text-white transition duration-75] ${
-                        item.deleted_at !== null
-                          ? "bg-blue hover:bg-orange"
-                          : "bg-primary hover:bg-[#E04B4B"
-                      }`}
-                    >
-                      <div className="flex items-center justify-center w-full">
-                        {item.deleted_at !== null ? (
-                          <LockKeyholeOpen size={20} strokeWidth={1.5} />
-                        ) : (
-                          <LockKeyhole size={20} strokeWidth={1.5} />
-                        )}
-                      </div>
-                      <p className="text-left">
-                        {item.deleted_at !== null ? "ปลดระงับ" : "ระงับ"}
-                      </p>
-                    </button>
+                    <td className="px-4 text-center border-r border-gray-100">
+                      {item.user_id}
+                    </td>
+                    <td className="px-4 border-r border-gray-100">
+                      {item.role_name}
+                    </td>
+                    <td className="px-4 border-r border-gray-100">
+                      {item.first_name}
+                    </td>
+                    <td className="px-4 border-r border-gray-100">
+                      {item.last_name}
+                    </td>
+                    <td className="px-4 border-r border-gray-100">
+                      {item.email}
+                    </td>
+                    <td className="p-4 flex items-center justify-center h-[82px]">
+                      <button
+                        disabled={item.role_id === 1}
+                        onClick={() =>
+                          handleTrashDelete(
+                            item.user_id!,
+                            item.deleted_at ? item.deleted_at : ""
+                          )
+                        }
+                        className={`${
+                          item.role_id === 1 && "hidden"
+                        } w-[150px] h-[50px] grid grid-cols-[55px_auto] items-center gap-2 rounded-md text-white transition duration-75 ${
+                          item.deleted_at !== null
+                            ? "bg-blue hover:bg-orange"
+                            : "bg-primary hover:bg-[#E04B4B"
+                        }`}
+                      >
+                        <div className="flex items-center justify-center w-full">
+                          {item.deleted_at !== null ? (
+                            <LockKeyholeOpen size={20} strokeWidth={1.5} />
+                          ) : (
+                            <LockKeyhole size={20} strokeWidth={1.5} />
+                          )}
+                        </div>
+                        <p className="text-left">
+                          {item.deleted_at !== null ? "ปลดระงับ" : "ระงับ"}
+                        </p>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            ) : (
+              <tbody>
+                <tr>
+                  <td colSpan={6} className="text-center py-4 text-gray-500">
+                    ไม่มีข้อมูล
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          ) : (
-            <tbody>
-              <tr>
-                <td colSpan={6} className="text-center py-4 text-gray-500">
-                  ไม่มีข้อมูล
-                </td>
-              </tr>
-            </tbody>
-          )}
-        </table>
+              </tbody>
+            )}
+          </table>
+        </div>
       </div>
 
       <Popup isOpen={isOpenDeleteUser} onClose={handleClosePopup}>

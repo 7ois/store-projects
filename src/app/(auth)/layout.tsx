@@ -11,7 +11,9 @@ export default function RootLayout({
   return (
     <main>
       <div
-        className={`${noto.className} font-[400] h-screen px-60 flex items-center`}
+        className={`${noto.className} font-[400] h-screen flex items-center px-5
+        lg:px-40
+        2xl:px-60`}
       >
         {children}
       </div>

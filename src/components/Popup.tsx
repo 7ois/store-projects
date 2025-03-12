@@ -1,3 +1,4 @@
+"use client";
 import ReactDOM from "react-dom";
 import clsx from "clsx";
 import { Bai_Jamjuree } from "next/font/google";

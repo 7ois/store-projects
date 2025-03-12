@@ -72,11 +72,19 @@ const Page = () => {
   }, [isOpenAddType, isOpenEditType, isOpenDeleteType]);
 
   return (
-    <div className="flex flex-col gap-2 w-full h-full text-lg">
-      <div className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white">
-        <h1 className="text-2xl text-white">เพิ่มประเภทโครงงาน</h1>
+    <div
+      className="flex flex-col gap-2 w-full h-full
+      lg:text-lg"
+    >
+      <div
+        className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white text-white
+        lg:text-xl lg:h-[80px]
+        2xl:text-2xl 2xl:h-[100px]"
+      >
+        <h1>เพิ่มประเภทโครงงาน</h1>
         <button
-          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
+          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange
+          lg:text-lg"
           onClick={() => setIsOpenAddType(true)}
         >
           <Plus size={20} />
@@ -89,17 +97,27 @@ const Page = () => {
         setOpenPopup={handleAddPopup}
       />
 
-      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
+      <div className="max-h-[423px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
         {typeProjects.length > 0 && (
-          <ul className="grid grid-cols-3 gap-5">
+          <ul
+            className="grid gap-5
+          lg:grid-cols-2
+          2xl:grid-cols-3"
+          >
             {typeProjects.map((type) => (
               <li
                 className="grid grid-cols-[auto_130px] items-center bg-white text-black rounded-lg shadow-md h-20 px-4"
                 key={type.type_id}
               >
-                <div className="w-full">
-                  <p>{type.type_name}</p>
+                <div className="w-full min-w-0">
+                  <p
+                    className="truncate overflow-hidden whitespace-nowrap 
+                    max-w-full sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px] 2xl:max-w-[300px]"
+                  >
+                    {type.type_name}
+                  </p>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2 items-center justify-between w-full">
                   <button
                     className="flex items-center justify-center border-[1px] border-primary bg-white text-primary w-full h-full box-border rounded-lg transition duration-75 hover:bg-primary hover:text-white"

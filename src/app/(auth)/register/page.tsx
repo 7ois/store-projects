@@ -2,7 +2,7 @@
 import Dropdown from "@/components/Dropdown";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { registerSchema, registerSchemaType } from "@/lib/types";
 import axios from "axios";
 import building2 from "../../../../public/images/business2.jpg";
 import logo_rmuti from "../../../../public/images/logo_rmuti.png";
+import logo_main from "../../../../public/images/logo_main.jpg";
 
 const Page = () => {
   const {
@@ -89,29 +90,45 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full h-[900px] flex rounded-[10px] overflow-hidden shadow-lg text-lg">
-      <div className="relative w-full bg-[#fff] flex flex-col justify-center items-center gap-2 px-20 py-5">
+    <div
+      className="w-full h-[600px] flex rounded-[10px] overflow-hidden shadow-lg text-base
+      lg:text-lg lg:h-[900px]"
+    >
+      <div
+        className="relative w-full bg-[#fff] flex flex-col justify-center items-center p-5 gap-1
+        lg:p-10 lg:gap-2
+        2xl:p-20"
+      >
         <div
           className="absolute top-5 left-5 cursor-pointer"
           onClick={() => router.back()}
         >
-          <ArrowLeft size={25} color="#1C3B6C" />
+          <ChevronLeft size={20} strokeWidth={1.5} />
         </div>
         <Image
-          src="/images/logo_main.jpg"
+          src={logo_main}
           alt="Logo"
-          width={150}
-          height={150}
+          className="w-full h-auto max-w-[100px] lg:max-w-[150px]" // ปรับขนาดให้ responsive
         />
-        <h1 className="text-3xl my-5 font-[400]">สมัครสมาชิก</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="grid gap-5 w-full">
+        <h1
+          className="my-5 font-[400] text-xl
+          lg:text-3xl"
+        >
+          สมัครสมาชิก
+        </h1>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="grid w-full overflow-y-auto gap-3
+          lg:gap-5"
+        >
           <div className="grid gap-1 relative">
             <label htmlFor="email">อีเมล</label>
             <input
               {...register("email")}
               placeholder="กรอกอีเมลของคุณ"
               type="email"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
+              className="px-2 border border-[#c5c5c5] rounded-lg h-[40px]
+              lg:h-[50px]"
             />
             {errors.email && (
               <p className="text-primary absolute -bottom-6 text-base">{`${errors.email.message}`}</p>
@@ -124,7 +141,8 @@ const Page = () => {
               {...register("password")}
               placeholder="รหัสผ่าน"
               type="password"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
+              className="px-2 border border-[#c5c5c5] rounded-lg h-[40px]
+              lg:h-[50px]"
             />
             {errors.password && (
               <p className="text-primary absolute -bottom-6 text-base">{`${errors.password.message}`}</p>
@@ -137,7 +155,8 @@ const Page = () => {
               {...register("confirmPassword")}
               placeholder="ยืนยันรหัสผ่าน"
               type="password"
-              className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
+              className="px-2 border border-[#c5c5c5] rounded-lg h-[40px]
+              lg:h-[50px]"
             />
             {errors.confirmPassword && (
               <p className="text-primary absolute -bottom-6 text-base">{`${errors.confirmPassword.message}`}</p>
@@ -146,14 +165,18 @@ const Page = () => {
 
           {email ? (
             email.endsWith("@rmuti.ac.th") ? (
-              <div className={`grid grid-cols-2 gap-5 w-full`}>
+              <div
+                className="grid grid-cols-2 w-full gap-1
+                lg:gap-5"
+              >
                 <div className="grid gap-1 w-full relative">
                   <label>ชื่อ</label>
                   <input
                     {...register("first_name")}
                     placeholder='กรุณากรอก "ชื่อ"'
                     type="text"
-                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
+                    className="px-2 w-full border border-[#c5c5c5] rounded-lg h-[40px]
+                    lg:h-[50px]"
                   />
                   {errors.first_name && (
                     <p className="text-primary absolute -bottom-6 text-base">{`${errors.first_name.message}`}</p>
@@ -166,7 +189,8 @@ const Page = () => {
                     {...register("last_name")}
                     placeholder='กรุณากรอก "นามสกุล"'
                     type="text"
-                    className="h-[50px] pl-2 border border-[#c5c5c5] rounded-lg"
+                    className="px-2 w-full border border-[#c5c5c5] rounded-lg h-[40px]
+                    lg:h-[50px]"
                   />
                   {errors.last_name && (
                     <p className="text-primary absolute -bottom-6 text-base">{`${errors.last_name.message}`}</p>
@@ -178,6 +202,7 @@ const Page = () => {
                     items={roles}
                     onSelect={handleRoleSelect}
                     labelName="ประเภทผู้ใช้"
+                    classNameInput="h-[40px]"
                   />
                   {errors.role_id && (
                     <p className="text-primary absolute -bottom-6 text-base">{`${errors.role_id.message}`}</p>
@@ -190,7 +215,7 @@ const Page = () => {
           <div className="w-full flex items-center justify-center my-5">
             <button
               type="submit"
-              className="bg-blue text-[#fff] w-[200px] h-[60px] border-[#c5c5c5] rounded-[10px] duration-75 hover:bg-orange"
+              className="bg-blue text-[#fff] w-[200px] h-[50px] border-[#c5c5c5] rounded-[10px] duration-75 hover:bg-orange"
             >
               สมัครสมาชิก
             </button>
@@ -198,7 +223,7 @@ const Page = () => {
         </form>
       </div>
 
-      <div className="w-full bg-blue text-[#fff] relative">
+      <div className="w-full bg-blue text-white relative hidden 2xl:block">
         <Image
           src={building2}
           alt="ตึกบริหาร"

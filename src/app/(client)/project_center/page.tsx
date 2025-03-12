@@ -114,32 +114,43 @@ const Page = () => {
 
   return (
     <div className="flex flex-col gap-2 w-full h-full relative">
-      <div className="flex text-2xl text-white items-center p-5 rounded-lg shadow-md h-[86px] bg-gradient-to-r from-blue to-white">
-        <h1>เลือกประเภทโครงการ</h1>
+      <div
+        className="flex text-white items-center p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white
+        lg:text-xl lg:h-[80px]
+        2xl:text-2xl 2xl:h-[100px]"
+      >
+        <h1>เลือกประเภทโครงงาน</h1>
       </div>
 
-      <div className="w-full max-w-[1503.16px] h-auto overflow-hidden px-2">
+      <div className="w-full h-auto overflow-hidden px-2">
         <div className="w-full h-full overflow-x-scroll scroll-smooth">
-          <ul className="w-full flex gap-5 flex-nowrap pb-4 pt-2 text-lg">
+          <ul
+            className="w-full flex gap-2 flex-nowrap pb-4 pt-3 text-base
+            lg:text-lg lg:gap-5"
+          >
             {typeProject.length > 0 ? (
               typeProject.map((type) => (
                 <div
                   key={type.type_id}
                   onClick={() => handleClick(type.type_id)}
-                  className="w-[300px] flex-shrink-0"
+                  className="flex-shrink-0 w-[200px]
+                  lg:w-[200px]
+                  2xl:w-[300px]"
                 >
                   <li
-                    className={`relative flex items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full h-20 cursor-pointer transition-transform duration-75 ${
+                    className={`relative flex items-center bg-blue text-white rounded-lg shadow-lg justify-center w-full cursor-pointer transition-transform duration-75 ${
                       activeButton === type.type_id
                         ? "bg-orange"
                         : "hover:bg-orange hover:-translate-y-1"
-                    }`}
+                    } h-[60px]
+                    lg:h-[70px] lg:px-4
+                    2xl:h-20`}
                   >
-                    <span className="text-base font-medium">
+                    <span className="font-medium truncate max-w-[200px]">
                       {type.type_name}
                     </span>
 
-                    <span className="absolute top-2 right-2 bg-primary text-white text-sm font-bold px-3 py-1 rounded-full">
+                    <span className="absolute -top-2 right-2 bg-primary text-white font-bold rounded-full text-xs px-3 py-1">
                       {formatProjectCount(type.project_count)} โครงงาน
                     </span>
                   </li>
@@ -152,14 +163,21 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="max-h-[437px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md text-lg">
-        <div className="grid gap-3">
+      <div
+        className="max-h-[423px] w-full h-auto rounded-lg overflow-auto shadow-md text-base p-3
+        lg:text-lg lg:p-5"
+      >
+        <div
+          className="grid gap-2
+          lg:gap-3"
+        >
           {projects.length > 0 ? (
             projects.map((project) => (
               <Link
                 href={`/project_center/${project.project_id}`}
                 key={project.project_id}
-                className="grid gap-3 items-center rounded-[10px] shadow-md p-5 cursor-pointer w-full h-auto overflow-hidden transition duration-75 hover:bg-blue hover:text-white"
+                className="grid gap-3 items-center rounded-[10px] shadow-md cursor-pointer w-full h-auto overflow-hidden transition duration-75 hover:bg-blue hover:text-white p-3
+                lg:p-5"
               >
                 <h1
                   className="font-medium overflow-hidden text-ellipsis break-words"
@@ -173,7 +191,8 @@ const Page = () => {
                 </h1>
 
                 <p
-                  className="text-[#B4B4B4] text-base w-full overflow-hidden text-ellipsis break-words"
+                  className="text-[#B4B4B4] w-full overflow-hidden text-ellipsis break-words text-sm
+                  lg:text-base"
                   style={{
                     display: "-webkit-box",
                     WebkitLineClamp: 3,
@@ -185,17 +204,21 @@ const Page = () => {
               </Link>
             ))
           ) : (
-            <p>No data available</p>
+            <p className="text-center text-gray-500">ไม่มีข้อมูล</p>
           )}
         </div>
       </div>
 
       {/* Pagination Controls */}
-      <div className="absolute bottom-0 w-full flex justify-between items-center mt-4 text-lg">
+      <div
+        className="absolute bottom-0 w-full flex justify-between items-center mt-4 text-sm
+      lg:text-lg"
+      >
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
-          className="w-[100px] h-[50px] border border-blue box-border text-blue rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white disabled:border-none"
+          className="w-[100px] h-[40px] border border-blue box-border text-blue rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white disabled:border-none
+          lg:w-[100px] lg:h-[50px]"
         >
           ย้อนกลับ
         </button>
@@ -205,7 +228,8 @@ const Page = () => {
         <button
           disabled={currentPage === totalPages || currentPage > totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
-          className="w-[100px] h-[50px] bg-blue text-white rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed"
+          className="w-[100px] h-[40px] border border-blue box-border text-blue rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed disabled:text-white disabled:border-none
+          lg:w-[100px] lg:h-[50px]"
         >
           ถัดไป
         </button>

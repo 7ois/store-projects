@@ -58,7 +58,7 @@ const PopupEditUser = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       localStorage.setItem("token", response.data.token);
@@ -67,29 +67,42 @@ const PopupEditUser = ({
   };
 
   return (
-    <Popup isOpen={isOpenEditUser} onClose={setOpenPopup} className="w-auto">
-      <div className="text-lg">
-        <div className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-2xl">
+    <Popup
+      isOpen={isOpenEditUser}
+      onClose={setOpenPopup}
+      className="w-5/6 lg:w-2/4"
+    >
+      <div className="lg:text-lg">
+        <div
+          className="border-b-[1px] grid items-center justify-center py-5 bg-blue text-white text-lg
+          lg:text-xl
+          2xl:text-2xl"
+        >
           <h1>แก้ไขชื่อผู้ใช้</h1>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="flex gap-2 m-5 items-center justify-center">
-            <div className="flex gap-2 m-5 items-center justify-center">
-              <label>ชื่อจริง</label>
+          <div
+            className="grid gap-2 m-5 items-center justify-center
+          lg:flex lg:gap-2"
+          >
+            <div className="flex gap-2 items-center justify-center">
+              <label className="text-nowrap">ชื่อจริง</label>
               <input
                 name="first_name"
-                className="border h-[50px] rounded-lg pl-2"
+                className="border rounded-lg pl-2 h-[40px] w-full
+                lg:h-[50px]"
                 placeholder="กรอกชื่อจริง"
                 type="text"
                 onChange={handleChange}
                 value={formData.first_name}
               />
             </div>
-            <div className="flex gap-2 m-5 items-center justify-center">
+            <div className="flex gap-2 items-center justify-center">
               <label>นามสกุล</label>
               <input
                 name="last_name"
-                className="border h-[50px] rounded-lg pl-2"
+                className="border rounded-lg pl-2 h-[40px] w-full
+                lg:h-[50px]"
                 placeholder="กรอกนามสกุล"
                 type="text"
                 onChange={handleChange}
@@ -100,12 +113,12 @@ const PopupEditUser = ({
           <div className="flex items-center justify-between gap-2 p-5 border-t-[1px]">
             <button
               type="button"
-              className="border border-primary text-primary h-[40px] w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
+              className="h-[50px] border border-primary text-primary w-full rounded-lg transition duration-75 hover:bg-primary hover:text-white"
               onClick={setOpenPopup}
             >
               ยกเลิก
             </button>
-            <button className="bg-blue text-white h-[40px] w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
+            <button className="h-[50px] bg-blue text-white w-full rounded-lg transition duration-75 hover:bg-orange hover:text-white">
               บันทึก
             </button>
           </div>

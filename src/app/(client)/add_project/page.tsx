@@ -17,7 +17,7 @@ const Page = () => {
   const [isOpenDeleteProject, setIsOpenDeleteProject] = useState(false);
   const [isOpenEditProject, setIsOpenEditProject] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
-    null,
+    null
   );
   const limit = 10;
   const totalPages = Math.ceil(totalCount / limit);
@@ -60,7 +60,7 @@ const Page = () => {
   const handleDelete = async (projectId: number) => {
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/deleteProject/${projectId}`
       );
 
       fetchMyProjects({ limit, offset: (currentPage - 1) * limit });
@@ -79,21 +79,29 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 h-full w-full text-lg relative">
-      <div className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white">
-        <h1 className="text-2xl text-white">โครงงานของฉัน</h1>
+    <div
+      className="flex flex-col gap-2 h-full w-full relative
+      lg:text-lg"
+    >
+      <div
+        className="flex items-center justify-between p-5 rounded-lg shadow-md bg-gradient-to-r from-blue to-white
+        lg:text-xl lg:h-[80px]
+        2xl:text-2xl 2xl:h-[100px]"
+      >
+        <h1 className="text-white lg:text-xl 2xl:text-2xl">โครงงานของฉัน</h1>
         <button
-          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange"
+          className="bg-white flex gap-2 items-center border text-blue border-blue p-[10px] rounded-[10px] transition duration-75 hover:border-orange hover:text-orange
+          lg:text-lg"
           onClick={() => setIsOpenAddProject(true)}
         >
           <Book size={20} />
           เพิ่มโครงงาน
         </button>
       </div>
-      <div className="max-h-[564px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
+      <div className="max-h-[550px] w-full h-auto rounded-lg p-5 overflow-auto shadow-md">
         <div className="grid gap-3">
           {projects.length === 0 && (
-            <div className="grid items-center justify-center">
+            <div className="grid items-center justify-center text-gray-500">
               <h1>ไม่มีข้อมูล</h1>
             </div>
           )}
@@ -187,11 +195,19 @@ const Page = () => {
         </button>
       </div>
 
-      <Popup isOpen={isOpenAddProject} onClose={handleClosePopup}>
+      <Popup
+        isOpen={isOpenAddProject}
+        onClose={handleClosePopup}
+        className="lg:w-3/4 2xl:w-4/4"
+      >
         <PopupAddProjects closePopup={handleClosePopup} />
       </Popup>
 
-      <Popup isOpen={isOpenEditProject} onClose={handleClosePopup}>
+      <Popup
+        isOpen={isOpenEditProject}
+        onClose={handleClosePopup}
+        className="lg:w-3/4"
+      >
         <PopupEditProject
           selectedProjectId={selectedProjectId}
           closePopup={handleClosePopup}

@@ -21,17 +21,33 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
-        <div className={`${baiJamjuree.className}`}>
+      <body className="min-h-screen flex flex-col">
+        <div
+          className={`${baiJamjuree.className} flex flex-1 flex-wrap lg:flex-nowrap`}
+        >
           <PopupProvider>
-            <div className="flex min-h-screen">
+            {/* Sidebar */}
+            <div
+              className={`z-10 drop-shadow-lg sticky top-0 bg-white hidden
+              lg:flex lg:flex-col lg:w-[300px] lg:p-3 lg:h-screen lg:overflow-auto
+              2xl:w-[400px] 2xl:p-5
+            `}
+            >
               <Sidebar />
-              {/* Main Content */}
-              <div className="flex flex-col w-full relative">
-                <Header />
-                <div className="flex-1 overflow-y-auto p-10">{children}</div>
-                <Footer />
+            </div>
+
+            {/* Main Content */}
+            <div className="flex flex-col flex-1 min-w-0">
+              <Header />
+              <div
+                className="flex-1 overflow-auto p-2
+                lg:p-5
+                2xl:p-10
+              "
+              >
+                {children}
               </div>
+              <Footer />
             </div>
           </PopupProvider>
         </div>

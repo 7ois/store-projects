@@ -334,8 +334,12 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
   };
 
   return (
-    <div className="max-w-[1000px] text-lg grid">
-      <div className="text-2xl h-20 flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white">
+    <div className="w-full text-lg grid">
+      <div
+        className="flex items-center justify-center py-6 shadow-sm bg-blue rounded-se-lg text-white w-full
+        lg:text-xl lg:h-20
+        2xl:text-2xl"
+      >
         เพิ่มโครงงาน
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -443,7 +447,7 @@ const PopupAddProjects = ({ closePopup }: { closePopup: () => void }) => {
           </div>
 
           <div className="grid grid-cols-4 items-center relative">
-            <label>Date</label>
+            <label>วันที่เผยแพร่</label>
             <input
               type="date"
               className="h-[50px] col-span-3 px-2 pr-4 border border-[#c5c5c5] text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition-colors"
