@@ -2,7 +2,7 @@
 import Popup from "@/components/Popup";
 import { useUsersStore } from "@/stores/userStore";
 import axios from "axios";
-import { CircleX, LockKeyhole, LockKeyholeOpen } from "lucide-react";
+import { LockKeyhole, LockKeyholeOpen } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
@@ -15,7 +15,6 @@ const Page = () => {
   const [selectDate, setSelectDate] = useState<string | "">("");
 
   const handleTrashDelete = (id: number, date: string | "") => {
-    console.log("h: , ", date);
     setSelectDate(date);
     setSelectedDelete(id);
     setIsOpenDeleteUser(true);
@@ -37,7 +36,7 @@ const Page = () => {
     if (date == "") {
       try {
         await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/deleteUser/${userId}`,
         );
 
         fetchUsers({ limit, offset: (currentPage - 1) * limit });
@@ -48,7 +47,7 @@ const Page = () => {
     } else {
       try {
         await axios.patch(
-          `${process.env.NEXT_PUBLIC_API_URL}/rollbackUser/${userId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/rollbackUser/${userId}`,
         );
 
         fetchUsers({ limit, offset: (currentPage - 1) * limit });
@@ -121,7 +120,7 @@ const Page = () => {
                         onClick={() =>
                           handleTrashDelete(
                             item.user_id!,
-                            item.deleted_at ? item.deleted_at : ""
+                            item.deleted_at ? item.deleted_at : "",
                           )
                         }
                         className={`${

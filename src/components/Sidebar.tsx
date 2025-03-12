@@ -29,6 +29,7 @@ const Sidebar = () => {
     const checkToken = () => {
       const token = localStorage.getItem("token");
       if (!token) {
+        setUser(null);
         if (!pathname.startsWith("/project_center")) {
           router.push("/project_center");
         }
@@ -56,7 +57,7 @@ const Sidebar = () => {
     checkToken();
 
     return () => clearInterval(intervalId);
-  }, [router]);
+  }, [pathname, router]);
 
   const [filteredMenu, setFilteredMenu] = useState(menu);
 
@@ -71,7 +72,6 @@ const Sidebar = () => {
       ? menu.filter((item) => item.id === 1) // role_id 4 แสดงเฉพาะ id 1
       : menu;
 
-    console.log("New filtered menu:", user);
     setFilteredMenu(newFilteredMenu);
   }, [user, menu]); // ให้ `useEffect` ทำงานเมื่อ `user` หรือ `menu` เปลี่ยนแปลง
 

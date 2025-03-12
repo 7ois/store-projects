@@ -41,7 +41,6 @@ export const useUsersStore = create<UserStore>((set) => ({
 
       const resUsers = response.data.data;
       const totalCount = response.data.totalCount;
-      console.log("users", resUsers);
       set({ users: resUsers, totalCount });
     } catch (error) {
       console.error("Error fetching data:", error);

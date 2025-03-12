@@ -120,8 +120,8 @@ const Navbar = () => {
   }, [router]);
 
   const handleLogout = () => {
+    setUser(null);
     localStorage.removeItem("token");
-    // router.push("/login");
     router.push("/project_center");
   };
 
