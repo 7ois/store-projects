@@ -53,7 +53,7 @@ const Sidebar = () => {
       }
     };
 
-    const intervalId = setInterval(checkToken, 5000);
+    const intervalId = setInterval(checkToken, 2000);
     checkToken();
 
     return () => clearInterval(intervalId);
